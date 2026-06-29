@@ -76,8 +76,7 @@ export function getChangelogPath(): string | undefined {
 // =============================================================================
 
 /**
- * Config directory bases in priority order (highest first).
- * User-level: ~/.omp/agent, ~/.claude, ~/.codex, ~/.gemini
+ * User-level: ~/.agent, ~/.claude, ~/.codex, ~/.gemini
  * Project-level: .omp, .claude, .codex, .gemini
  */
 const USER_CONFIG_BASES = priorityList.map(({ dir, globalAgentDir }) => ({

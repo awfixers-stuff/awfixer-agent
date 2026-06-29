@@ -14,7 +14,7 @@ import { getConfigRootDir, getCustomThemesDir, removeWithRetries, setAgentDir } 
 const DARK_THEME_PATH = path.join(import.meta.dir, "..", "src", "modes", "theme", "dark.json");
 
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = path.join(getConfigRootDir(), "agent");
+const fallbackAgentDir = getConfigRootDir()
 
 let tmpAgentDir: string;
 

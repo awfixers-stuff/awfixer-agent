@@ -64,7 +64,7 @@ describe("SessionManager.moveTo", () => {
 	let cwdA: string;
 	let cwdB: string;
 	const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-	const fallbackAgentDir = path.join(getConfigRootDir(), "agent");
+	const fallbackAgentDir = getConfigRootDir()
 
 	beforeEach(async () => {
 		testAgentDir = await fsp.mkdtemp(path.join(os.tmpdir(), "omp-move-test-"));

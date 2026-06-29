@@ -11,7 +11,7 @@ import { getConfigRootDir, setAgentDir } from "@oh-my-pi/pi-utils";
 
 let tempDir: string;
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = path.join(getConfigRootDir(), "agent");
+const fallbackAgentDir = getConfigRootDir()
 const storage = new FileSessionStorage();
 
 beforeEach(async () => {

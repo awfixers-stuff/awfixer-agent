@@ -127,7 +127,7 @@ class FakeAgentSession {
 
 const cleanupRoots: string[] = [];
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = path.join(getConfigRootDir(), "agent");
+const fallbackAgentDir = getConfigRootDir()
 
 afterEach(async () => {
 	if (originalAgentDir) {

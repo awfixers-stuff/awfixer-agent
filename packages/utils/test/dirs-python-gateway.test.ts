@@ -40,8 +40,10 @@ describe("python gateway directory", () => {
 		process.env.PI_CONFIG_DIR = `.omp-test-${Snowflake.next()}`;
 		process.env.XDG_STATE_HOME = path.join(tempRoot, "state");
 		await fs.mkdir(path.join(process.env.XDG_STATE_HOME, APP_NAME), { recursive: true });
-		const defaultAgentDir = path.join(os.homedir(), getConfigDirName(), "agent");
+
+		const defaultAgentDir = path.join(os.homedir(), getConfigDirName());
 		setAgentDir(defaultAgentDir);
+
 		expect(getPythonGatewayDir()).toBe(path.join(process.env.XDG_STATE_HOME, APP_NAME, "python-gateway"));
 	});
 

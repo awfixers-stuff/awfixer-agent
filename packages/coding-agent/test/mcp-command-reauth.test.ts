@@ -30,7 +30,7 @@ type TestConfigFile = {
 
 const originalProjectDir = getProjectDir();
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = path.join(getConfigRootDir(), "agent");
+const fallbackAgentDir = getConfigRootDir()
 
 function restoreEnvValue(name: string, value: string | undefined): void {
 	if (value === undefined) {

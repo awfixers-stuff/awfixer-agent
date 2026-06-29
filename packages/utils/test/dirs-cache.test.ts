@@ -6,6 +6,7 @@ import {
 	APP_NAME,
 	__resetDirsFromEnvForTests,
 	getActiveProfile,
+	getConfigRootDir,
 	getConfigDirName,
 	getDocumentConversionCacheDir,
 	getProfileRootDir,
@@ -52,7 +53,7 @@ describe("document conversion cache directory", () => {
 		process.env.XDG_CACHE_HOME = path.join(tempRoot, "cache");
 		await fs.mkdir(path.join(process.env.XDG_CACHE_HOME, APP_NAME), { recursive: true });
 
-		const defaultAgentDir = path.join(os.homedir(), getConfigDirName(), "agent");
+		const defaultAgentDir = getConfigRootDir();
 		setAgentDir(defaultAgentDir);
 
 		expect(getDocumentConversionCacheDir()).toBe(

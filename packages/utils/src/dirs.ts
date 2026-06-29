@@ -236,7 +236,7 @@ export function getConfigDirName(): string {
 /** Get the config agent directory name relative to home (e.g. ".omp/agent" or PI_CONFIG_DIR + "/agent"). */
 export function getConfigAgentDirName(): string {
 	const profile = getActiveProfile();
-	return profile ? path.join(getConfigDirName(), "profiles", profile, "agent") : `${getConfigDirName()}/agent`;
+	return profile ? path.join(getConfigDirName(), "profiles", profile, "agent") : getConfigDirName();
 }
 
 // =============================================================================
@@ -267,7 +267,7 @@ class DirResolver {
 		const profile = normalizeProfileName(options.profile);
 		this.configRoot = getProfileConfigRoot(profile);
 
-		const defaultAgent = path.join(this.configRoot, "agent");
+		const defaultAgent = profile ? path.join(this.configRoot, "agent") : this.configRoot;
 		const agentDirOverride = profile ? undefined : options.agentDirOverride;
 		this.agentDir = agentDirOverride ? path.resolve(agentDirOverride) : defaultAgent;
 		const isDefault = this.agentDir === defaultAgent;

@@ -9,7 +9,7 @@ import { getConfigRootDir, getProjectDir, removeWithRetries, setAgentDir, setPro
 
 const originalProjectDir = getProjectDir();
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = path.join(getConfigRootDir(), "agent");
+const fallbackAgentDir = getConfigRootDir()
 
 describe("issue #956: interactive /mcp test", () => {
 	let projectDir = "";

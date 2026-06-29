@@ -43,7 +43,7 @@ describe("SessionManager subagent breadcrumb isolation", () => {
 	let cwd: string;
 	const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
 	const originalTmuxPane = process.env.TMUX_PANE;
-	const fallbackAgentDir = path.join(getConfigRootDir(), "agent");
+	const fallbackAgentDir = getConfigRootDir()
 
 	beforeEach(async () => {
 		// Deterministic, non-TTY terminal id so breadcrumb read/write is stable.

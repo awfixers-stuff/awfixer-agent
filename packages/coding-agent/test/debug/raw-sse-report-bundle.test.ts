@@ -23,7 +23,7 @@ const model: Model<"anthropic-messages"> = buildModel({
 
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
 const originalXdgStateHome = process.env.XDG_STATE_HOME;
-const fallbackAgentDir = path.join(getConfigRootDir(), "agent");
+const fallbackAgentDir = getConfigRootDir()
 let cleanupRoot: string | undefined;
 
 afterEach(async () => {

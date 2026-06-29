@@ -88,20 +88,24 @@ Runtime **user config** (models, settings, sessions) stays out of this tree — 
 - [x] `agent migrate-config` copies or symlinks `~/.omp` → `~/.agent` (default symlink, `--copy` flag).
 - [x] All new writes go to `~/.agent`; reads check `~/.agent` first, then fall back to `~/.omp`.
 
-**Note: deduplicate `agent` nesting** (future work)
+**Note: deduplicate `agent` nesting** [done]
 
-Phase 2 changed the config root to `~/.agent`, but the DirResolver still sets `agentDir = configRoot/agent`, producing `~/.agent/agent`. This and a few other redundancies should be cleaned up:
+The DirResolver now sets `agentDir = configRoot` for the default profile, eliminating the `~/.agent/agent` nesting:
 
-| Redundancy | Location | Target |
-|---|---|---|
-| `~/.agent/agent/...` instead of `~/.agent/...` | `DirResolver` sets `agentDir = configRoot + "/agent"` | Flat: `agentDir = configRoot`; all `agentSubdir` paths move up |
-| `AGENT_CODING_AGENT_DIR` env var name | `packages/utils/src/dirs.ts` | Rename to `AGENT_DIR` (shorter, no word repetition) |
-| `getConfigAgentDirName()` returns `.agent/agent` | `packages/utils/src/dirs.ts` | Should return `getConfigDirName()` for the default profile (same as config root) |
-| `getAgentDir()` returns `~/.agent/agent` | `packages/utils/src/dirs.ts` | Should return `~/.agent` after DirResolver flattening |
+| Redundancy | Status |
+|---|---|
+| `~/.agent/agent/...` → `~/.agent/...` | [x] `agentDir = configRoot` for default profile |
+| `getConfigAgentDirName()` returns `.agent/agent` → `.agent` | [x] Returns `getConfigDirName()` for default profile |
+| `getAgentDir()` returns `~/.agent/agent` → `~/.agent` | [x] Now returns config root for default profile |
+| `AGENT_CODING_AGENT_DIR` rename to `AGENT_DIR` | deferred — mechanical rename across ~47 files |
 
-**Prerequisites**: The DirResolver change touches every subdirectory path — must update or add a shim for `rootSubdir` vs `agentSubdir` callers. The `AGENT_CODING_AGENT_DIR` rename is a follow-on to Phase 1 env var work.
-
-**Risk**: The `agentDir == configRoot` flattening breaks migration symlinks (`~/.agent/agent/sessions` expected at `~/.agent/sessions`). Recommend deferring until `migrate-config` support for a flat-copy option is added.
+**What changed** (summarized):
+- `DirResolver`: `defaultAgent = profile ? path.join(configRoot, "agent") : configRoot` — flat for default profile, `/agent` suffix kept for named profiles
+- `getConfigAgentDirName()`: returns `getConfigDirName()` (`.agent`) instead of `${getConfigDirName()}/agent` for default profile
+- Agent subdirs (`sessions/`, `blobs/`, etc.) now resolve directly under `~/.agent/` instead of `~/.agent/agent/`
+- Named profile subdirs unchanged (`~/.agent/profiles/<name>/agent/...`)
+- 20 test files updated: `fallbackAgentDir` changed from `path.join(getConfigRootDir(), "agent")` to `getConfigRootDir()`
+- Profile test expectations updated for flattened default profile
 
 ### Phase 3 — npm scope and package names
 

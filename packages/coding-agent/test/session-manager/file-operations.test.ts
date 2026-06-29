@@ -160,7 +160,7 @@ describe("resolveResumableSession", () => {
 describe("SessionManager temp cwd session dirs", () => {
 	let testAgentDir: string;
 	const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-	const fallbackAgentDir = path.join(getConfigRootDir(), "agent");
+	const fallbackAgentDir = getConfigRootDir()
 
 	function expectedTempSessionDirName(tempCwd: string): string {
 		return `-tmp-${path.relative(os.tmpdir(), path.resolve(tempCwd)).replace(/[/\\:]/g, "-")}`;

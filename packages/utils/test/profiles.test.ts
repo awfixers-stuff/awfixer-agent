@@ -138,7 +138,7 @@ describe("profile directories", () => {
 		const root = path.join(os.homedir(), configDir);
 		expect(getActiveProfile()).toBeUndefined();
 		expect(getConfigRootDir()).toBe(root);
-		expect(getAgentDir()).toBe(path.join(root, "agent"));
+		expect(getAgentDir()).toBe(root);
 	});
 
 	it("keeps XDG-backed named profile state under profile-specific roots", async () => {
@@ -247,7 +247,7 @@ describe("profile directories", () => {
 		setProfile(undefined);
 		expect(getActiveProfile()).toBeUndefined();
 		expect(process.env.PI_CODING_AGENT_DIR).toBeUndefined();
-		expect(getAgentDir()).toBe(path.join(os.homedir(), configDir, "agent"));
+		expect(getAgentDir()).toBe(path.join(os.homedir(), configDir));
 	});
 });
 
@@ -369,7 +369,7 @@ describe("dirs module import behavior", () => {
 		try {
 			const dirsUrl = url.pathToFileURL(path.join(import.meta.dir, "..", "src", "dirs.ts")).href;
 			const workAgentDir = path.join(os.homedir(), probeConfigDir, "profiles", "work", "agent");
-			const defaultAgentDir = path.join(os.homedir(), probeConfigDir, "agent");
+			const defaultAgentDir = path.join(os.homedir(), probeConfigDir);
 
 			for (const ompProfile of ["", "default"]) {
 				const probePath = path.join(root, `default-profile-${ompProfile || "empty"}.ts`);
