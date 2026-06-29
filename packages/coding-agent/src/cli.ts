@@ -307,6 +307,12 @@ export async function runCli(argv: string[]): Promise<void> {
 		process.exitCode = 1;
 		return;
 	}
+	// Migration hint: suggest migrate-config when ~/.agent missing and ~/.omp exists
+	if (import.meta.main) {
+		const { suggestMigrateConfig } = await import("./cli/commands/migrate-config");
+		suggestMigrateConfig();
+	}
+
 	return run({ bin: "agent", version: VERSION, argv: resolved.argv, commands, help: showHelp });
 }
 

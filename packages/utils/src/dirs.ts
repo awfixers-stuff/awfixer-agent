@@ -16,11 +16,14 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { engines, version } from "../package.json" with { type: "json" };
 
-/** App name (e.g. "omp") */
-export const APP_NAME: string = "omp";
+/** App name (e.g. "agent") */
+export const APP_NAME: string = "agent";
 
-/** Config directory name (e.g. ".omp") */
-export const CONFIG_DIR_NAME: string = ".omp";
+/** Config directory name (e.g. ".agent") */
+export const CONFIG_DIR_NAME: string = ".agent";
+
+/** Legacy config directory name for project-level configs (.omp stays for projects) */
+export const PROJECT_CONFIG_DIR_NAME: string = ".omp";
 
 /** Version (e.g. "1.0.0") */
 export const VERSION: string = version;
@@ -212,15 +215,21 @@ export async function directoryExists(dir: string): Promise<boolean> {
 	} catch {
 		return false;
 	}
+
 }
 
-/** Get the config directory name relative to home (e.g. ".omp" or AGENT_CONFIG_DIR / PI_CONFIG_DIR override). */
+/** Get the config directory name relative to home (e.g. ".agent" or AGENT_CONFIG_DIR / PI_CONFIG_DIR override). */
 export function getConfigDirName(): string {
 	if (process.env.AGENT_CONFIG_DIR) return process.env.AGENT_CONFIG_DIR;
 	if (process.env.PI_CONFIG_DIR) {
 		emitDeprecatedEnvVar("PI_CONFIG_DIR", "AGENT_CONFIG_DIR");
 		return process.env.PI_CONFIG_DIR;
 	}
+	// Migration fallback: prefer .agent, but if only .omp exists use that
+	const agentHome = path.join(os.homedir(), CONFIG_DIR_NAME);
+	const ompHome = path.join(os.homedir(), ".omp");
+	if (fs.existsSync(agentHome)) return CONFIG_DIR_NAME;
+	if (fs.existsSync(ompHome)) return ".omp";
 	return CONFIG_DIR_NAME;
 }
 
@@ -507,7 +516,7 @@ export function getAgentDir(): string {
 
 /** Get the project-local config directory (.omp). */
 export function getProjectAgentDir(cwd: string = getProjectDir()): string {
-	return path.join(cwd, CONFIG_DIR_NAME);
+	return path.join(cwd, PROJECT_CONFIG_DIR_NAME);
 }
 
 // =============================================================================

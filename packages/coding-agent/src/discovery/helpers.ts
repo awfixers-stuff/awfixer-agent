@@ -4,7 +4,9 @@ import * as path from "node:path";
 import type { ThinkingLevel } from "@oh-my-pi/pi-agent-core";
 import { FileType, glob } from "@oh-my-pi/pi-natives";
 import {
+	APP_NAME,
 	CONFIG_DIR_NAME,
+	PROJECT_CONFIG_DIR_NAME,
 	getAgentDir,
 	getConfigDirName,
 	getPluginsDir,
@@ -33,7 +35,7 @@ export const SOURCE_PATHS = {
 		get userAgent() {
 			return `${getConfigDirName()}/agent`;
 		},
-		projectDir: CONFIG_DIR_NAME,
+		projectDir: PROJECT_CONFIG_DIR_NAME,
 	},
 	claude: {
 		userBase: ".claude",

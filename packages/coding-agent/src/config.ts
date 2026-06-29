@@ -1,13 +1,13 @@
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { CONFIG_DIR_NAME, getConfigAgentDirName, getProjectDir } from "@oh-my-pi/pi-utils";
+import { CONFIG_DIR_NAME, getConfigAgentDirName, getProjectDir, PROJECT_CONFIG_DIR_NAME } from "@oh-my-pi/pi-utils";
 import { expandTilde } from "./tools/path-utils";
 
 export * from "./config/config-file";
 
 const priorityList = [
-	{ dir: CONFIG_DIR_NAME, globalAgentDir: getConfigAgentDirName },
+	{ dir: PROJECT_CONFIG_DIR_NAME, globalAgentDir: getConfigAgentDirName },
 	{ dir: ".claude" },
 	{ dir: ".codex" },
 	{ dir: ".gemini" },

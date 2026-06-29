@@ -68,24 +68,40 @@ Runtime **user config** (models, settings, sessions) stays out of this tree — 
 | Install scripts | `scripts/install.sh`, `scripts/install-local.ts` |
 | Docker | `Dockerfile`, `Dockerfile.robomp`, `/usr/local/bin/omp` shim → `agent` |
 
-### Phase 2 — Config path migration
+### Phase 2 — Config path migration [done]
 
-**Default paths**
+**Default paths** (changed):
 
-| Resource | Legacy | New default |
-| --- | --- | --- |
-| Config root | `~/.omp` | `~/.agent` |
-| Agent settings | `~/.omp/agent` | `~/.agent` |
-| Sessions | `~/.omp/agent/sessions` | `~/.agent/sessions` |
-| Logs | `~/.omp/logs` | `~/.agent/logs` |
-| Natives cache | `~/.omp/natives` | `~/.agent/natives` |
-| XDG data | `$XDG_DATA_HOME/omp` | `$XDG_DATA_HOME/agent` |
+| Resource | Legacy | New default | Status |
+| --- | --- | --- | --- |
+| Config root | `~/.omp` | `~/.agent` | [x] default changed |
+| Agent settings | `~/.omp/agent` | `~/.agent` | [x] `getConfigDirName` returns `.agent` |
+| Sessions | `~/.omp/agent/sessions` | `~/.agent/agent/sessions` | [x] under `.agent` |
+| Logs | `~/.omp/logs` | `~/.agent/logs` | [x] via `rootSubdir` |
+| Natives cache | `~/.omp/natives` | `~/.agent/natives` | [x] via `rootSubdir` |
+| XDG data | `$XDG_DATA_HOME/omp` | `$XDG_DATA_HOME/agent` | [x] uses `APP_NAME="agent"` |
+| Project config | `.omp` | `.omp` | [x] unchanged via `PROJECT_CONFIG_DIR_NAME` |
 
-**Migration strategy**
+**Migration strategy** (done):
 
-1. On first launch after upgrade, if `~/.agent` is missing and `~/.omp` exists, print a one-line hint: `run agent migrate-config` (new command).
-2. `agent migrate-config` copies or symlinks `~/.omp` → `~/.agent` (user chooses copy vs symlink).
-3. All new writes go to `~/.agent`; reads check `~/.agent` first, then legacy `~/.omp`.
+- [x] On first launch after upgrade, if `~/.agent` is missing and `~/.omp` exists, print hint: `run agent migrate-config`.
+- [x] `agent migrate-config` copies or symlinks `~/.omp` → `~/.agent` (default symlink, `--copy` flag).
+- [x] All new writes go to `~/.agent`; reads check `~/.agent` first, then fall back to `~/.omp`.
+
+**Note: deduplicate `agent` nesting** (future work)
+
+Phase 2 changed the config root to `~/.agent`, but the DirResolver still sets `agentDir = configRoot/agent`, producing `~/.agent/agent`. This and a few other redundancies should be cleaned up:
+
+| Redundancy | Location | Target |
+|---|---|---|
+| `~/.agent/agent/...` instead of `~/.agent/...` | `DirResolver` sets `agentDir = configRoot + "/agent"` | Flat: `agentDir = configRoot`; all `agentSubdir` paths move up |
+| `AGENT_CODING_AGENT_DIR` env var name | `packages/utils/src/dirs.ts` | Rename to `AGENT_DIR` (shorter, no word repetition) |
+| `getConfigAgentDirName()` returns `.agent/agent` | `packages/utils/src/dirs.ts` | Should return `getConfigDirName()` for the default profile (same as config root) |
+| `getAgentDir()` returns `~/.agent/agent` | `packages/utils/src/dirs.ts` | Should return `~/.agent` after DirResolver flattening |
+
+**Prerequisites**: The DirResolver change touches every subdirectory path — must update or add a shim for `rootSubdir` vs `agentSubdir` callers. The `AGENT_CODING_AGENT_DIR` rename is a follow-on to Phase 1 env var work.
+
+**Risk**: The `agentDir == configRoot` flattening breaks migration symlinks (`~/.agent/agent/sessions` expected at `~/.agent/sessions`). Recommend deferring until `migrate-config` support for a flat-copy option is added.
 
 ### Phase 3 — npm scope and package names
 
