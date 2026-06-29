@@ -2,7 +2,7 @@
   "type": "module",
   "private": true,
   "name": "@oh-my-pi/terminal-bench",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Run harbor-framework/terminal-bench-2 against the local omp build with a live progress/spend/success dashboard",
   "homepage": "https://omp.sh",
   "author": "Can Boluk",
