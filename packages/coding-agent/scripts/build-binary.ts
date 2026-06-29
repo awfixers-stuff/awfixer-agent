@@ -6,13 +6,13 @@ import * as path from "node:path";
 const packageDir = path.join(import.meta.dir, "..");
 const repoRoot = path.join(packageDir, "..", "..");
 // Optional cross-compile target, e.g. CROSS_TARGET=linux-arm64 → bun build
-// --target=bun-linux-arm64, embeds the matching native, outputs dist/omp-<target>.
+// --target=bun-linux-arm64, embeds the matching native, outputs dist/agent-<target>.
 const crossTarget = Bun.env.CROSS_TARGET || null;
 const [crossPlatform, crossArch] = crossTarget ? crossTarget.split("-") : [null, null];
 // x64 uses the baseline bun runtime so it runs under Rosetta / pre-AVX2 CPUs
 // (the modern bun-linux-x64 target SIGILLs under Apple-Silicon Rosetta).
 const bunTarget = crossTarget ? (crossTarget === "linux-x64" ? "bun-linux-x64-baseline" : `bun-${crossTarget}`) : null;
-const outName = crossTarget ? `omp-${crossTarget}` : "omp";
+const outName = crossTarget ? `agent-${crossTarget}` : "agent";
 const outputPath = path.join(packageDir, "dist", outName);
 
 // Transformers.js is an optional, native-heavy dependency that is never bundled
@@ -92,7 +92,7 @@ async function main(): Promise<void> {
 					"--no-compile-autoload-package-json",
 					"--keep-names",
 					"--define",
-					'process.env.PI_COMPILED="true"',
+					'process.env.AGENT_COMPILED="true"',
 					"--define",
 					`process.env.PI_TINY_TRANSFORMERS_VERSION=${JSON.stringify(transformersVersion)}`,
 					"--external",

@@ -208,6 +208,7 @@ import * as bundledPiCodingAgentCliBenchCli from "@oh-my-pi/pi-coding-agent/cli/
 import * as bundledPiCodingAgentCliClassifyInstallTarget from "@oh-my-pi/pi-coding-agent/cli/classify-install-target";
 import * as bundledPiCodingAgentCliClaudeTraceCli from "@oh-my-pi/pi-coding-agent/cli/claude-trace-cli";
 import * as bundledPiCodingAgentCliCommandsInitXdg from "@oh-my-pi/pi-coding-agent/cli/commands/init-xdg";
+import * as bundledPiCodingAgentCliCommandsMigrateConfig from "@oh-my-pi/pi-coding-agent/cli/commands/migrate-config";
 import * as bundledPiCodingAgentCliCompletionGen from "@oh-my-pi/pi-coding-agent/cli/completion-gen";
 import * as bundledPiCodingAgentCliConfigCli from "@oh-my-pi/pi-coding-agent/cli/config-cli";
 import * as bundledPiCodingAgentCliDryBalanceCli from "@oh-my-pi/pi-coding-agent/cli/dry-balance-cli";
@@ -267,6 +268,7 @@ import * as bundledPiCodingAgentCommandsGrievances from "@oh-my-pi/pi-coding-age
 import * as bundledPiCodingAgentCommandsInstall from "@oh-my-pi/pi-coding-agent/commands/install";
 import * as bundledPiCodingAgentCommandsJoin from "@oh-my-pi/pi-coding-agent/commands/join";
 import * as bundledPiCodingAgentCommandsLaunch from "@oh-my-pi/pi-coding-agent/commands/launch";
+import * as bundledPiCodingAgentCommandsMigrateConfig from "@oh-my-pi/pi-coding-agent/commands/migrate-config";
 import * as bundledPiCodingAgentCommandsModels from "@oh-my-pi/pi-coding-agent/commands/models";
 import * as bundledPiCodingAgentCommandsPlugin from "@oh-my-pi/pi-coding-agent/commands/plugin";
 import * as bundledPiCodingAgentCommandsRead from "@oh-my-pi/pi-coding-agent/commands/read";
@@ -1639,6 +1641,8 @@ export const BUNDLED_PI_REGISTRY: Readonly<Record<string, Readonly<Record<string
 	"@oh-my-pi/pi-coding-agent/cli/commands/init-xdg": bundledPiCodingAgentCliCommandsInitXdg as unknown as Readonly<
 		Record<string, unknown>
 	>,
+	"@oh-my-pi/pi-coding-agent/cli/commands/migrate-config":
+		bundledPiCodingAgentCliCommandsMigrateConfig as unknown as Readonly<Record<string, unknown>>,
 	"@oh-my-pi/pi-coding-agent/commands/acp": bundledPiCodingAgentCommandsAcp as unknown as Readonly<
 		Record<string, unknown>
 	>,
@@ -1690,6 +1694,8 @@ export const BUNDLED_PI_REGISTRY: Readonly<Record<string, Readonly<Record<string
 	"@oh-my-pi/pi-coding-agent/commands/launch": bundledPiCodingAgentCommandsLaunch as unknown as Readonly<
 		Record<string, unknown>
 	>,
+	"@oh-my-pi/pi-coding-agent/commands/migrate-config":
+		bundledPiCodingAgentCommandsMigrateConfig as unknown as Readonly<Record<string, unknown>>,
 	"@oh-my-pi/pi-coding-agent/commands/models": bundledPiCodingAgentCommandsModels as unknown as Readonly<
 		Record<string, unknown>
 	>,

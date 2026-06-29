@@ -4,11 +4,10 @@
  *
  * Layout (PREFIX defaults to $HOME/.local, override with LOCAL_PREFIX):
  *
- *   $PREFIX/bin/omp              → libexec/omp/current/omp
- *   $PREFIX/bin/agent            → libexec/omp/current/omp  (rebrand alias)
- *   $PREFIX/libexec/omp/<ver>/omp
- *   $PREFIX/libexec/omp/current  → <ver>
- *   $PREFIX/lib/omp/natives/<ver>/*.node
+ *   $PREFIX/bin/agent             → libexec/agent/current/agent
+ *   $PREFIX/libexec/agent/<ver>/agent
+ *   $PREFIX/libexec/agent/current → <ver>
+ *   $PREFIX/lib/agent/natives/<ver>/*.node
  *   $PREFIX/agent/versions/<ver>/manifest.json
  *   $PREFIX/agent/versions/<ver>/natives/*.node
  *
@@ -26,7 +25,7 @@ import { $ } from "bun";
 const repoRoot = path.join(import.meta.dir, "..");
 const codingAgentPkg = path.join(repoRoot, "packages", "coding-agent", "package.json");
 const nativesDir = path.join(repoRoot, "packages", "natives", "native");
-const distBinary = path.join(repoRoot, "packages", "coding-agent", "dist", "omp");
+const distBinary = path.join(repoRoot, "packages", "coding-agent", "dist", "agent");
 
 const isDryRun = process.argv.includes("--dry-run");
 const skipBuild = process.argv.includes("--skip-build");
@@ -137,11 +136,10 @@ async function runPostBuild(version: string): Promise<void> {
 }
 
 async function installLayout(prefix: string, version: string): Promise<void> {
-	const libexecVersion = path.join(prefix, "libexec", "omp", version);
-	const libexecCurrent = path.join(prefix, "libexec", "omp", "current");
-	const binOmp = path.join(prefix, "bin", "omp");
+	const libexecVersion = path.join(prefix, "libexec", "agent", version);
+	const libexecCurrent = path.join(prefix, "libexec", "agent", "current");
 	const binAgent = path.join(prefix, "bin", "agent");
-	const libNatives = path.join(prefix, "lib", "omp", "natives", version);
+	const libNatives = path.join(prefix, "lib", "agent", "natives", version);
 	const agentVersion = path.join(prefix, "agent", "versions", version);
 	const agentNatives = path.join(agentVersion, "natives");
 
@@ -155,7 +153,7 @@ async function installLayout(prefix: string, version: string): Promise<void> {
 		installedAt: new Date().toISOString(),
 		repoRoot,
 		layout: {
-			bin: { omp: binOmp, agent: binAgent },
+			bin: { agent: binAgent },
 			libexec: libexecVersion,
 			lib: libNatives,
 			agent: agentVersion,
@@ -163,16 +161,15 @@ async function installLayout(prefix: string, version: string): Promise<void> {
 		natives: nativeAddons,
 	};
 
-	console.log(`Installing omp ${version} → ${prefix}`);
+	console.log(`Installing agent ${version} → ${prefix}`);
 
 	await ensureDir(libexecVersion);
 	await ensureDir(libNatives);
 	await ensureDir(agentNatives);
 
-	await copyFileAtomic(distBinary, path.join(libexecVersion, "omp"), 0o755);
+	await copyFileAtomic(distBinary, path.join(libexecVersion, "agent"), 0o755);
 	await symlinkAtomic(version, libexecCurrent);
-	await symlinkAtomic(path.join("..", "libexec", "omp", "current", "omp"), binOmp);
-	await symlinkAtomic(path.join("..", "libexec", "omp", "current", "omp"), binAgent);
+	await symlinkAtomic(path.join("..", "libexec", "agent", "current", "agent"), binAgent);
 
 	for (const filename of nativeAddons) {
 		const src = path.join(nativesDir, filename);
@@ -191,14 +188,14 @@ async function installLayout(prefix: string, version: string): Promise<void> {
 async function smokeInstalled(prefix: string): Promise<void> {
 	if (skipSmoke || isDryRun) return;
 
-	const ompBin = path.join(prefix, "bin", "omp");
-	if (!(await pathExists(ompBin))) {
-		throw new Error(`Smoke check failed: ${ompBin} missing after install`);
+	const agentBin = path.join(prefix, "bin", "agent");
+	if (!(await pathExists(agentBin))) {
+		throw new Error(`Smoke check failed: ${agentBin} missing after install`);
 	}
 
 	const runtimeHome = await fs.mkdtemp(path.join(os.tmpdir(), "omp-install-local-"));
 	try {
-		const proc = Bun.spawn([ompBin, "--version"], {
+		const proc = Bun.spawn([agentBin, "--version"], {
 			env: {
 				...Bun.env,
 				HOME: runtimeHome,
@@ -231,11 +228,10 @@ async function main(): Promise<void> {
 	await smokeInstalled(prefix);
 
 	console.log("");
-	console.log("✓ Installed omp to local prefix");
-	console.log(`  binary:  ${path.join(prefix, "bin", "omp")}`);
-	console.log(`  alias:   ${path.join(prefix, "bin", "agent")}`);
-	console.log(`  lib:     ${path.join(prefix, "lib", "omp", "natives", version)}`);
-	console.log(`  libexec: ${path.join(prefix, "libexec", "omp", version)}`);
+	console.log("✓ Installed agent to local prefix");
+	console.log(`  binary:  ${path.join(prefix, "bin", "agent")}`);
+	console.log(`  lib:     ${path.join(prefix, "lib", "agent", "natives", version)}`);
+	console.log(`  libexec: ${path.join(prefix, "libexec", "agent", version)}`);
 	console.log(`  agent:   ${path.join(prefix, "agent", "versions", version)}`);
 	if (!process.env.PATH?.split(path.delimiter).includes(path.join(prefix, "bin"))) {
 		console.log(`  ensure ${path.join(prefix, "bin")} is on your PATH`);
