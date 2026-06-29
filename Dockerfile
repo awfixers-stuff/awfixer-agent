@@ -151,9 +151,9 @@ RUN printf '%s\n' \
     '  echo "pi: PI_ROOT=$PI_ROOT does not look like a pi checkout" >&2' \
     '  exit 127' \
     'fi' \
-    'exec bun "$PI_ROOT/packages/coding-agent/src/cli.ts" "$@"' \
     > /usr/local/bin/omp \
-    && chmod +x /usr/local/bin/omp
+    && chmod +x /usr/local/bin/omp \
+    && ln -sf /usr/local/bin/omp /usr/local/bin/agent
 
 ############################
 # 4) pi-runtime — pi-base + pi source + bun install (DEFAULT)

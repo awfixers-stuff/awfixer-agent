@@ -29,7 +29,15 @@ export const VERSION: string = version;
 export const MIN_BUN_VERSION: string = engines.bun.replace(/[^0-9.]/g, "");
 
 const PROFILE_NAME_RE = /^[a-z0-9][a-z0-9._-]{0,63}$/;
-const PROFILE_ENV_KEYS = ["OMP_PROFILE", "PI_PROFILE"] as const;
+const PROFILE_ENV_KEYS = ["AGENT_PROFILE", "OMP_PROFILE", "PI_PROFILE"] as const;
+
+/** Track one-time deprecation warnings so they fire at most once per session per key. */
+const emittedWarnings = new Set<string>();
+function emitDeprecatedEnvVar(oldVar: string, newVar: string): void {
+	if (emittedWarnings.has(oldVar)) return;
+	emittedWarnings.add(oldVar);
+	process.stderr.write(`[deprecated] Environment variable ${oldVar} is deprecated. Use ${newVar} instead.\n`);
+}
 
 /**
  * Names Windows treats as reserved device aliases. Matches the basename
@@ -69,19 +77,26 @@ export function normalizeProfileName(profile: string | undefined): string | unde
 }
 
 /**
- * Resolve the active profile from the two profile env vars. `OMP_PROFILE` is the
- * canonical variable and takes precedence; `PI_PROFILE` is the legacy
- * compatibility fallback, consulted only when `OMP_PROFILE` is undefined. An
- * explicitly-empty `OMP_PROFILE` therefore selects the default profile rather
- * than silently inheriting `PI_PROFILE`. Delegates validation/normalization to
+ * Resolve the active profile from the three profile env vars. `AGENT_PROFILE` is
+ * the canonical variable and takes precedence; `OMP_PROFILE` is the legacy
+ * compatibility fallback (consulted only when `AGENT_PROFILE` is undefined),
+ * and `PI_PROFILE` is the oldest fallback. An explicitly-empty `AGENT_PROFILE`
+ * therefore selects the default profile rather than silently inheriting
+ * `OMP_PROFILE` or `PI_PROFILE`. Delegates validation/normalization to
  * {@link normalizeProfileName} (which throws on a syntactically invalid value).
  */
-export function resolveProfileEnv(omp: string | undefined, pi: string | undefined): string | undefined {
-	return normalizeProfileName(omp !== undefined ? omp : pi);
+export function resolveProfileEnv(agent: string | undefined, omp: string | undefined, pi: string | undefined): string | undefined {
+	return normalizeProfileName(agent !== undefined ? agent : omp !== undefined ? omp : pi);
 }
 
 function getProfileFromEnv(): string | undefined {
-	return resolveProfileEnv(process.env.OMP_PROFILE, process.env.PI_PROFILE);
+	if (process.env.OMP_PROFILE !== undefined && process.env.AGENT_PROFILE === undefined) {
+		emitDeprecatedEnvVar("OMP_PROFILE", "AGENT_PROFILE");
+	}
+	if (process.env.PI_PROFILE !== undefined && process.env.AGENT_PROFILE === undefined && process.env.OMP_PROFILE === undefined) {
+		emitDeprecatedEnvVar("PI_PROFILE", "AGENT_PROFILE");
+	}
+	return resolveProfileEnv(process.env.AGENT_PROFILE, process.env.OMP_PROFILE, process.env.PI_PROFILE);
 }
 
 /**
@@ -199,9 +214,14 @@ export async function directoryExists(dir: string): Promise<boolean> {
 	}
 }
 
-/** Get the config directory name relative to home (e.g. ".omp" or PI_CONFIG_DIR override). */
+/** Get the config directory name relative to home (e.g. ".omp" or AGENT_CONFIG_DIR / PI_CONFIG_DIR override). */
 export function getConfigDirName(): string {
-	return process.env.PI_CONFIG_DIR || CONFIG_DIR_NAME;
+	if (process.env.AGENT_CONFIG_DIR) return process.env.AGENT_CONFIG_DIR;
+	if (process.env.PI_CONFIG_DIR) {
+		emitDeprecatedEnvVar("PI_CONFIG_DIR", "AGENT_CONFIG_DIR");
+		return process.env.PI_CONFIG_DIR;
+	}
+	return CONFIG_DIR_NAME;
 }
 
 /** Get the config agent directory name relative to home (e.g. ".omp/agent" or PI_CONFIG_DIR + "/agent"). */
@@ -339,23 +359,15 @@ function resolvePreProfileAgentDir(
 
 let activeProfile = readProfileFromEnvSafe();
 
-/**
- * Resolve the agent-dir override for the current `activeProfile` from the live
- * environment. A named profile derives its own agent dir (no override); default
- * mode honors a non-profile `PI_CODING_AGENT_DIR` (see
- * {@link resolvePreProfileAgentDir}). Shared by the module-load resolver and
- * {@link refreshDirsFromEnv} so both apply identical logic.
- */
 function resolveActiveAgentDirOverride(): string | undefined {
+	const agentDir = process.env.AGENT_CODING_AGENT_DIR ?? process.env.PI_CODING_AGENT_DIR;
+	if (agentDir !== process.env.PI_CODING_AGENT_DIR && process.env.PI_CODING_AGENT_DIR !== undefined) {
+		emitDeprecatedEnvVar("PI_CODING_AGENT_DIR", "AGENT_CODING_AGENT_DIR");
+	}
 	return activeProfile
 		? undefined
-		: resolvePreProfileAgentDir(undefined, process.env.PI_CODING_AGENT_DIR, readPiProfileFromEnvSafe());
+		: resolvePreProfileAgentDir(undefined, agentDir, readPiProfileFromEnvSafe());
 }
-
-let dirs = new DirResolver({
-	agentDirOverride: resolveActiveAgentDirOverride(),
-	profile: activeProfile,
-});
 /**
  * Snapshot of `PI_CODING_AGENT_DIR` from before the first named-profile
  * activation. Reset paths restore this value (or its absence) instead of
@@ -369,7 +381,7 @@ let dirs = new DirResolver({
  */
 let preProfileAgentDirEnv: string | undefined = resolvePreProfileAgentDir(
 	activeProfile,
-	process.env.PI_CODING_AGENT_DIR,
+	process.env.AGENT_CODING_AGENT_DIR ?? process.env.PI_CODING_AGENT_DIR,
 	activeProfile ?? readPiProfileFromEnvSafe(),
 );
 // Anchor home for the resolver. Captured at module load to stay stable across
@@ -377,6 +389,11 @@ let preProfileAgentDirEnv: string | undefined = resolvePreProfileAgentDir(
 // production callers (`home === RESOLVER_HOME`) hit the XDG-aware resolver while
 // tests passing a temp HOME short-circuit to a deterministic path.
 const RESOLVER_HOME = os.homedir();
+
+let dirs = new DirResolver({
+	agentDirOverride: resolveActiveAgentDirOverride(),
+	profile: activeProfile,
+});
 
 /**
  * Rebuild the dirs resolver from the current environment, reusing the profile
@@ -394,12 +411,6 @@ export function refreshDirsFromEnv(): void {
 		profile: activeProfile,
 	});
 }
-
-// =============================================================================
-// Root directories
-// =============================================================================
-
-/** Get the config root directory (~/.omp). */
 export function getConfigRootDir(): string {
 	return dirs.configRoot;
 }
@@ -426,7 +437,7 @@ export function setAgentDir(dir: string): void {
 export function __resetProfileSnapshotForTests(): void {
 	preProfileAgentDirEnv = resolvePreProfileAgentDir(
 		activeProfile,
-		process.env.PI_CODING_AGENT_DIR,
+		process.env.AGENT_CODING_AGENT_DIR ?? process.env.PI_CODING_AGENT_DIR,
 		activeProfile ?? readPiProfileFromEnvSafe(),
 	);
 }
@@ -448,26 +459,29 @@ export function setProfile(profile: string | undefined): void {
 	const next = normalizeProfileName(profile);
 	if (next && !activeProfile) {
 		// First activation of a named profile in this process: snapshot the
-		// current PI_CODING_AGENT_DIR so a later reset can restore the user's
+		// current AGENT_CODING_AGENT_DIR / PI_CODING_AGENT_DIR so a later reset can restore the user's
 		// explicit override. Subsequent profile switches keep the original
 		// snapshot — the "pre-profile" baseline is the state before profiles
 		// entered the picture, not the state between two activations.
 		preProfileAgentDirEnv = resolvePreProfileAgentDir(
 			undefined,
-			process.env.PI_CODING_AGENT_DIR,
+			process.env.AGENT_CODING_AGENT_DIR ?? process.env.PI_CODING_AGENT_DIR,
 			readPiProfileFromEnvSafe(),
 		);
 	}
 	activeProfile = next;
 	if (activeProfile) {
 		dirs = new DirResolver({ profile: activeProfile });
+		process.env.AGENT_PROFILE = activeProfile;
 		process.env.OMP_PROFILE = activeProfile;
 		process.env.PI_PROFILE = activeProfile;
+		process.env.AGENT_CODING_AGENT_DIR = dirs.agentDir;
 		process.env.PI_CODING_AGENT_DIR = dirs.agentDir;
 	} else {
 		for (const key of PROFILE_ENV_KEYS) {
 			delete process.env[key];
 		}
+		delete process.env.AGENT_CODING_AGENT_DIR;
 		if (preProfileAgentDirEnv === undefined) {
 			delete process.env.PI_CODING_AGENT_DIR;
 		} else {
@@ -596,7 +610,10 @@ export function setWorktreesDir(dir: string | undefined): string | undefined {
  * ignored and resolution falls through.
  */
 export function getWorktreesDir(): string {
-	return resolveWorktreeBase(process.env.OMP_WORKTREE_DIR) ?? worktreesDirOverride ?? dirs.rootSubdir("wt", "data");
+	return resolveWorktreeBase(process.env.AGENT_WORKTREE_DIR)
+		?? resolveWorktreeBase(process.env.OMP_WORKTREE_DIR)
+		?? worktreesDirOverride
+		?? dirs.rootSubdir("wt", "data");
 }
 
 /** Get the SSH control socket directory (~/.omp/ssh-control). */
@@ -662,7 +679,7 @@ export function getGpuCachePath(): string {
  * cache file without touching the rest of the config root.
  */
 export function getGithubCacheDbPath(): string {
-	const override = process.env.OMP_GITHUB_CACHE_DB;
+	const override = process.env.AGENT_GITHUB_CACHE_DB ?? process.env.OMP_GITHUB_CACHE_DB;
 	if (override) return override;
 	return dirs.rootSubdir(path.join("cache", "github-cache.db"), "cache");
 }
@@ -673,7 +690,7 @@ export function getGithubCacheDbPath(): string {
  * operators can isolate or relocate the cache file.
  */
 export function getAuthBrokerSnapshotCachePath(): string {
-	const override = process.env.OMP_AUTH_BROKER_SNAPSHOT_CACHE;
+	const override = process.env.AGENT_AUTH_BROKER_SNAPSHOT_CACHE ?? process.env.OMP_AUTH_BROKER_SNAPSHOT_CACHE;
 	if (override) return override;
 	return dirs.rootSubdir(path.join("cache", "auth-broker-snapshot.enc"), "cache");
 }

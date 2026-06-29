@@ -203,7 +203,11 @@ export function setTerminalHeadless(headless: boolean): boolean {
  * first for cheap fast-path detection.
  */
 export function isCompiledBinary(): boolean {
-	if (process.env.PI_COMPILED || Bun.env.PI_COMPILED) return true;
+	if (process.env.AGENT_COMPILED || Bun.env.AGENT_COMPILED) return true;
+	if (process.env.PI_COMPILED || Bun.env.PI_COMPILED) {
+		process.stderr.write("[deprecated] Environment variable PI_COMPILED is deprecated. Use AGENT_COMPILED instead.\n");
+		return true;
+	}
 	const url = import.meta.url;
 	return url.includes("$bunfs") || url.includes("~BUN") || url.includes("%7EBUN");
 }

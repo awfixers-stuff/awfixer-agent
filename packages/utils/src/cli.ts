@@ -20,7 +20,10 @@ import { parseArgs as nodeParseArgs } from "node:util";
  * still leave its `:start` marker behind.
  */
 function startupMarker(text: string): void {
-	if (!process.env.PI_DEBUG_STARTUP) return;
+	if (!process.env.PI_DEBUG_STARTUP && !process.env.AGENT_DEBUG_STARTUP) return;
+	if (process.env.PI_DEBUG_STARTUP && !process.env.AGENT_DEBUG_STARTUP) {
+		process.stderr.write("[deprecated] Environment variable PI_DEBUG_STARTUP is deprecated. Use AGENT_DEBUG_STARTUP instead.\n");
+	}
 	try {
 		fs.writeSync(2, `[startup] ${text}\n`);
 	} catch {

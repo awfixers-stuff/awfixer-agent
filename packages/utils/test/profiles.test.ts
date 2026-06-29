@@ -255,15 +255,15 @@ describe("profile directories", () => {
 describe("profile env + name validation", () => {
 	it("honors OMP_PROFILE precedence and treats empty/default as the default profile", () => {
 		// OMP_PROFILE is canonical and wins over the legacy PI_PROFILE fallback.
-		expect(resolveProfileEnv("work", "other")).toBe("work");
+		expect(resolveProfileEnv(undefined, "work", "other")).toBe("work");
 		// PI_PROFILE is consulted only when OMP_PROFILE is undefined.
-		expect(resolveProfileEnv(undefined, "work")).toBe("work");
+		expect(resolveProfileEnv(undefined, undefined, "work")).toBe("work");
 		// An explicitly-empty OMP_PROFILE selects the default profile; it must NOT
 		// fall through to the lower-precedence PI_PROFILE.
-		expect(resolveProfileEnv("", "work")).toBeUndefined();
-		expect(resolveProfileEnv("   ", "work")).toBeUndefined();
-		expect(resolveProfileEnv("default", "work")).toBeUndefined();
-		expect(resolveProfileEnv(undefined, undefined)).toBeUndefined();
+		expect(resolveProfileEnv(undefined, "", "work")).toBeUndefined();
+		expect(resolveProfileEnv(undefined, "   ", "work")).toBeUndefined();
+		expect(resolveProfileEnv(undefined, "default", "work")).toBeUndefined();
+		expect(resolveProfileEnv(undefined, undefined, undefined)).toBeUndefined();
 	});
 
 	it("rejects uppercase profile names so isolation is filesystem-independent", () => {

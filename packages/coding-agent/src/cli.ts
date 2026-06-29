@@ -244,7 +244,7 @@ export async function runCli(argv: string[]): Promise<void> {
 			// validation here turns `OMP_PROFILE=.. omp --version` into a clean error;
 			// calling setProfile keeps every later path helper on the env-selected
 			// profile instead of the default agent directory.
-			setProfile(resolveProfileEnv(process.env.OMP_PROFILE, process.env.PI_PROFILE));
+			setProfile(resolveProfileEnv(process.env.AGENT_PROFILE, process.env.OMP_PROFILE, process.env.PI_PROFILE));
 		}
 		if (extracted.aliasName !== undefined) {
 			const profile = extracted.profile ?? getActiveProfile();
@@ -307,7 +307,7 @@ export async function runCli(argv: string[]): Promise<void> {
 		process.exitCode = 1;
 		return;
 	}
-	return run({ bin: APP_NAME, version: VERSION, argv: resolved.argv, commands, help: showHelp });
+	return run({ bin: "agent", version: VERSION, argv: resolved.argv, commands, help: showHelp });
 }
 
 // Floating call instead of top-level await: TLA forces `--bytecode` (CJS

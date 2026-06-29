@@ -227,16 +227,19 @@ install_binary() {
     mkdir -p "$INSTALL_DIR"
     # Download binary
     BINARY_URL="https://github.com/${REPO}/releases/download/${LATEST}/${BINARY}"
-    echo "Downloading ${BINARY}..."
     curl -fsSL "$BINARY_URL" -o "${INSTALL_DIR}/omp"
     chmod +x "${INSTALL_DIR}/omp"
+    ln -sf "${INSTALL_DIR}/omp" "${INSTALL_DIR}/agent"
     echo ""
-    echo "✓ Installed omp to ${INSTALL_DIR}/omp"
-
+    echo "✓ Installed agent (and omp alias) to ${INSTALL_DIR}"
+    echo ""
+    echo "  agent: ${INSTALL_DIR}/agent"
+    echo "  omp:   ${INSTALL_DIR}/omp"
+    echo ""
     # Check if in PATH
     case ":$PATH:" in
-        *":$INSTALL_DIR:"*) echo "Run 'omp' to get started!" ;;
-        *) echo "Add ${INSTALL_DIR} to your PATH, then run 'omp'" ;;
+        *":$INSTALL_DIR:"*) echo "Run 'agent' to get started!" ;;
+        *) echo "Add ${INSTALL_DIR} to your PATH, then run 'agent'" ;;
     esac
 }
 

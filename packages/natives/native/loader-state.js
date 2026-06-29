@@ -40,7 +40,10 @@ const SUPPORTED_PLATFORMS = ["linux-x64", "linux-arm64", "darwin-x64", "darwin-a
  * @param {string} text
  */
 function startupMarker(text) {
-	if (!process.env.PI_DEBUG_STARTUP) return;
+	if (!process.env.PI_DEBUG_STARTUP && !process.env.AGENT_DEBUG_STARTUP) return;
+	if (process.env.PI_DEBUG_STARTUP && !process.env.AGENT_DEBUG_STARTUP) {
+		process.stderr.write("[deprecated] PI_DEBUG_STARTUP is deprecated. Use AGENT_DEBUG_STARTUP instead.\n");
+	}
 	try {
 		fs.writeSync(2, `[startup] ${text}\n`);
 	} catch {
@@ -79,6 +82,7 @@ function resolveLeafPackageDir(platformTag) {
  */
 export function detectCompiledBinary({ embeddedAddon, env, importMetaUrl }) {
 	if (embeddedAddon) return true;
+	if (env && env.AGENT_COMPILED) return true;
 	if (env && env.PI_COMPILED) return true;
 	if (typeof importMetaUrl === "string") {
 		if (importMetaUrl.includes("$bunfs")) return true;
@@ -251,7 +255,7 @@ function runCommand(command, args) {
 }
 
 function getVariantOverride() {
-	const value = process.env.PI_NATIVE_VARIANT;
+	const value = process.env.AGENT_NATIVE_VARIANT ?? process.env.PI_NATIVE_VARIANT;
 	if (!value) return null;
 	if (value === "modern" || value === "baseline") return value;
 	return null;

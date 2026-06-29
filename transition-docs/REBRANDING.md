@@ -43,8 +43,8 @@ Runtime **user config** (models, settings, sessions) stays out of this tree — 
 ### Phase 0 — Documentation and aliases (now)
 
 - [x] `install:local` installs `bin/agent` alongside `bin/omp`.
-- [ ] Document rebrand in this file; no user-visible breakage.
-- [ ] Fork README points at awfixer-agent naming.
+- [x] Document rebrand in this file; no user-visible breakage.
+- [x] Fork README points at awfixer-agent naming.
 
 ### Phase 1 — CLI and env (low risk)
 
