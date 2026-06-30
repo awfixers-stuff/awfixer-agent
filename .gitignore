@@ -2,6 +2,9 @@
 node_modules/
 .npm/
 
+.frameworks
+.source
+
 # Build output
 dist/
 packages/*/dist/
