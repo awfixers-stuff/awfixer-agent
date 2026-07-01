@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prwatch"
+version = "0.1.0"
+description = "PR review worker for the awfixer GitHub App (omp-RPC + E2B)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "asyncpg>=0.30",
+  "click>=8.1",
+  "httpx>=0.27",
+  "pydantic>=2.6",
+  "pydantic-settings>=2.2",
+  "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "pytest-asyncio>=0.23",
+  "ruff>=0.13",
+]
+e2b = [
+  "e2b-code-interpreter>=1.0",
+]
+onepassword = [
+  "onepassword-sdk>=0.4",
+]
+
+[project.scripts]
+prwatch = "prwatch.cli:main"
+
+[tool.setuptools]
+package-dir = { "prwatch" = "src/prwatch" }
+packages = ["prwatch"]
+
+[tool.setuptools.package-data]
+prwatch = ["prompts/*.md", "py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B"]
+ignore = ["E501", "B008"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["prwatch"]

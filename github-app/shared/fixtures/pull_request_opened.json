@@ -1,0 +1,20 @@
+{
+  "action": "opened",
+  "installation": {
+    "id": 12345,
+    "account": { "login": "awfixerai", "type": "Organization" }
+  },
+  "repository": {
+    "full_name": "awfixerai/example",
+    "default_branch": "main"
+  },
+  "pull_request": {
+    "number": 42,
+    "state": "open",
+    "draft": false,
+    "title": "feat: example",
+    "user": { "login": "contributor" },
+    "head": { "sha": "abc123def456", "ref": "feature/x" },
+    "base": { "ref": "main" }
+  }
+}

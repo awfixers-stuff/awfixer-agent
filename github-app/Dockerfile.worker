@@ -1,0 +1,18 @@
+# syntax=docker/dockerfile:1
+# Build from monorepo root: docker build -f github-app/Dockerfile.worker --build-arg PI_BASE=oh-my-pi/pi:dev .
+ARG PI_BASE=oh-my-pi/pi:dev
+FROM ${PI_BASE} AS pi
+
+FROM python:3.12-slim
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY github-app/worker/pyproject.toml github-app/worker/README.md ./
+COPY github-app/worker/src ./src
+RUN pip install --no-cache-dir .
+COPY --from=pi /usr/local/bin/omp /usr/local/bin/omp
+ENV PRWATCH_OMP_COMMAND=omp
+ENV PRWATCH_WORKSPACE_ROOT=/data/workspaces
+VOLUME /data
+ENTRYPOINT ["prwatch"]
+CMD ["worker"]

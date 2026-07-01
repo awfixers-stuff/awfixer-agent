@@ -1,0 +1,22 @@
+# Railway multi-service layout (create two services from this repo):
+#
+# 1. gateway — Dockerfile: github-app/Dockerfile.gateway (build context: repo root)
+#    Public networking ON. Healthcheck path: /healthz
+#    Variables: DATABASE_URL (from Railway Postgres plugin), GITHUB_WEBHOOK_SECRET,
+#               GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY (multiline PEM)
+#
+# 2. worker — Dockerfile: github-app/Dockerfile.worker (build context: repo root, PI_BASE image)
+#    Public networking OFF. Same DATABASE_URL. Plus E2B_API_KEY, OMP/model env as needed.
+#
+# 3. Postgres — Railway "Add PostgreSQL" → reference DATABASE_URL on both services.
+#
+# Webhook URL: https://<gateway-domain>/webhook/github
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "github-app/Dockerfile.gateway"
+
+[deploy]
+healthcheckPath = "/healthz"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
