@@ -6,7 +6,7 @@ description: >
    toolchains + the RustFS-backed sccache; on GitHub-hosted runners it installs
    the toolchains and uses Swatinem target/ cache + the GitHub Actions sccache
    backend. PRs run on GitHub-hosted runners, so the on-infra path only ever
-   serves trusted push/main + release builds.
+   serves trusted push/master + release builds.
 
 inputs:
    hash:
@@ -230,7 +230,7 @@ runs:
       # cargo-zigbuild (needs zig); MSVC targets (e.g. x86_64-pc-windows-msvc)
       # build with cargo-xwin (needs clang/lld/llvm). The napi CLI's
       # --cross-compile flag picks the backend; we just install what it needs.
-      # Cross builds only run on push/main + release (omp-kata), so the
+      # Cross builds only run on push/master + release (omp-kata), so the
       # GitHub-hosted cross branches exist for portability and never fire here.
       - name: Ensure baked zig (omp-kata, non-MSVC cross)
         if: steps.detect.outputs.on_infra == 'true' && steps.resolve.outputs.cross_target != '' && !endsWith(steps.resolve.outputs.cross_target, '-msvc')
@@ -310,5 +310,5 @@ runs:
            if-no-files-found: error
            # Explicit so the native_artifact_lookup canary keeps working even if
            # org defaults shift; bump if Rust source ever stays stable for >90 days
-           # of main pushes and you want to avoid rebuilds.
+           # of master pushes and you want to avoid rebuilds.
            retention-days: 90

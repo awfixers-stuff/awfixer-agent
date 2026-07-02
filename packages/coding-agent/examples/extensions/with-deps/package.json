@@ -1,9 +1,9 @@
 {
-	"name": "pi-extension-with-deps",
+	"name": "agent-extension-with-deps",
 	"version": "1.0.0",
 	"homepage": "https://agent.awfixer.codes",
 	"type": "module",
-	"omp": {
+	"agent": {
 		"extensions": [
 			"./index.ts"
 		]

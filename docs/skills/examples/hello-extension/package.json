@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Minimal awfixer-agent extension example",
   "homepage": "https://agent.awfixer.codes",
-  "omp": {
+  "agent": {
     "extensions": ["./index.ts"]
   }
 }

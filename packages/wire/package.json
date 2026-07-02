@@ -2,7 +2,7 @@
   "type": "module",
   "name": "@awfixerai/wire",
   "version": "0.0.1-rc.1",
-  "description": "Shared wire protocol types for Oh My Pi packages",
+  "description": "Shared wire protocol types for awfixer-agent packages",
   "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {

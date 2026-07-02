@@ -166,8 +166,7 @@
     "autoawfixer:test:integration": "AUTOAWFIXER_INTEGRATION=1 uv run --directory python --package autoawfixer pytest -x autoawfixer/tests/test_worker_smoke.py",
     "agent:image": "docker build -t \"${AGENT_IMAGE:-awfixer-agent/agent:dev}\" .",
     "agent:run": "docker run --rm -it \"${AGENT_IMAGE:-awfixer-agent/agent:dev}\"",
-    "pi:image": "bun run agent:image",
-    "pi:run": "bun run agent:run",
+
     "autoawfixer:build": "bun run agent:image && docker compose --project-directory python/autoawfixer build",
     "autoawfixer:rebuild": "bun run agent:image && docker compose --project-directory python/autoawfixer build --no-cache",
     "autoawfixer:up": "docker compose --project-directory python/autoawfixer up -d",

@@ -3,7 +3,7 @@
   "name": "@awfixerai/collab-web",
   "version": "0.0.0",
   "private": true,
-  "description": "Browser guest client and local relay tools for omp collab live sessions",
+  "description": "Browser guest client and local relay tools for agent collab live sessions",
   "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {

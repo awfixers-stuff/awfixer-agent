@@ -1,13 +1,12 @@
 name: Publish
 
-# Intentionally inert: only fires on a branch that does not exist. The workflow
-# must be present so npm trusted publishers (OIDC) can reference it via
-# `bun scripts/setup-npm-trust.ts`. Replace the trigger when CI-driven npm
-# publishing is ready (e.g. main pushes that carry a release tag).
+# Publishes @awfixerai/* packages on pushes to master. The workflow must be
+# present so npm trusted publishers (OIDC) can reference it via
+# `bun scripts/setup-npm-trust.ts`.
 on:
    push:
       branches:
-         - __publish-disabled__
+         - master
 
 concurrency:
    group: publish-${{ github.sha }}

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "awfixer-agent extension example: block rm -rf / via tool_call hook",
   "homepage": "https://agent.awfixer.codes",
-  "omp": {
+  "agent": {
     "extensions": ["./index.ts"]
   }
 }

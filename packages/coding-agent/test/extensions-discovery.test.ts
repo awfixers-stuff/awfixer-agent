@@ -461,10 +461,10 @@ describe("extensions discovery", () => {
 		fs.writeFileSync(
 			path.join(extDir, "package.json"),
 			JSON.stringify({
-				name: "pi-extension-with-deps",
+				name: "agent-extension-with-deps",
 				version: "1.0.0",
 				type: "module",
-				omp: { extensions: ["./index.ts"] },
+				agent: { extensions: ["./index.ts"] },
 			}),
 		);
 

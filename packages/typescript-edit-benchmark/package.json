@@ -33,7 +33,7 @@
     "test": "bun test --parallel",
     "fix": "biome check --write --unsafe .",
     "fmt": "biome format --write .",
-    "generate": "bun run src/generate.ts --typescript-dir /tmp/pi-mono-source --count-per-type 4",
+    "generate": "bun run src/generate.ts --typescript-dir /tmp/agent-mono-source --count-per-type 4",
     "start": "bun run src/index.ts"
   },
   "dependencies": {

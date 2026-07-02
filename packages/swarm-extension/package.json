@@ -2,7 +2,7 @@
   "type": "module",
   "name": "@awfixerai/swarm-extension",
   "version": "0.0.1-rc.1",
-  "description": "Swarm orchestration extension for omp",
+  "description": "Swarm orchestration extension for agent",
   "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
@@ -20,7 +20,7 @@
     "extension"
   ],
   "bin": {
-    "omp-swarm": "src/cli.ts"
+    "agent-swarm": "src/cli.ts"
   },
   "scripts": {
     "check": "biome check . && bun run check:types",
@@ -41,7 +41,7 @@
   "engines": {
     "bun": ">=1.3.14"
   },
-  "omp": {
+  "agent": {
     "extensions": [
       "./src/extension.ts"
     ]

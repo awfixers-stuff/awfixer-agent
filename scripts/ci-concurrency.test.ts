@@ -1,5 +1,5 @@
 // Regression test for #2564: the CI workflow's `concurrency` block must route
-// release runs to a per-sha group with no cancellation, so a later main push
+// release runs to a per-sha group with no cancellation, so a later master push
 // can't kill the in-flight release and leave the tag unpublished. The block is
 // evaluated by GitHub at workflow-scheduling time (before any job can produce
 // the signal), so this test re-implements the small subset of GitHub
@@ -252,7 +252,7 @@ const RELEASE_SUBJECT = "chore: bump version to 15.12.6";
 const baseCtx = (overrides: Partial<GhaCtx> = {}): { github: GhaCtx } => ({
 	github: {
 		workflow: "CI",
-		ref: "refs/heads/main",
+		ref: "refs/heads/master",
 		sha: "deadbeefcafebabe",
 		event_name: "push",
 		event: {},
@@ -287,7 +287,7 @@ describe("ci.yml concurrency", () => {
 		expect(GhaEval.template(cancelTemplate, ctx)).toBe("false");
 	});
 
-	it("workflow_dispatch from tagged main HEAD is isolated before release_metadata can inspect tags", () => {
+	it("workflow_dispatch from tagged master HEAD is isolated before release_metadata can inspect tags", () => {
 		const ctx = baseCtx({
 			event_name: "workflow_dispatch",
 			sha: "taggedmain123",
@@ -297,9 +297,9 @@ describe("ci.yml concurrency", () => {
 		expect(GhaEval.template(cancelTemplate, ctx)).toBe("false");
 	});
 
-	it("regular main push: branch-wide group, cancel-in-progress enabled", () => {
+	it("regular master push: branch-wide group, cancel-in-progress enabled", () => {
 		const ctx = baseCtx({ event: { head_commit: { message: "fix(ux): theme tweak" } } });
-		expect(GhaEval.template(groupTemplate, ctx)).toBe("CI-refs/heads/main");
+		expect(GhaEval.template(groupTemplate, ctx)).toBe("CI-refs/heads/master");
 		expect(GhaEval.template(cancelTemplate, ctx)).toBe("true");
 	});
 
@@ -322,7 +322,7 @@ describe("ci.yml concurrency", () => {
 		const ctx = baseCtx({
 			event: { head_commit: { message: `revert: ${RELEASE_SUBJECT}` } },
 		});
-		expect(GhaEval.template(groupTemplate, ctx)).toBe("CI-refs/heads/main");
+		expect(GhaEval.template(groupTemplate, ctx)).toBe("CI-refs/heads/master");
 		expect(GhaEval.template(cancelTemplate, ctx)).toBe("true");
 	});
 });
