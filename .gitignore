@@ -7,7 +7,11 @@ node_modules/
 
 .gradle
 .gradel
-gradle
+.direnv
+
+# Android app ships its own Gradle wrapper + version catalog
+!android-app/gradle/
+!android-app/gradle/**
 
 # Build output
 dist/
@@ -20,7 +24,9 @@ target/
 *.b64.js
 
 # Environment
-.env
+.env*
+!.env.example
+!.envrc
 
 # Editors
 .vscode/

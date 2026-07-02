@@ -2,9 +2,12 @@ package codes.awfixer.agentmobile
 
 import codes.awfixer.agentmobile.data.dto.DashboardStatsDto
 import codes.awfixer.agentmobile.data.dto.MessageStatsDto
+import codes.awfixer.agentmobile.data.dto.ModelStatsDto
 import codes.awfixer.agentmobile.data.dto.RequestDetailsDto
 import codes.awfixer.agentmobile.data.dto.SyncResultDto
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -58,8 +61,39 @@ class StatsDtoParsingTest {
         assertEquals(7, details.id)
         assertEquals("detail-entry", details.entryId)
         assertEquals(0.03, details.usage.cost.total, 0.0001)
-        assertEquals(emptyList(), details.messages)
+        assertEquals(emptyList<JsonElement>(), details.messages)
         assertNull(details.output)
+    }
+
+    @Test
+    fun parsesModelStatsListFromModelsEndpoint() {
+        val payload = readFixture("model-stats-list.json")
+        val models = json.decodeFromString(ListSerializer(ModelStatsDto.serializer()), payload)
+
+        assertEquals(1, models.size)
+        assertEquals("claude-sonnet-4.5", models.first().model)
+        assertEquals(1, models.first().failedRequests)
+    }
+
+    @Test
+    fun parsesMessageStatsListFromRecentEndpoint() {
+        val payload = "[${readFixture("message-stats.json")}]"
+        val recent = json.decodeFromString(ListSerializer(MessageStatsDto.serializer()), payload)
+
+        assertEquals(1, recent.size)
+        assertEquals("gpt-5.4", recent.first().model)
+    }
+
+    @Test
+    fun parsesErrorMessageStatsWithPremiumRequests() {
+        val payload = readFixture("message-stats-error.json")
+        val stats = json.decodeFromString(MessageStatsDto.serializer(), payload)
+
+        assertEquals("error", stats.stopReason)
+        assertEquals("rate limit exceeded", stats.errorMessage)
+        assertEquals("subagent", stats.agentType)
+        assertEquals(1, stats.usage.premiumRequests)
+        assertNull(stats.ttft)
     }
 
     @Test
@@ -73,7 +107,7 @@ class StatsDtoParsingTest {
     }
 
     private fun readFixture(name: String): String {
-        val stream = checkNotNull(javaClass.classLoader.getResourceAsStream(name)) {
+        val stream = checkNotNull(javaClass.classLoader?.getResourceAsStream(name)) {
             "Missing test fixture: $name"
         }
         return stream.bufferedReader().use { it.readText() }

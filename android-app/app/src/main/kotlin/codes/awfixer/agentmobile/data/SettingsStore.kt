@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "agentmobile_settings")
 
+/** Emulator loopback to host machine. */
+const val DEFAULT_BASE_URL = "http://10.0.2.2:3847"
+
 data class AppSettings(
     val baseUrl: String = DEFAULT_BASE_URL,
     val bearerToken: String = "",
@@ -40,10 +43,5 @@ class SettingsStore(private val context: Context) {
 
     suspend fun setTimeRange(range: String) {
         context.dataStore.edit { it[keyRange] = range }
-    }
-
-    companion object {
-        /** Emulator loopback to host machine. */
-        const val DEFAULT_BASE_URL = "http://10.0.2.2:3847"
     }
 }

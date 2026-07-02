@@ -1,0 +1,30 @@
+{
+  "id": 2,
+  "sessionFile": "/tmp/session.jsonl",
+  "entryId": "failed-entry",
+  "folder": "/tmp/project",
+  "model": "claude-sonnet-4.5",
+  "provider": "anthropic",
+  "api": "anthropic-messages",
+  "timestamp": 1719849600000,
+  "duration": 500,
+  "ttft": null,
+  "stopReason": "error",
+  "errorMessage": "rate limit exceeded",
+  "usage": {
+    "input": 100,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0,
+    "totalTokens": 100,
+    "premiumRequests": 1,
+    "cost": {
+      "input": 0.001,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "total": 0.001
+    }
+  },
+  "agentType": "subagent"
+}

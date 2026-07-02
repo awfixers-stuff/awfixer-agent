@@ -18,9 +18,11 @@ Requires Android SDK and JDK 17.
 
 ```bash
 cd android-app
-./gradlew :app:assembleDebug
-./gradlew :app:testDebugUnitTest
+./gradlew --no-daemon :app:testDebugUnitTest
+./gradlew --no-daemon :app:assembleDebug
 ```
+
+On memory-constrained hosts, `gradle.properties` caps the JVM at 1024m and disables the daemon.
 
 Default stats URL for emulator: `http://10.0.2.2:3847`. Start stats on the host:
 

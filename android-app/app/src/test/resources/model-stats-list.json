@@ -1,0 +1,22 @@
+[
+  {
+    "model": "claude-sonnet-4.5",
+    "provider": "anthropic",
+    "totalRequests": 3,
+    "successfulRequests": 2,
+    "failedRequests": 1,
+    "errorRate": 0.3333333333333333,
+    "totalInputTokens": 310,
+    "totalOutputTokens": 155,
+    "totalCacheReadTokens": 30,
+    "totalCacheWriteTokens": 0,
+    "cacheRate": 0.08,
+    "totalCost": 0.05,
+    "totalPremiumRequests": 0,
+    "avgDuration": 1000,
+    "avgTtft": 100,
+    "avgTokensPerSecond": 50,
+    "firstTimestamp": 1719849600000,
+    "lastTimestamp": 1719849700000
+  }
+]

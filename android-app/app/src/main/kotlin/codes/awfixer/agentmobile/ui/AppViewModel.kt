@@ -57,10 +57,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun refreshAll(settings: AppSettings = settings.value) {
-        loadDashboard(settings)
-        loadRecent(settings)
-        loadErrors(settings)
+    fun refreshAll(current: AppSettings = settings.value) {
+        loadDashboard(current)
+        loadRecent(current)
+        loadErrors(current)
         viewModelScope.launch { _control.value = controlRepository.refresh() }
     }
 
