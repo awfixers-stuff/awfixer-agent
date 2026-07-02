@@ -750,7 +750,14 @@ async function resolveSince(repoRoot: string, since: string | undefined): Promis
 	if (since) return since;
 	const versionTag = await latestTag(repoRoot);
 	const baseline = await changelogBaselineCommit(repoRoot);
-	if (!baseline) return versionTag;
+	if (!baseline) {
+		if (!versionTag) {
+			const root = (await gitMaybe(["rev-list", "--max-parents=0", "HEAD"], repoRoot))?.trim();
+			if (root) return root;
+			return "HEAD";
+		}
+		return versionTag;
+	}
 	if (!versionTag) return CHANGELOG_BASELINE_REF;
 	const versionTagIsNewer =
 		(await gitMaybe(["merge-base", "--is-ancestor", baseline, versionTag], repoRoot)) !== undefined;

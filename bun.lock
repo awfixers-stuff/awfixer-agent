@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "omp-monorepo",
+      "name": "awfixer-agent",
       "dependencies": {
         "sherpa-onnx": "1.13.2",
         "sherpa-onnx-darwin-arm64": "1.13.3",
@@ -21,7 +21,7 @@
     },
     "packages/agent": {
       "name": "@awfixerai/agent-core",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "dependencies": {
         "@awfixerai/ai": "catalog:",
         "@awfixerai/catalog": "catalog:",
@@ -49,7 +49,7 @@
     },
     "packages/ai": {
       "name": "@awfixerai/ai",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "dependencies": {
         "@awfixerai/catalog": "catalog:",
         "@awfixerai/utils": "catalog:",
@@ -65,7 +65,7 @@
     },
     "packages/catalog": {
       "name": "@awfixerai/catalog",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "dependencies": {
         "@awfixerai/utils": "catalog:",
         "@bufbuild/protobuf": "catalog:",
@@ -79,7 +79,7 @@
     },
     "packages/coding-agent": {
       "name": "@awfixerai/agent",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "bin": {
         "agent": "src/cli.ts",
       },
@@ -148,7 +148,7 @@
     },
     "packages/hashline": {
       "name": "@awfixerai/hashline",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "dependencies": {
         "diff": "catalog:",
         "lru-cache": "catalog:",
@@ -159,7 +159,7 @@
     },
     "packages/mnemopi": {
       "name": "@awfixerai/mnemopi",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "bin": {
         "mnemopi": "src/cli.ts",
       },
@@ -185,7 +185,7 @@
     },
     "packages/natives": {
       "name": "@awfixerai/natives",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "devDependencies": {
         "@napi-rs/cli": "catalog:",
         "@types/bun": "catalog:",
@@ -193,7 +193,7 @@
     },
     "packages/snapcompact": {
       "name": "@awfixerai/snapcompact",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "dependencies": {
         "@awfixerai/ai": "catalog:",
         "@awfixerai/natives": "catalog:",
@@ -206,7 +206,7 @@
     },
     "packages/stats": {
       "name": "@awfixerai/stats",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "bin": {
         "omp-stats": "./src/index.ts",
       },
@@ -232,7 +232,7 @@
     },
     "packages/swarm-extension": {
       "name": "@awfixerai/swarm-extension",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "bin": {
         "omp-swarm": "src/cli.ts",
       },
@@ -258,7 +258,7 @@
     },
     "packages/tui": {
       "name": "@awfixerai/tui",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "dependencies": {
         "@awfixerai/natives": "catalog:",
         "@awfixerai/utils": "catalog:",
@@ -299,7 +299,7 @@
     },
     "packages/utils": {
       "name": "@awfixerai/utils",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "dependencies": {
         "@awfixerai/natives": "catalog:",
         "handlebars": "catalog:",
@@ -312,7 +312,7 @@
     },
     "packages/wire": {
       "name": "@awfixerai/wire",
-      "version": "0.0.0",
+      "version": "0.0.1-rc.1",
       "devDependencies": {
         "@types/bun": "catalog:",
       },
@@ -337,38 +337,38 @@
     "@ark/schema@0.56.0": "patches/@ark%2Fschema@0.56.0.patch",
   },
   "overrides": {
-    "@awfixerai/agent": "workspace:*",
-    "@awfixerai/agent-core": "workspace:*",
-    "@awfixerai/ai": "workspace:*",
-    "@awfixerai/catalog": "workspace:*",
-    "@awfixerai/collab-web": "workspace:*",
-    "@awfixerai/hashline": "workspace:*",
-    "@awfixerai/mnemopi": "workspace:*",
-    "@awfixerai/natives": "workspace:*",
-    "@awfixerai/snapcompact": "workspace:*",
-    "@awfixerai/stats": "workspace:*",
-    "@awfixerai/swarm-extension": "workspace:*",
-    "@awfixerai/terminal-bench": "workspace:*",
-    "@awfixerai/tui": "workspace:*",
-    "@awfixerai/typescript-edit-benchmark": "workspace:*",
-    "@awfixerai/utils": "workspace:*",
-    "@awfixerai/wire": "workspace:*",
+    "@awfixerai/agent": "0.0.1-rc.1",
+    "@awfixerai/agent-core": "0.0.1-rc.1",
+    "@awfixerai/ai": "0.0.1-rc.1",
+    "@awfixerai/catalog": "0.0.1-rc.1",
+    "@awfixerai/collab-web": "0.0.1-rc.1",
+    "@awfixerai/hashline": "0.0.1-rc.1",
+    "@awfixerai/mnemopi": "0.0.1-rc.1",
+    "@awfixerai/natives": "0.0.1-rc.1",
+    "@awfixerai/snapcompact": "0.0.1-rc.1",
+    "@awfixerai/stats": "0.0.1-rc.1",
+    "@awfixerai/swarm-extension": "0.0.1-rc.1",
+    "@awfixerai/terminal-bench": "0.0.1-rc.1",
+    "@awfixerai/tui": "0.0.1-rc.1",
+    "@awfixerai/typescript-edit-benchmark": "0.0.1-rc.1",
+    "@awfixerai/utils": "0.0.1-rc.1",
+    "@awfixerai/wire": "0.0.1-rc.1",
   },
   "catalog": {
     "@1password/sdk": "^0.4.0",
     "@agentclientprotocol/sdk": "0.25.0",
-    "@awfixerai/agent": "16.2.5",
-    "@awfixerai/agent-core": "16.2.5",
-    "@awfixerai/ai": "16.2.5",
-    "@awfixerai/catalog": "16.2.5",
-    "@awfixerai/hashline": "16.2.5",
-    "@awfixerai/mnemopi": "16.2.5",
-    "@awfixerai/natives": "16.2.5",
-    "@awfixerai/snapcompact": "16.2.5",
-    "@awfixerai/stats": "16.2.5",
-    "@awfixerai/tui": "16.2.5",
-    "@awfixerai/utils": "16.2.5",
-    "@awfixerai/wire": "16.2.5",
+    "@awfixerai/agent": "0.0.1-rc.1",
+    "@awfixerai/agent-core": "0.0.1-rc.1",
+    "@awfixerai/ai": "0.0.1-rc.1",
+    "@awfixerai/catalog": "0.0.1-rc.1",
+    "@awfixerai/hashline": "0.0.1-rc.1",
+    "@awfixerai/mnemopi": "0.0.1-rc.1",
+    "@awfixerai/natives": "0.0.1-rc.1",
+    "@awfixerai/snapcompact": "0.0.1-rc.1",
+    "@awfixerai/stats": "0.0.1-rc.1",
+    "@awfixerai/tui": "0.0.1-rc.1",
+    "@awfixerai/utils": "0.0.1-rc.1",
+    "@awfixerai/wire": "0.0.1-rc.1",
     "@babel/generator": "^7.29.7",
     "@babel/parser": "^7.29.7",
     "@babel/traverse": "^7.29.7",
@@ -958,7 +958,7 @@
 
     "@xterm/headless": ["@xterm/headless@6.0.0", "", {}, "sha512-5Yj1QINYCyzrZtf8OFIHi47iQtI+0qYFPHmouEfG8dHNxbZ9Tb9YGSuLcsEwj9Z+OL75GJqPyJbyoFer80a2Hw=="],
 
-    "adm-zip": ["adm-zip@0.5.17", "", {}, "sha512-+Ut8d9LLqwEvHHJl1+PIHqoyDxFgVN847JTVM3Izi3xHDWPE4UtzzXysMZQs64DMcrJfBeS/uoEP4AD3HQHnQQ=="],
+    "adm-zip": ["adm-zip@0.5.18", "", {}, "sha512-ufJnssQGbxzLNS1Ho9bCtX4rQKCCvoVuDLHoJyc3F9dOGDB4BkWs2Ci0kv53lqocAEQ/Cbi+I2XCsNYGqVYqng=="],
 
     "ansi-escapes": ["ansi-escapes@7.3.0", "", { "dependencies": { "environment": "^1.0.0" } }, "sha512-BvU8nYgGQBxcmMuEeUEmNTvrMVjJNSH7RgW24vXexN4Ven6qCvy4TntnvlnwnMLTVlcRQQdbRY8NKnaIoeWDNg=="],
 
@@ -996,7 +996,7 @@
 
     "boolean": ["boolean@3.2.0", "", {}, "sha512-d0II/GO9uf9lfUHH2BQsjxzRJZBdsjgsBiW4BvhWk/3qoKwQFjIDVN19PfX8F2D/r9PCMTtLWjYVCFrpeYUzsw=="],
 
-    "brace-expansion": ["brace-expansion@5.0.6", "", { "dependencies": { "balanced-match": "^4.0.2" } }, "sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g=="],
+    "brace-expansion": ["brace-expansion@5.0.7", "", { "dependencies": { "balanced-match": "^4.0.2" } }, "sha512-7oFy703dxfY3/NLxC1fh2SUCQ0H9rmAY+5EpDVfXjUTTs+HEwR2nYaqLv+GWcTsumwxPfiz6CzCNkwXwBUwqCA=="],
 
     "browserslist": ["browserslist@4.28.4", "", { "dependencies": { "baseline-browser-mapping": "^2.10.38", "caniuse-lite": "^1.0.30001799", "electron-to-chromium": "^1.5.376", "node-releases": "^2.0.48", "update-browserslist-db": "^1.2.3" }, "bin": { "browserslist": "cli.js" } }, "sha512-MTc8i/x9jBQd1iMw2CFGS+rwMa07eYjLR0CCTLDACl9xhxy+nIs3KeML/biicXtk9JrZ6dnnTatmc7ErPXIxqw=="],
 
@@ -1080,7 +1080,7 @@
 
     "duck": ["duck@0.1.12", "", { "dependencies": { "underscore": "^1.13.1" } }, "sha512-wkctla1O6VfP89gQ+J/yDesM0S7B7XLXjKGzXxMDVFg7uEn706niAtyYovKbyq1oT9YwDcly721/iUWoc8MVRg=="],
 
-    "electron-to-chromium": ["electron-to-chromium@1.5.376", "", {}, "sha512-cUVA7/RvbFTEuw/i3obUwDTRIXojaxkResf+ibByPFxjc6XK3VNtcQXV0NSbAlJ0FMjcJGgftVVB4Qo184EXvA=="],
+    "electron-to-chromium": ["electron-to-chromium@1.5.381", "", {}, "sha512-n9Wa6yB+vDsGuA8AKbl/0z7HbvWqt5jxIdvr1IUicd0ryPrk7/xzwqLv8D9AbbvZ6avVNtXYLTfmgFHkwkyelg=="],
 
     "emnapi": ["emnapi@1.11.1", "", { "peerDependencies": { "node-addon-api": ">= 6.1.0" }, "optionalPeers": ["node-addon-api"] }, "sha512-kSRjhIcxjMFsBqk7ORvoc9aA5SBKDmecrtF5RMcmOTao0kD/zamaxsuTxMI8C1//wGUuvE7a+19pCE7AEhGVnA=="],
 
@@ -1098,7 +1098,7 @@
 
     "es-errors": ["es-errors@1.3.0", "", {}, "sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw=="],
 
-    "es-toolkit": ["es-toolkit@1.48.1", "", {}, "sha512-wfnXlwd5I75eXRtdD2vuEs50xHHESECDsGD7yiQnfFVNoa5522NwXEbmgo98LfiukSQHs+mBM7/YG3qKJB9/mQ=="],
+    "es-toolkit": ["es-toolkit@1.49.0", "", {}, "sha512-G5iZ6Pc/FNRY/soKZHC+TxGDD83rHUDXxzaWhGCX44vAv/tMs56WMusnm/KMNK+luUPsgA9U28cGr4RDlSzL2g=="],
 
     "es6-error": ["es6-error@4.1.1", "", {}, "sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg=="],
 
@@ -1186,7 +1186,7 @@
 
     "js-tokens": ["js-tokens@4.0.0", "", {}, "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="],
 
-    "js-yaml": ["js-yaml@4.2.0", "", { "dependencies": { "argparse": "^2.0.1" }, "bin": { "js-yaml": "bin/js-yaml.js" } }, "sha512-ePWsvanv0DWuDRsW8dnt+R4jQ31SCRCQ7hhNcPXZPsoBZiemuZNYGf7adZdqX2D86j6rvKp3RpCxVTSb8WQlOw=="],
+    "js-yaml": ["js-yaml@4.3.0", "", { "dependencies": { "argparse": "^2.0.1" }, "bin": { "js-yaml": "bin/js-yaml.js" } }, "sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q=="],
 
     "jsesc": ["jsesc@3.1.0", "", { "bin": { "jsesc": "bin/jsesc" } }, "sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA=="],
 
@@ -1242,7 +1242,7 @@
 
     "lru-cache": ["lru-cache@11.5.1", "", {}, "sha512-RPimw/7aMdv2oqRrxKwvZXcPfwBrn/JZ2xYcY9Hus/6LaS3VOAKVWKWgNLCFSiOm1ESXinjsDlidVU7JlnCN2A=="],
 
-    "lucide-react": ["lucide-react@1.21.0", "", { "peerDependencies": { "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-reEZMXq8Qdd5jg5XYkQ5TR1fB/GiQ7ih4vcrthYDtgjSDwh0i6/YLiGjsWsIwgN49gpAnd4J2elSNzncMEEUUQ=="],
+    "lucide-react": ["lucide-react@1.22.0", "", { "peerDependencies": { "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-c9o3l0PiNcgOQDW4F31BEYHudE7kgxVt3o30qMl36ZPwTxXlGB4QnLilhERvVM4uh/pl5MDyY1/gzZSYcHDtBg=="],
 
     "magic-string": ["magic-string@0.30.21", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.5" } }, "sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ=="],
 
@@ -1320,9 +1320,9 @@
 
     "platform": ["platform@1.3.6", "", {}, "sha512-fnWVljUchTro6RiCFvCXBbNhJc2NijN7oIQxbwsyL0buWJPG85v81ehlHI9fXrJsMNgTofEoWIQeClKpgxFLrg=="],
 
-    "postcss": ["postcss@8.5.15", "", { "dependencies": { "nanoid": "^3.3.12", "picocolors": "^1.1.1", "source-map-js": "^1.2.1" } }, "sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A=="],
+    "postcss": ["postcss@8.5.16", "", { "dependencies": { "nanoid": "^3.3.12", "picocolors": "^1.1.1", "source-map-js": "^1.2.1" } }, "sha512-vuwillviilfKZsg0VGj5R/YwwcHx4SLsIOI/7K6mQkWx+l5cUHTjj5g0AasTBcyXsbfTgrwsUNmVUb5xVwyPwg=="],
 
-    "prettier": ["prettier@3.8.4", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-N2MylSdi48+5N/6S5j+maeHbUSIzzZ5uOcX5Hm4QpV8Dkb1HFjfAKTKX6yNPJQD9AhcT3ifHNB66tWTTJDi11Q=="],
+    "prettier": ["prettier@3.9.1", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-ppiDo2CSwexck1eyZUwJHg/N3nf1+6IRCv7W/VJ5vaLnVCmB7+3CdRfMwoCHBBX6xTrREDTksZ4OZl5SSf4zXA=="],
 
     "process-nextick-args": ["process-nextick-args@2.0.1", "", {}, "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag=="],
 
@@ -1588,7 +1588,7 @@
 
     "fastembed/onnxruntime-node/onnxruntime-common": ["onnxruntime-common@1.21.0", "", {}, "sha512-Q632iLLrtCAVOTO65dh2+mNbQir/QNTVBG3h/QdZBpns7mZ0RYbLRBgGABPbpU9351AgYy7SJf1WaeVwMrBFPQ=="],
 
-    "fastembed/onnxruntime-node/tar": ["tar@7.5.17", "", { "dependencies": { "@isaacs/fs-minipass": "^4.0.0", "chownr": "^3.0.0", "minipass": "^7.1.2", "minizlib": "^3.1.0", "yallist": "^5.0.0" } }, "sha512-wPEBwzapC+2PaTYPH6e2L+cNOEE227S47wUYFqlegcs8zlLLmeb9Fcff1HVZY4Fwku/1Eyv38n7GYwB2aaS71g=="],
+    "fastembed/onnxruntime-node/tar": ["tar@7.5.19", "", { "dependencies": { "@isaacs/fs-minipass": "^4.0.0", "chownr": "^3.0.0", "minipass": "^7.1.2", "minizlib": "^3.1.0", "yallist": "^5.0.0" } }, "sha512-4LeEWl96twnS2Q7Bz4MGqgazLqO+hJN63GZxXoIqh1T3VweYD997gbU1ItNsQafqqXTXd5WFyFdReLtwvRBNiw=="],
 
     "jszip/readable-stream/string_decoder": ["string_decoder@1.1.1", "", { "dependencies": { "safe-buffer": "~5.1.0" } }, "sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg=="],
 

@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@awfixerai/utils",
-  "version": "0.0.0",
+  "version": "0.0.1-rc.1",
   "description": "Shared utilities for pi packages",
   "homepage": "https://agent.awfixer.codes",
   "license": "MIT",

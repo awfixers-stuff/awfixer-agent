@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@awfixerai/ai",
-  "version": "0.0.0",
+  "version": "0.0.1-rc.1",
   "description": "Unified LLM API with automatic model discovery and provider configuration",
   "homepage": "https://agent.awfixer.codes",
   "license": "MIT",

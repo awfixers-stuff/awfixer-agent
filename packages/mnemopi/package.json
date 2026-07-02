@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@awfixerai/mnemopi",
-  "version": "0.0.0",
+  "version": "0.0.1-rc.1",
   "description": "Local SQLite memory engine for Oh My Pi agents",
   "homepage": "https://agent.awfixer.codes",
   "license": "MIT",

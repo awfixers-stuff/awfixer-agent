@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@awfixerai/swarm-extension",
-  "version": "0.0.0",
+  "version": "0.0.1-rc.1",
   "description": "Swarm orchestration extension for omp",
   "homepage": "https://agent.awfixer.codes",
   "license": "MIT",

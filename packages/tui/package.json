@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@awfixerai/tui",
-  "version": "0.0.0",
+  "version": "0.0.1-rc.1",
   "description": "Terminal User Interface library with differential rendering for efficient text-based applications",
   "homepage": "https://agent.awfixer.codes",
   "license": "MIT",

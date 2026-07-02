@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@awfixerai/agent",
-  "version": "0.0.0",
+  "version": "0.0.1-rc.1",
   "description": "Coding agent CLI with read, bash, edit, write tools and session management",
   "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
