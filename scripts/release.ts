@@ -283,14 +283,18 @@ async function cmdRelease(versionOrBump: string): Promise<void> {
 	}
 	console.log();
 
-	// Update @awfixerai/* catalog entries in root package.json
+	// Update @awfixerai/* catalog entries in root package.json (catalog only — not overrides).
 	console.log("Updating root catalog versions...");
-	let rootPkgRaw = await Bun.file("package.json").text();
-	rootPkgRaw = rootPkgRaw.replace(
-		/("@awfixerai\/[^"]+":\s*)"[^"]+"/g,
-		`$1"${version}"`,
-	);
-	await Bun.write("package.json", rootPkgRaw);
+	const rootPkg = (await Bun.file("package.json").json()) as {
+		workspaces?: { catalog?: Record<string, string> };
+	};
+	const catalog = rootPkg.workspaces?.catalog;
+	if (catalog) {
+		for (const key of Object.keys(catalog)) {
+			if (key.startsWith("@awfixerai/")) catalog[key] = version;
+		}
+		await Bun.write("package.json", `${JSON.stringify(rootPkg, null, "\t")}\n`);
+	}
 	console.log("  Updated root catalog @awfixerai/* entries");
 
 	// 3. Update Rust workspace version
