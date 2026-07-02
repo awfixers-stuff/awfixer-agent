@@ -8,8 +8,8 @@ version = "0.0.0"
 edition = "2024"
 license = "MIT"
 authors = ["Can Boluk"]
-homepage = "https://omp.sh/"
-repository = "https://github.com/can1357/oh-my-pi"
+homepage = "https://agent.awfixer.codes/"
+repository = "https://github.com/awfixers-stuff/awfixer-agent"
 
 [patch.crates-io]
 brush-core = { path = "crates/vendor/brush-core" }

@@ -10,15 +10,15 @@
 #   pi-runtime      — pi-base + pi source + bun install      (DEFAULT, runnable)
 #
 # Build:
-#     docker build -t oh-my-pi/pi:dev .                          # default = pi-runtime
-#     docker build --target pi-base -t oh-my-pi/pi-base:dev .    # base for derived images
+#     docker build -t awfixer-agent/agent:dev .                          # default = pi-runtime
+#     docker build --target pi-base -t awfixer-agent/agent-base:dev .    # base for derived images
 #
 # Run:
-#     docker run --rm oh-my-pi/pi:dev --help
-#     docker run --rm -it -v "$PWD":/work oh-my-pi/pi:dev cli    # interactive omp
+#     docker run --rm awfixer-agent/agent:dev --help
+#     docker run --rm -it -v "$PWD":/work awfixer-agent/agent:dev cli    # interactive omp
 #
-# Consume as a base in another Dockerfile (see Dockerfile.robomp):
-#     ARG PI_BASE=oh-my-pi/pi:dev
+# Consume as a base in another Dockerfile (see Dockerfile.autoawfixer):
+#     ARG PI_BASE=awfixer-agent/agent:dev
 #     FROM ${PI_BASE} AS pi-base
 ###############################################################################
 
@@ -54,7 +54,7 @@ COPY --parents \
     Cargo.toml Cargo.lock rust-toolchain.toml \
     packages/*/package.json \
     packages/tsconfig.workspace.json \
-    python/robomp/web/package.json \
+    python/autoawfixer/web/package.json \
     crates/*/Cargo.toml \
     /pi/
 
@@ -96,8 +96,8 @@ RUN python -m build --wheel --outdir /out
 ############################
 # 3) pi-base — python + bun + rustup + natives + omp_rpc + omp shim
 #
-# Sharable runtime base. Derived images (pi-runtime below, Dockerfile.robomp)
-# extend this and overlay their own source tree. Default PI_ROOT=/work/pi is
+# Sharable runtime base. Derived images (pi-runtime below, Dockerfile.autoawfixer)
+# extend this and overlay their own source tree. Default AGENT_ROOT=/work/pi is
 # friendly to derived images that mount a host pi checkout there; pi-runtime
 # overrides it to /pi because its source is baked in.
 ############################
@@ -109,7 +109,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     BUN_INSTALL=/opt/bun \
-    PI_ROOT=/work/pi \
+    AGENT_ROOT=/work/pi \
     CARGO_HOME=/data/cache/cargo \
     CARGO_TARGET_DIR=/data/cache/cargo-target \
     RUSTUP_HOME=/data/cache/rustup \
@@ -141,14 +141,14 @@ COPY --from=natives-builder /out/pi_natives.linux-*.node /opt/bun/bin/
 COPY --from=wheel-builder /out/*.whl /tmp/wheels/
 RUN pip install /tmp/wheels/omp_rpc-*.whl && rm -rf /tmp/wheels
 
-# `omp` shim — runs the coding-agent CLI against $PI_ROOT via Bun. Derived
-# images override PI_ROOT to point at wherever their pi source lives.
+# `omp` shim — runs the coding-agent CLI against $AGENT_ROOT via Bun. Derived
+# images override AGENT_ROOT to point at wherever their pi source lives.
 RUN printf '%s\n' \
     '#!/usr/bin/env bash' \
     'set -euo pipefail' \
-    ': "${PI_ROOT:=/work/pi}"' \
-    'if [ ! -d "$PI_ROOT/packages/coding-agent" ]; then' \
-    '  echo "pi: PI_ROOT=$PI_ROOT does not look like a pi checkout" >&2' \
+    ': "${AGENT_ROOT:=/work/pi}"' \
+    'if [ ! -d "$AGENT_ROOT/packages/coding-agent" ]; then' \
+    '  echo "pi: AGENT_ROOT=$AGENT_ROOT does not look like a pi checkout" >&2' \
     '  exit 127' \
     'fi' \
     > /usr/local/bin/omp \
@@ -158,12 +158,12 @@ RUN printf '%s\n' \
 ############################
 # 4) pi-runtime — pi-base + pi source + bun install (DEFAULT)
 #
-# A self-contained, runnable omp image. `docker run oh-my-pi/pi:dev --help`
+# A self-contained, runnable omp image. `docker run awfixer-agent/agent:dev --help`
 # Just Works without a host checkout.
 ############################
 FROM pi-base AS pi-runtime
 
-ENV PI_ROOT=/pi
+ENV AGENT_ROOT=/pi
 WORKDIR /pi
 
 # Same manifests-only layered install pattern as natives-builder — `bun install`
@@ -174,7 +174,7 @@ COPY --parents \
     tsconfig.base.json tsconfig.json \
     packages/*/package.json \
     packages/tsconfig.workspace.json \
-    python/robomp/web/package.json \
+    python/autoawfixer/web/package.json \
     /pi/
 
 RUN bun install --frozen-lockfile --ignore-scripts

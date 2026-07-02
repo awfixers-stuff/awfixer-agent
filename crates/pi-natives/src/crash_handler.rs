@@ -366,18 +366,18 @@ mod tests {
 
 	#[test]
 	fn resolve_logs_dir_defaults_under_dot_omp() {
-		let dir = resolve_logs_dir(Path::new("/tmp/pi-natives-test-home"), None, None);
-		assert_eq!(dir, PathBuf::from("/tmp/pi-natives-test-home/.omp/logs"));
+		let dir = resolve_logs_dir(Path::new("/tmp/agent-natives-test-home"), None, None);
+		assert_eq!(dir, PathBuf::from("/tmp/agent-natives-test-home/.omp/logs"));
 	}
 
 	#[test]
 	fn resolve_logs_dir_honors_relative_pi_config_dir() {
 		let dir = resolve_logs_dir(
-			Path::new("/tmp/pi-natives-test-home"),
+			Path::new("/tmp/agent-natives-test-home"),
 			Some(OsStr::new(".omp-dev")),
 			None,
 		);
-		assert_eq!(dir, PathBuf::from("/tmp/pi-natives-test-home/.omp-dev/logs"));
+		assert_eq!(dir, PathBuf::from("/tmp/agent-natives-test-home/.omp-dev/logs"));
 	}
 
 	#[test]
@@ -386,21 +386,21 @@ mod tests {
 		// getConfigDirName())`, which never honors an absolute PI_CONFIG_DIR — it is
 		// always re-rooted under `$HOME` (and `..` components are normalized away).
 		let dir = resolve_logs_dir(
-			Path::new("/tmp/pi-natives-test-home"),
-			Some(OsStr::new("/var/tmp/pi-natives-state")),
+			Path::new("/tmp/agent-natives-test-home"),
+			Some(OsStr::new("/var/tmp/agent-natives-state")),
 			None,
 		);
-		assert_eq!(dir, PathBuf::from("/tmp/pi-natives-test-home/var/tmp/pi-natives-state/logs"));
+		assert_eq!(dir, PathBuf::from("/tmp/agent-natives-test-home/var/tmp/agent-natives-state/logs"));
 	}
 
 	#[test]
 	fn resolve_logs_dir_normalizes_parent_components_like_path_join() {
 		let dir = resolve_logs_dir(
-			Path::new("/tmp/pi-natives-test-home"),
+			Path::new("/tmp/agent-natives-test-home"),
 			Some(OsStr::new("nested/../.omp-dev")),
 			None,
 		);
-		assert_eq!(dir, PathBuf::from("/tmp/pi-natives-test-home/.omp-dev/logs"));
+		assert_eq!(dir, PathBuf::from("/tmp/agent-natives-test-home/.omp-dev/logs"));
 	}
 
 	#[cfg(any(target_os = "linux", target_os = "macos"))]
@@ -411,7 +411,7 @@ mod tests {
 		let dir = xdg_state_logs(
 			Some(OsStr::new("/xdg/state")),
 			Some(OsStr::new("")),
-			Path::new("/tmp/pi-natives-test-home/.omp/agent"),
+			Path::new("/tmp/agent-natives-test-home/.omp/agent"),
 			|_p| true,
 		);
 		assert_eq!(dir, Some(PathBuf::from("/xdg/state/omp/logs")));
@@ -420,14 +420,14 @@ mod tests {
 	#[test]
 	fn resolve_logs_dir_ignores_empty_pi_config_dir() {
 		let dir =
-			resolve_logs_dir(Path::new("/tmp/pi-natives-test-home"), Some(OsStr::new("")), None);
-		assert_eq!(dir, PathBuf::from("/tmp/pi-natives-test-home/.omp/logs"));
+			resolve_logs_dir(Path::new("/tmp/agent-natives-test-home"), Some(OsStr::new("")), None);
+		assert_eq!(dir, PathBuf::from("/tmp/agent-natives-test-home/.omp/logs"));
 	}
 
 	#[test]
 	fn resolve_logs_dir_prefers_xdg_when_provided() {
 		let dir = resolve_logs_dir(
-			Path::new("/tmp/pi-natives-test-home"),
+			Path::new("/tmp/agent-natives-test-home"),
 			None,
 			Some(PathBuf::from("/xdg/state/omp/logs")),
 		);
@@ -440,7 +440,7 @@ mod tests {
 		let dir = xdg_state_logs(
 			Some(OsStr::new("/xdg/state")),
 			None,
-			Path::new("/tmp/pi-natives-test-home/.omp/agent"),
+			Path::new("/tmp/agent-natives-test-home/.omp/agent"),
 			|_p| true,
 		);
 		assert_eq!(dir, Some(PathBuf::from("/xdg/state/omp/logs")));
@@ -452,7 +452,7 @@ mod tests {
 		let dir = xdg_state_logs(
 			Some(OsStr::new("/xdg/state")),
 			None,
-			Path::new("/tmp/pi-natives-test-home/.omp/agent"),
+			Path::new("/tmp/agent-natives-test-home/.omp/agent"),
 			|_p| false,
 		);
 		assert_eq!(dir, None);
@@ -461,7 +461,7 @@ mod tests {
 	#[cfg(any(target_os = "linux", target_os = "macos"))]
 	#[test]
 	fn xdg_state_logs_skipped_when_xdg_state_home_unset_or_empty() {
-		let default_agent = Path::new("/tmp/pi-natives-test-home/.omp/agent");
+		let default_agent = Path::new("/tmp/agent-natives-test-home/.omp/agent");
 		assert_eq!(xdg_state_logs(None, None, default_agent, |_p| true), None);
 		assert_eq!(xdg_state_logs(Some(OsStr::new("")), None, default_agent, |_p| true), None);
 	}
@@ -474,7 +474,7 @@ mod tests {
 		let dir = xdg_state_logs(
 			Some(OsStr::new("/xdg/state")),
 			Some(OsStr::new("/some/custom/agent")),
-			Path::new("/tmp/pi-natives-test-home/.omp/agent"),
+			Path::new("/tmp/agent-natives-test-home/.omp/agent"),
 			|_p| true,
 		);
 		assert_eq!(dir, None);
@@ -496,29 +496,29 @@ mod tests {
 	#[cfg(any(target_os = "linux", target_os = "macos"))]
 	#[test]
 	fn default_agent_dir_uses_dot_omp_by_default() {
-		let dir = default_agent_dir(Path::new("/tmp/pi-natives-test-home"), None);
-		assert_eq!(dir, PathBuf::from("/tmp/pi-natives-test-home/.omp/agent"));
+		let dir = default_agent_dir(Path::new("/tmp/agent-natives-test-home"), None);
+		assert_eq!(dir, PathBuf::from("/tmp/agent-natives-test-home/.omp/agent"));
 	}
 	#[cfg(any(target_os = "linux", target_os = "macos"))]
 	#[test]
 	fn default_agent_dir_respects_pi_config_dir() {
 		let dir =
-			default_agent_dir(Path::new("/tmp/pi-natives-test-home"), Some(OsStr::new(".omp-dev")));
-		assert_eq!(dir, PathBuf::from("/tmp/pi-natives-test-home/.omp-dev/agent"));
+			default_agent_dir(Path::new("/tmp/agent-natives-test-home"), Some(OsStr::new(".omp-dev")));
+		assert_eq!(dir, PathBuf::from("/tmp/agent-natives-test-home/.omp-dev/agent"));
 	}
 
 	#[test]
 	fn build_crash_log_path_tags_kind_and_pid() {
-		let dir = Path::new("/tmp/pi-natives-test-home/.omp/logs");
+		let dir = Path::new("/tmp/agent-natives-test-home/.omp/logs");
 		let panic_log = build_crash_log_path(dir, CrashKind::Panic, 4242, 1_700_000_000_000);
 		assert_eq!(
 			panic_log,
-			PathBuf::from("/tmp/pi-natives-test-home/.omp/logs/native-panic-4242-1700000000000.log")
+			PathBuf::from("/tmp/agent-natives-test-home/.omp/logs/native-panic-4242-1700000000000.log")
 		);
 		let alloc_log = build_crash_log_path(dir, CrashKind::Alloc, 99, 1);
 		assert_eq!(
 			alloc_log,
-			PathBuf::from("/tmp/pi-natives-test-home/.omp/logs/native-alloc-99-1.log")
+			PathBuf::from("/tmp/agent-natives-test-home/.omp/logs/native-alloc-99-1.log")
 		);
 	}
 }
