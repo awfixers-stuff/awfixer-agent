@@ -2,9 +2,9 @@
 /**
  * Configure npm trusted publishers (OIDC) for every package this repo ships.
  *
- * Trusted publishing lets the `release_npm` CI job publish with provenance and
- * no long-lived token, but each package must be linked to this repo's workflow
- * once — see https://docs.npmjs.com/trusted-publishers. The npm website makes
+ * Trusted publishing lets the `publish_npm` workflow job publish with provenance and
+ * no long-lived token, but each package must be linked to this repo's
+ * `.github/workflows/publish.yml` once — see https://docs.npmjs.com/trusted-publishers. The npm website makes
  * you do this by hand, per package; this script drives `npm trust github` over
  * the full published set (the same list `ci-release-publish.ts` uses, imported
  * so the two never drift) in one pass.
@@ -28,7 +28,7 @@
  *   bun scripts/setup-npm-trust.ts --force         Replace any existing config (revoke + recreate)
  *   bun scripts/setup-npm-trust.ts --only a,b      Limit to specific package names
  *   bun scripts/setup-npm-trust.ts --repo o/r      Override the GitHub repo (default: from package.json)
- *   bun scripts/setup-npm-trust.ts --workflow f    Override the workflow file (default: ci.yml)
+ *   bun scripts/setup-npm-trust.ts --workflow f    Override the workflow file (default: publish.yml)
  */
 
 import * as fs from "node:fs/promises";
@@ -40,7 +40,7 @@ import { packages } from "./ci-release-publish.ts";
 
 const repoRoot = path.join(import.meta.dir, "..");
 const MIN_NPM = "11.16.0";
-const DEFAULT_WORKFLOW = "ci.yml";
+const DEFAULT_WORKFLOW = "publish.yml";
 const FALLBACK_REPO = "awfixers-stuff/awfixer-agent";
 const PLACEHOLDER_VERSION = "0.0.0";
 
@@ -125,7 +125,7 @@ function printUsageAndExit(code = 0): never {
 			"  --force           Replace an existing config (revoke + recreate)",
 			"  --only a,b,c      Limit to the named packages",
 			"  --repo owner/repo Override the GitHub repo (default: from package.json)",
-			"  --workflow file   Override the workflow filename (default: ci.yml)",
+			"  --workflow file   Override the workflow filename (default: publish.yml)",
 			"  -h, --help        Show this help",
 		].join("\n"),
 	);
