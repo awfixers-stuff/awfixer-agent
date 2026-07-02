@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/awfixerai/github-app/gateway/internal/api"
 	"github.com/awfixerai/github-app/gateway/internal/config"
 	"github.com/awfixerai/github-app/gateway/internal/migrate"
 	"github.com/awfixerai/github-app/gateway/internal/store"
@@ -44,6 +45,7 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte("ok"))
 	})
+	mux.Handle("/api/v1/", api.NewServer(st))
 	mux.Handle("/webhook/github", &webhook.Handler{Secret: cfg.GitHubWebhookSecret, Store: st})
 
 	srv := &http.Server{Addr: cfg.BindAddr, Handler: mux}

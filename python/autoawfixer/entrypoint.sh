@@ -2,9 +2,10 @@
 # autoawfixer container entrypoint. No per-boot pip installs — everything is baked
 # into the image; we only sanity-check the runtime mount and create state dirs.
 #
-# Used by both the orchestrator (CMD: `python -m autoawfixer serve`) and the
-# sibling gh-proxy (compose command: `python -m autoawfixer.proxy serve`). The
-# proxy role does NOT need a $AGENT_ROOT pi checkout — it never runs omp.
+# Used by both the orchestrator (CMD: `uv run --package autoawfixer autoawfixer serve`)
+# and the sibling gh-proxy (compose command: `uv run --package autoawfixer python -m
+# autoawfixer.proxy serve`). The proxy role does NOT need a $AGENT_ROOT pi checkout —
+# it never runs omp.
 set -euo pipefail
 
 # Shared git metadata under /data/workspaces/_pool is intentionally group
@@ -13,14 +14,15 @@ set -euo pipefail
 umask 0002
 
 # Detect the proxy role by inspecting the command. Compose passes `command:`
-# as $@ here (after tini --), so $1=python, $2=-m, $3=autoawfixer.proxy is the
-# canonical shape; we also accept a single concatenated arg for safety.
+# as $@ here (after tini --). Match any arg that names the proxy module so both
+# `python -m autoawfixer.proxy` and `uv run … python -m autoawfixer.proxy` work.
 is_proxy_role=0
-if [ "${1:-}" = "python" ] && [ "${2:-}" = "-m" ] && [[ "${3:-}" == autoawfixer.proxy* ]]; then
-    is_proxy_role=1
-elif [[ "${1:-}" == *"autoawfixer.proxy"* ]]; then
-    is_proxy_role=1
-fi
+for arg in "$@"; do
+    if [[ "$arg" == autoawfixer.proxy* ]]; then
+        is_proxy_role=1
+        break
+    fi
+done
 
 /usr/sbin/groupadd -f -g 2000 omp
 max_slots="${AUTOAWFIXER_MAX_CONCURRENCY:-8}"

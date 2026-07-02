@@ -31,6 +31,14 @@ func Up(ctx context.Context, pool *pgxpool.Pool) error {
 		_, _ = conn.Exec(context.Background(), "SELECT pg_advisory_unlock($1)", advisoryLockKey)
 	}()
 
+	if _, err := conn.Exec(ctx, `
+		CREATE TABLE IF NOT EXISTS schema_migrations (
+		  version     INTEGER PRIMARY KEY,
+		  applied_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+		)`); err != nil {
+		return fmt.Errorf("bootstrap schema_migrations: %w", err)
+	}
+
 	entries, err := migrationFS.ReadDir("migrations")
 	if err != nil {
 		return err

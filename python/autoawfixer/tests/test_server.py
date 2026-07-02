@@ -1513,7 +1513,7 @@ def _post_issue_comment(
     )
 
 
-def test_webhook_directive_on_unknown_issue_is_queued_with_metadata(env) -> None:
+def test_webhook_directive_on_unknown_issue_is_queued_with_metadata(env, freeze_worker_pool) -> None:
     cfg = Settings()  # type: ignore[call-arg]
     cfg.ensure_paths()
     app = create_app(cfg)

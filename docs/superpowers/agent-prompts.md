@@ -22,7 +22,8 @@ Copy-paste prompts for autonomous agents. Each prompt is self-contained: read th
 | prwatch scaffold | **Done** | Committed `dd5ebe9`; gateway webhook+enqueue works; Tasks 1–18 remain |
 | android-app scaffold | **Done** | Phase 1 Kotlin UI exists; no `gradlew` wrapper yet |
 | `bun run check:ts` | **Passes** | All workspace packages typecheck |
-| `bun run test:py` | **1 failure** | `test_run_git_kills_hung_child` in `test_sandbox.py` |
+| `bun run test:py` | **Passes** | Sandbox git-timeout shim + webhook enqueue race fixed (Prompt C) |
+| autoawfixer deploy hardening | **Done** | uv-based gh-proxy, entrypoint proxy detect, compose env passthrough, healthz on `:6543` |
 | Docker script alias | **Fixed** | `agent:image` added; `pi:image` delegates |
 | `PI_BASE` build arg | **Open** | Still `PI_BASE` in compose/Dockerfiles (rename to `AGENT_BASE` optional) |
 | prwatch v1 pipeline | **Not started** | No store dedup test, GitHub auth, checks, REST API, agent-RPC review |
@@ -145,11 +146,12 @@ Read first:
 - python/autoawfixer/tests/test_sandbox.py (failing `test_run_git_kills_hung_child`)
 - python/autoawfixer/docker-compose.yml
 
-Known failure (2026-07-02):
-- `test_run_git_kills_hung_child` — fake `git` shim does not raise `GitCommandError` on timeout.
-  Fix the subprocess timeout/kill path in `git_ops.py` or adjust the test fixture.
+Status (2026-07-02): **Done** — sandbox git-timeout test fixed (portable shim),
+webhook enqueue race stabilized (`freeze_worker_pool` fixture), `.env.example` audited,
+compose env passthrough added, `bun run test:py` + `autoawfixer:web:build` + docker
+healthz verified.
 
-Steps:
+Steps (historical):
 1. Fix the failing test (root cause, not skip).
 2. `uv run --directory python pytest -x autoawfixer/tests` — full pass.
 3. Audit `.env.example`: all `AUTOAWFIXER_*` documented; no `ROBOMP_*`.

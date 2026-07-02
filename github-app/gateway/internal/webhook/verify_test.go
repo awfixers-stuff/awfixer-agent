@@ -1,22 +1,11 @@
 package webhook
 
-import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
-	"testing"
-)
-
-func sign(secret string, body []byte) string {
-	mac := hmac.New(sha256.New, []byte(secret))
-	mac.Write(body)
-	return "sha256=" + hex.EncodeToString(mac.Sum(nil))
-}
+import "testing"
 
 func TestVerifySignature_ok(t *testing.T) {
 	body := []byte(`{"zen":"test"}`)
 	secret := "s3cret"
-	if !VerifySignature(secret, body, sign(secret, body)) {
+	if !VerifySignature(secret, body, SignBody(secret, body)) {
 		t.Fatal("expected valid signature")
 	}
 }

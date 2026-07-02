@@ -9,6 +9,7 @@ import pytest
 from autoawfixer.config import Settings, reset_settings_cache
 from autoawfixer.dashboard import reset_index_cache, static_dir
 from autoawfixer.db import Database, close_database
+from autoawfixer.queue import WorkerPool
 
 # Minimum HTML the dashboard handler needs to render: `<title>` plus a script
 # block carrying the `__AUTOAWFIXER_CONFIG__` sentinel. The real Vite-built bundle
@@ -137,6 +138,20 @@ def proxy_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> dict[str, str]
     yield baseline
     reset_settings_cache()
     close_database()
+
+
+@pytest.fixture
+def freeze_worker_pool(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Prevent TestClient lifespan from claiming queued webhook events.
+
+    Enqueue-contract tests assert the sqlite row stays `queued` immediately
+    after POST; the real dispatch loop would race that read.
+    """
+
+    async def noop_start(self: WorkerPool) -> None:
+        return
+
+    monkeypatch.setattr(WorkerPool, "start", noop_start)
 
 
 @pytest.fixture

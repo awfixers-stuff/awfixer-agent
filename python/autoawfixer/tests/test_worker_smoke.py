@@ -78,6 +78,8 @@ def test_triage_end_to_end(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> N
     monkeypatch.setenv("GITHUB_TOKEN", "")
     monkeypatch.setenv("GITHUB_WEBHOOK_SECRET", "secret")
     monkeypatch.setenv("AUTOAWFIXER_BOT_LOGIN", "autoawfixer-bot")
+    monkeypatch.setenv("AUTOAWFIXER_GIT_AUTHOR_NAME", "autoawfixer-bot")
+    monkeypatch.setenv("AUTOAWFIXER_GIT_AUTHOR_EMAIL", "autoawfixer-bot@example.invalid")
     monkeypatch.setenv("AUTOAWFIXER_REPO_ALLOWLIST", "octo/widget")
     monkeypatch.setenv("AUTOAWFIXER_WORKSPACE_ROOT", str(tmp_path / "workspaces"))
     monkeypatch.setenv("AUTOAWFIXER_SQLITE_PATH", str(tmp_path / "autoawfixer.sqlite"))

@@ -65,7 +65,7 @@ openssl rand -hex 32              # GITHUB_WEBHOOK_SECRET
 
 bun run agent:image                  # build awfixer-agent/agent:dev (one-time / on pi change)
 bun run autoawfixer:build && bun run autoawfixer:up
-curl -fsS http://localhost:8080/healthz
+curl -fsS http://localhost:6543/healthz
 ```
 
 The bundled `docker-compose.yml` runs in gh-proxy mode by default. To run
