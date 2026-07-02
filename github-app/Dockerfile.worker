@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
-# Build from monorepo root: docker build -f github-app/Dockerfile.worker --build-arg PI_BASE=oh-my-pi/pi:dev .
-ARG PI_BASE=oh-my-pi/pi:dev
+# Build from monorepo root: docker build -f github-app/Dockerfile.worker --build-arg PI_BASE=awfixer-agent/agent:dev .
+ARG PI_BASE=awfixer-agent/agent:dev
 FROM ${PI_BASE} AS pi
 
 FROM python:3.12-slim

@@ -1,6 +1,6 @@
 # OMP Android companion
 
-Kotlin + Jetpack Compose app for monitoring Oh My Pi stats (`omp stats`, port **3847**).
+Kotlin + Jetpack Compose app for monitoring Oh My Pi stats (`agent stats`, port **3847**).
 
 ## Phase 1 (implemented)
 
@@ -24,7 +24,7 @@ cd android-app
 Default stats URL for emulator: `http://10.0.2.2:3847`. Start stats on the host:
 
 ```bash
-omp stats
+agent stats
 ```
 
 ## Layout

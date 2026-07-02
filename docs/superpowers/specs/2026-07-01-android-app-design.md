@@ -6,7 +6,7 @@ Kotlin + Jetpack Compose companion at repo root `android-app/`: monitor Oh My Pi
 
 ## Backend reality (verified)
 
-**Stats (works today):** `packages/stats/src/server.ts` on port **3847** (`omp stats` / `/stats`).
+**Stats (works today):** `packages/stats/src/server.ts` on port **3847** (`agent stats` / `/stats`).
 
 | Method | Path | Notes |
 |--------|------|--------|

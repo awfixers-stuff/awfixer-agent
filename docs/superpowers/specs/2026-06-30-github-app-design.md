@@ -6,13 +6,13 @@
 
 ## 1. Purpose & Positioning
 
-A new GitHub App, stored at `github-app/` in this repo, that sits **between the codebase and `autoawfixer`** to review and validate every pull request across all our repos before merge. v1 ships one wedge: **PR review via an omp-RPC agent, plus GitHub Check Runs and inline review comments.** The agent runs on the Python worker host (reusing autoawfixer's proven omp-on-host + worktree model); untrusted code execution (the PR's tests/build/lint) is isolated in a fresh **E2B** sandbox per review. It is the surface every later capability plugs into.
+A new GitHub App, stored at `github-app/` in this repo, that sits **between the codebase and `autoawfixer`** to review and validate every pull request across all our repos before merge. v1 ships one wedge: **PR review via an agent-RPC agent, plus GitHub Check Runs and inline review comments.** The agent runs on the Python worker host (reusing autoawfixer's proven omp-on-host + worktree model); untrusted code execution (the PR's tests/build/lint) is isolated in a fresh **E2B** sandbox per review. It is the surface every later capability plugs into.
 
 The long-term product is a platform covering the roles of CodeRabbit (review), Mergify (gating), Semgrep (security), Sourcery (quality refactors), Renovate/Dependabot (deps), and cursor-agent (issue/PR finding). Each of those is a **separate phase with its own spec → plan → build cycle**; this document covers v1 only.
 
 ### Relationship to `autoawfixer`
 
-- **New app, not a shared library.** We reuse autoawfixer's *patterns* (webhook HMAC verification, durable queue with `BEGIN IMMEDIATE`/`SELECT FOR UPDATE SKIP LOCKED`, host-tool audit surface, sync omp-RPC driver in a worker thread, prompts-as-data-files, credential redaction, structured JSON logging) but copy none of its code.
+- **New app, not a shared library.** We reuse autoawfixer's *patterns* (webhook HMAC verification, durable queue with `BEGIN IMMEDIATE`/`SELECT FOR UPDATE SKIP LOCKED`, host-tool audit surface, sync agent-RPC driver in a worker thread, prompts-as-data-files, credential redaction, structured JSON logging) but copy none of its code.
 - `autoawfixer` keeps its job: issue triage → fix PRs. This app's job is to **review PRs** — including PRs `autoawfixer` opens. The two compose: autoawfixer produces PRs, this app gates them. Issue triage is **not** duplicated here.
 
 ### Stack (user-anchored)
@@ -27,7 +27,7 @@ The long-term product is a platform covering the roles of CodeRabbit (review), M
 
 - GitHub App installed across all our repos.
 - Triggers: `pull_request` (opened, synchronize, reopened, ready_for_review) and `pull_request_review_comment`.
-- Worker materializes the PR as a git worktree on the worker host and runs an omp-RPC review agent against the diff. The agent reads the diff with built-in tools (read/grep/git on the local worktree) and runs the PR's *own* tests/build/lint via a `run_in_sandbox` host-tool the worker registers, which executes the command in a fresh E2B sandbox synced with the checkout. The built-in `bash` tool is used only for trusted commands (git, grep) and never for the PR's untrusted code.
+- Worker materializes the PR as a git worktree on the worker host and runs an agent-RPC review agent against the diff. The agent reads the diff with built-in tools (read/grep/git on the local worktree) and runs the PR's *own* tests/build/lint via a `run_in_sandbox` host-tool the worker registers, which executes the command in a fresh E2B sandbox synced with the checkout. The built-in `bash` tool is used only for trusted commands (git, grep) and never for the PR's untrusted code.
 - Agent findings become: (a) inline review comments on the diff, (b) one summary review comment, (c) a Check Run with pass/fail + annotated findings.
 - Webhook-delivery dedup: duplicate `X-GitHub-Delivery` deliveries are dropped (no new job created). Re-review on the same SHA is *deterministic at the job level* (same inputs → same job) but **not at the finding level** — LLM reviews are non-deterministic; the contract is dedup + replayability, not byte-identical findings across runs.
 - First-class REST API (auth-scoped) for the Android app: list repos, list PRs, list reviews, job status, trigger manual re-review, view findings.
@@ -61,8 +61,8 @@ Go **never** calls omp and **never** runs review logic.
 - Fetches PR metadata + diff via GitHub API (installation token).
 - Materializes the PR as a git worktree on the worker host (clone pool + `--filter=blob:none`, mirrors autoawfixer's `SandboxManager`).
 - Assembles the review persona from `prompts/*.md` data files with diff context.
-- Drives `omp --mode rpc` on the worker host (synchronous, in a worker thread — directly mirroring autoawfixer's `worker.run_task`); agent read/grep/git tools operate on the local worktree.
-- Spawns a fresh **E2B sandbox** per review for untrusted execution and registers a `run_in_sandbox(cmd)` host-tool (Python callback) alongside the review-specific host-tools. The review persona prompt instructs the agent to use `run_in_sandbox` for the PR's own tests/build/lint and `bash` only for trusted commands. This is the autoawfixer host-tool pattern — omp's built-in `bash` cannot be transparently proxied, so untrusted execution is a named tool the agent must call explicitly.
+- Drives `agent --mode rpc` on the worker host (synchronous, in a worker thread — directly mirroring autoawfixer's `worker.run_task`); agent read/grep/git tools operate on the local worktree.
+- Spawns a fresh **E2B sandbox** per review for untrusted execution and registers a `run_in_sandbox(cmd)` host-tool (Python callback) alongside the review-specific host-tools. The review persona prompt instructs the agent to use `run_in_sandbox` for the PR's own tests/build/lint and `bash` only for trusted commands. This is the autoawfixer host-tool pattern — agent's built-in `bash` cannot be transparently proxied, so untrusted execution is a named tool the agent must call explicitly.
 - Collects structured findings via a host-tool (mirrors autoawfixer's `host_tools.py` audit pattern).
 - Posts GitHub review (inline comments + summary) + Check Run.
 - Handles retries, backoff, credential redaction.
@@ -91,11 +91,11 @@ github-app/
     pyproject.toml
     src/prwatch/
       __main__.py, cli.py, config.py
-      runner.py                 # claims jobs; materializes worktree; drives omp-RPC; registers host-tools (incl. run_in_sandbox → E2B)
+      runner.py                 # claims jobs; materializes worktree; drives agent-RPC; registers host-tools (incl. run_in_sandbox → E2B)
       e2b_sandbox.py            # E2B SDK wrapper
       kernel_sandbox.py         # Kernel browser wrapper (opt-in)
       review_persona.py         # prompt assembly (prompts as .md data files)
-      omp_rpc.py                # omp --mode rpc stdio subprocess client (sync, worker thread)
+      omp_rpc.py                # agent --mode rpc stdio subprocess client (sync, worker thread)
       github_client.py          # typed httpx client for posting reviews
       db.py                     # asyncpg access to shared Postgres
       host_tools.py             # agent's GitHub surface (audit pattern)
@@ -136,13 +136,13 @@ This is the load-bearing architectural decision in the spec, so it's stated expl
 Three layers, per review job:
 
 1. **Local worktree (Railway worker host)** — the PR is materialized as a git worktree (clone pool + `--filter=blob:none`, mirrors autoawfixer's `SandboxManager`). This is trusted: it's just text the agent reads.
-2. **omp-RPC subprocess (Railway worker host)** — the worker spawns `omp --mode rpc` as a local stdio subprocess, pipes JSON-RPC over stdin/stdout, and registers host-tools as Python callbacks (the autoawfixer pattern, unchanged). omp's `read`/`grep`/`git` tools operate on the local worktree. The App private key and Postgres connection stay on the worker — they never enter E2B.
-3. **E2B sandbox (external, per-review)** — a fresh Firecracker microVM spawned per review job, holding a synced copy of the worktree. The worker registers a `run_in_sandbox(cmd)` host-tool (a Python callback in the omp-RPC host-tool surface, the same mechanism as autoawfixer's `host_tools.py`). When the agent needs to run the PR's *own* tests/build/lint (untrusted code), it calls `run_in_sandbox(cmd)`; the worker forwards `cmd` to E2B over the E2B SDK, executes it in isolation, and returns stdout/stderr/exit-code to the agent. The agent never sees E2B's filesystem directly; it sees command results. The built-in `bash` tool is **not** intercepted — it runs locally on the worker and the persona prompt restricts it to trusted commands (git, grep). There is no omp mechanism to override a built-in tool's execution target, so untrusted execution is a named host-tool the agent calls explicitly.
+2. **agent-RPC subprocess (Railway worker host)** — the worker spawns `agent --mode rpc` as a local stdio subprocess, pipes JSON-RPC over stdin/stdout, and registers host-tools as Python callbacks (the autoawfixer pattern, unchanged). agent's `read`/`grep`/`git` tools operate on the local worktree. The App private key and Postgres connection stay on the worker — they never enter E2B.
+3. **E2B sandbox (external, per-review)** — a fresh Firecracker microVM spawned per review job, holding a synced copy of the worktree. The worker registers a `run_in_sandbox(cmd)` host-tool (a Python callback in the agent-RPC host-tool surface, the same mechanism as autoawfixer's `host_tools.py`). When the agent needs to run the PR's *own* tests/build/lint (untrusted code), it calls `run_in_sandbox(cmd)`; the worker forwards `cmd` to E2B over the E2B SDK, executes it in isolation, and returns stdout/stderr/exit-code to the agent. The agent never sees E2B's filesystem directly; it sees command results. The built-in `bash` tool is **not** intercepted — it runs locally on the worker and the persona prompt restricts it to trusted commands (git, grep). There is no omp mechanism to override a built-in tool's execution target, so untrusted execution is a named host-tool the agent calls explicitly.
 
 **Why this and not (a) runner-in-E2B or (b) full-worker-in-E2B:**
 - (a) requires redesigning the host-tool pattern (omp inside E2B can't call Python callbacks on the worker) and puts the App key inside E2B. Rejected for v1.
 - (b) puts the whole worker — Postgres client, App key, GitHub client — inside E2B. Broadest attack surface. Rejected for v1.
-- (c) keeps omp's host-tool/callback model intact (direct port of autoawfixer), keeps credentials on the worker, and still isolates the only truly untrusted thing: the PR's build/test code. The "fragile network mount" concern doesn't apply because omp's file tools read the local worktree, not E2B; only *command execution* crosses the boundary, over E2B's SDK.
+- (c) keeps agent's host-tool/callback model intact (direct port of autoawfixer), keeps credentials on the worker, and still isolates the only truly untrusted thing: the PR's build/test code. The "fragile network mount" concern doesn't apply because agent's file tools read the local worktree, not E2B; only *command execution* crosses the boundary, over E2B's SDK.
 
 **E2B sync mechanism:** the worker `rsync`s (or `tar | untar` over the E2B SDK) the worktree into the sandbox at spawn time. Re-sync on `synchronize` events is a v1.1 optimization; v1 re-spawns. The E2B template is a minimal Linux + git + the PR's likely toolchains (detected per-repo: Node, Python, Rust, Go). Template selection is a planning-phase detail.
 
@@ -169,7 +169,7 @@ Python worker (N replicas, each an independent poller + processor)
   4. materialize PR as a git worktree on the worker host (clone pool + --filter=blob:none)
   5. spawn a fresh E2B sandbox and sync the worktree into it (rsync/tar over E2B SDK)
   6. assemble review persona (prompts/*.md) with diff context
-  7. drive omp --mode rpc on the worker host (sync, worker thread)
+  7. drive agent --mode rpc on the worker host (sync, worker thread)
      — agent reads diff via omp built-in tools (read/grep/git on local worktree, trusted text)
      — agent runs the PR's own tests/build/lint via the `run_in_sandbox(cmd)` host-tool (Python callback → E2B); built-in `bash` is restricted by the persona to trusted commands only
   8. agent emits structured findings via a host-tool (Python callback)
@@ -217,7 +217,7 @@ Server-sent events for live job progress is a **v1.1 stretch**; v1 polls `GET /j
 - **worker** — Railway service, `Dockerfile.worker`, 1+ replicas, scales horizontally (each replica claims disjoint jobs via `SKIP LOCKED`). No public ports. Env: `DATABASE_URL`, `E2B_API_KEY`, `KERNEL_API_KEY`, GitHub App key, `OMP_*`.
 - **E2B** — external, invoked per-review.
 - **Kernel** — external, invoked opt-in (flag on the review job for PRs that touch UI).
-- **omp runtime** — the worker image bundles `omp` (built from this monorepo's pi image, slimmed — or pulls the published `oh-my-pi/pi` image as a base layer). This resolves the "lean runtime image" blocker from `transition-docs/expanding-robomp.md`.
+- **omp runtime** — the worker image bundles `agent` (built from this monorepo's pi image, slimmed — or pulls the published `awfixer-agent/pi` image as a base layer). This resolves the "lean runtime image" blocker from `transition-docs/expanding-robomp.md`.
 - **Migrations** — a dedicated one-shot step (Railway pre-deploy hook or a `migrate` service) runs `migrate up` under a Postgres advisory lock (`pg_advisory_lock`) so 2+ gateway replicas don't race. Gateway replicas wait on the lock, then skip if the schema is already at the latest version. Alternative: a separate `migrate` Railway service with `restart: no` that runs once per deploy.
 ## 8. Testing, Error Handling, Security
 
@@ -240,7 +240,7 @@ Server-sent events for live job progress is a **v1.1 stretch**; v1 polls `GET /j
 - Installation tokens never logged; API tokens Argon2id-hashed.
 - **Prompt-injection defense:** the review agent treats diff content as untrusted *data*, not instructions (enforced in the persona prompt + by stripping code fences / markdown control chars from agent-emitted findings before posting to GitHub).
 - **Execution boundary:** the PR's own tests/build/lint (untrusted code) run inside a fresh E2B Firecracker microVM per review — never on the Railway worker host. This is enforced by a `run_in_sandbox(cmd)` host-tool the worker registers; the persona prompt instructs the agent to use it for untrusted commands and to use the built-in `bash` only for trusted commands (git, grep). omp has no mechanism to override a built-in tool's execution target, so the boundary is a named host-tool, not transparent proxying.
-- The App private key, Postgres DSN, and GitHub tokens stay on the worker and never enter E2B. omp's built-in `read`/`grep`/`git` operate on the local worktree (trusted text); only `run_in_sandbox` command results cross the E2B boundary.
+- The App private key, Postgres DSN, and GitHub tokens stay on the worker and never enter E2B. agent's built-in `read`/`grep`/`git` operate on the local worktree (trusted text); only `run_in_sandbox` command results cross the E2B boundary.
 ## 9. Phased Roadmap (beyond v1)
 
 Each phase gets its own spec → plan → build cycle. Order is by leverage and dependency:
@@ -257,7 +257,7 @@ Issue triage stays in `autoawfixer`; this app delegates to it.
 
 ## 10. Open Questions (to resolve during planning, not now)
 
-- **Worker image base:** slim `pi` image vs. published `oh-my-pi/pi` as base layer — decide during planning based on image size + omp availability.
+- **Worker image base:** slim `pi` image vs. published `awfixer-agent/pi` as base layer — decide during planning based on image size + omp availability.
 - **`prwatch` name:** confirm or replace before scaffolding.
 - **GitHub App registration:** who holds the App private key in prod (Railway env var vs. a secrets manager).
 - **E2B cold-start budget:** E2B sandbox spin-up latency may dominate small-PR review time; planning phase should measure and decide on warm pools.

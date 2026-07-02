@@ -10,7 +10,7 @@ Plan: [`docs/superpowers/plans/2026-07-01-github-app-v1.md`](../docs/superpowers
 ```
 github-app/
   gateway/          # Go: webhook, migrations, enqueue, (API/checks TODO)
-  worker/           # Python prwatch: claim jobs, omp-RPC, E2B (scaffold)
+  worker/           # Python prwatch: claim jobs, agent-RPC, E2B (scaffold)
   shared/           # OpenAPI + fixtures (TODO)
   Dockerfile.gateway
   Dockerfile.worker
@@ -42,7 +42,7 @@ cd github-app/worker && pip install -e '.[dev]' && pytest -q
 
 1. Add **PostgreSQL** to the project; copy `DATABASE_URL` to **gateway** and **worker**.
 2. **Gateway** service: root context, `github-app/Dockerfile.gateway`, public URL, health `/healthz`.
-3. **Worker** service: `github-app/Dockerfile.worker`, private, `E2B_API_KEY`, model/`omp` config (extend `pi` image as in autoawfixer).
+3. **Worker** service: `github-app/Dockerfile.worker`, private, `E2B_API_KEY`, model/`agent` config (extend `pi` image as in autoawfixer).
 4. GitHub App webhook: `https://<gateway>/webhook/github`, secret = `GITHUB_WEBHOOK_SECRET`.
 
 ## Status (scaffold)
@@ -51,9 +51,9 @@ cd github-app/worker && pip install -e '.[dev]' && pytest -q
 |-------|--------|
 | Postgres schema + migrate | Done (gateway embed) |
 | Webhook HMAC + enqueue + NOTIFY | Done |
-| Worker claim loop | Done (no omp/GitHub yet) |
+| Worker claim loop | Done (no agent/GitHub yet) |
 | E2B `run_in_sandbox` | Interface + stub |
 | Check Runs + REST API | Planned |
-| omp-RPC review persona | Planned |
+| agent-RPC review persona | Planned |
 
 Issue triage stays in **`python/autoawfixer`**; this app only reviews PRs.
