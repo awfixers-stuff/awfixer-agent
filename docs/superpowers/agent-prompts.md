@@ -1,460 +1,415 @@
 # Agent work prompts — awfixer-agent fork
 
+> **Status (2026-07-02):** Fork rebrand is **landed in the working tree** (Phases 0–5 per `transition-docs/REBRANDING.md`). CLI is `agent`, npm scope is `@awfixerai/*`, config defaults to `~/.agent`, self-update polls `agent-api.awfixer.codes`, and `python/autoawfixer` replaced `robomp`. **~2700 files are uncommitted** — run the commit series in Prompt A before starting new feature work.
+
 Copy-paste prompts for autonomous agents. Each prompt is self-contained: read the cited docs first, then execute. Run verification commands before claiming done. **Do not commit unless the prompt says to.**
 
-**Repo context:** Fork of oh-my-pi → awfixer-agent. Primary package: `packages/coding-agent/`. Rules: `AGENTS.md` at repo root.
-
-**Suggested order:** Prompts 0 → 1 → 2 are prerequisites for most other work. Prompts 3–5 are parallel after 2. Prompts 6–8 are product tracks (pick one). Prompts 9–12 are longer-horizon.
+**Repo context:** awfixer-agent monorepo. Primary package: `packages/coding-agent/` (`@awfixerai/agent`). Rules: `AGENTS.md` at repo root.
 
 ---
 
-## Prompt 0 — Bootstrap dev environment
+## What's done vs what's left
 
-```
-You are working in the awfixer-agent monorepo (fork of oh-my-pi).
-
-Goal: Make the repo buildable and verifiable from a clean checkout.
-
-Steps:
-1. Read AGENTS.md (repo root) for conventions.
-2. Run `bun install` at repo root.
-3. Run `bun run build:native` (Rust natives).
-4. Run `bun run check` — fix only blocking issues you introduced; report pre-existing failures.
-5. Run `bun run ci:test:smoke` (worker + tiny-model smoke probe).
-6. Optionally run `bun run install:local` and verify `agent --version` and `agent --smoke-test`.
-
-For Python (autoawfixer):
-7. Run `bun run autoawfixer:install` (uv sync).
-8. Run `bun run test:py`.
-
-Deliverable: A short report listing pass/fail for each command, any env gaps (Go, uv, Android SDK, etc.), and the exact commands the user should run daily for dev.
-
-Do not commit. Do not start feature work.
-```
+| Area | Status | Notes |
+|------|--------|-------|
+| npm scope `@awfixerai/*` | **Done** | Zero `@awfixer-agent/` imports in `.ts`/`.json` |
+| CLI `agent` + `AGENT_*` env | **Done** | `omp` bin removed; `~/.omp` read fallback |
+| Config `~/.agent` + `migrate-config` | **Done** | Flat default profile (no `~/.agent/agent/`) |
+| Self-update repoint | **Done** | `main.ts` + `update-cli.ts` → `agent-api.awfixer.codes` |
+| Extension compat (`@oh-my-pi/*`) | **Done** | `legacy-pi-compat.ts` + bundled registry |
+| autoawfixer rename | **Done** | `python/autoawfixer/`, `AUTOAWFIXER_*`, `Dockerfile.autoawfixer` |
+| Docs rebrand sweep | **Mostly done** | `scripts/docs-rebrand-sweep.ts` ran; stale refs remain in natives docs, android README, some `omp.sh` URLs |
+| prwatch scaffold | **Done** | Committed `dd5ebe9`; gateway webhook+enqueue works; Tasks 1–18 remain |
+| android-app scaffold | **Done** | Phase 1 Kotlin UI exists; no `gradlew` wrapper yet |
+| `bun run check:ts` | **Passes** | All workspace packages typecheck |
+| `bun run test:py` | **1 failure** | `test_run_git_kills_hung_child` in `test_sandbox.py` |
+| Docker script alias | **Fixed** | `agent:image` added; `pi:image` delegates |
+| `PI_BASE` build arg | **Open** | Still `PI_BASE` in compose/Dockerfiles (rename to `AGENT_BASE` optional) |
+| prwatch v1 pipeline | **Not started** | No store dedup test, GitHub auth, checks, REST API, agent-RPC review |
+| HTTP control API | **Not started** | Blocks Android Phase 2 |
+| Windows drop | **Not started** | `win32-x64` still in `LEAF_TARGETS` and CI |
+| autoawfixer triggers | **Not started** | GitHub logic still inline in `server.py` |
+| Root README | **Missing** | No repo-root README for contributors |
+| npm publish | **Not done** | Packages renamed but not published under `@awfixerai` |
 
 ---
 
-## Prompt 1 — Land the in-flight autoawfixer rename + rebrand changelog
+## Suggested order (2026-07)
+
+**Immediate (clean git history):** A → B
+
+**Product tracks (pick one or parallelize):**
+- Bots: C (autoawfixer hardening) or D+E (prwatch gateway + worker)
+- Mobile: F → G (Android polish, then control API)
+- Platform: H (drop Windows), I (trigger abstraction)
+
+**Polish (anytime):** J (Docker arg cleanup), K (docs/README sweep)
+
+---
+
+## Prompt A — Land the rebrand commit series
 
 ```
-You are working in awfixer-agent. There is large uncommitted work: staged `python/robomp` → `python/autoawfixer` renames plus unstaged content updates.
+You are working in awfixer-agent. ~2700 files of fork rebrand work are uncommitted.
 
-Goal: Produce clean, logical commits for the rename and rebranding documentation — only if the user asked you to commit; otherwise prepare the diff and a proposed commit message series.
+Goal: Produce a clean, reviewable git history and push to origin. The user asked for strategic commits — not one giant blob.
 
 Read first:
-- transition-docs/REBRANDING.md
-- docs/superpowers/plans/2026-06-29-rebranding-phase-0-1.md
+- transition-docs/REBRANDING.md (Phases 0–5 status)
 - packages/coding-agent/CHANGELOG.md [Unreleased]
+- git log --oneline -5 (scaffold commit dd5ebe9 already exists)
 
-Steps:
-1. `git status` — understand staged (rename) vs unstaged (content) vs untracked.
-2. Ensure every `robomp` / `ROBOMP_*` reference in code, Docker, scripts, and tests is updated to `autoawfixer` / `AUTOAWFIXER_*`. Grep for leftovers; fix or document intentional保留 (e.g. historical docs in transition-docs/expanding-robomp.md).
-3. Verify root package.json scripts use `autoawfixer:*` not `robomp:*`.
-4. Update python/autoawfixer/README.md links if they still point at can1357/oh-my-pi where fork URLs apply.
-5. Run `bun run check`, `bun run test:py`, and `bun run autoawfixer:build` (or document why Docker isn't available).
-6. Propose (or execute) commits:
-   - Commit A: `python/robomp` → `python/autoawfixer` rename only
-   - Commit B: AUTOAWFIXER_* content, Dockerfiles, root scripts, tests
-   - Commit C: CHANGELOG [Unreleased] entries for rebrand + autoawfixer rename
+Proposed commit series (adjust if git detects conflicts, but keep this spirit):
+
+1. `feat(rebrand)!: migrate monorepo to @awfixerai scope`
+   Stage: packages/, bun.lock, bunfig.toml, root package.json (workspaces.catalog + deps only)
+
+2. `feat(cli): agent binary, AGENT_* env vars, and ~/.agent config`
+   Stage: packages/coding-agent/, packages/utils/ (if not fully in commit 1)
+
+3. `chore(rebrand): rename robomp to autoawfixer`
+   Stage: python/, Dockerfile.autoawfixer, delete Dockerfile.robomp*, python/autoawfixer/
+
+4. `feat(update): repoint self-update to fork registry`
+   Stage: packages/coding-agent/src/main.ts, packages/coding-agent/src/cli/update-cli.ts, packages/agent-api/ (if changed), transition-docs/update-checker-domains.md
+
+5. `chore(docs): rebrand documentation sweep`
+   Stage: docs/ (exclude docs/superpowers/agent-prompts.md for last commit), AGENTS.md
+
+6. `chore(ci): update workflows and release scripts for fork`
+   Stage: .github/, scripts/ci-*.ts, scripts/rebrand-codemod.ts, scripts/docs-rebrand-sweep.ts, scripts/install*.ts
+
+7. `chore: update natives crates and root Dockerfiles`
+   Stage: crates/, Cargo.toml, Dockerfile, Dockerfile.dockerignore, .gitignore
+
+8. `docs(transition): update rebrand planning docs`
+   Stage: transition-docs/
+
+9. `chore: update product scaffolds and skills`
+   Stage: github-app/, android-app/, docs/superpowers/plans/, docs/superpowers/specs/, .omp/
+
+10. `fix(scripts): add agent:image docker build alias`
+    Stage: package.json agent:image/agent:run + pi:image/pi:run delegates
+
+11. `docs: refresh agent work prompts for fork status`
+    Stage: docs/superpowers/agent-prompts.md only
+
+Before each commit:
+- `git diff --cached --stat` — sanity-check scope
+- Do NOT commit secrets, `.env`, `.venv`, `node_modules`, or build artifacts
+
+After all commits:
+- `bun run check:ts` (must pass)
+- `bun run ci:test:smoke` (if native build available)
+- `git push origin HEAD`
 
 Acceptance:
-- `rg 'robomp|ROBOMP_' --glob '!transition-docs/**' --glob '!CHANGELOG.md'` returns only intentional historical mentions.
-- `bun run test:py` passes (or failures are documented with root cause).
-- CHANGELOG [Unreleased] documents autoawfixer rename and Phase 0–2 rebrand items.
+- `git status` clean (except intentionally gitignored)
+- `rg '@awfixer-agent' --glob '!CHANGELOG.md' --glob '!transition-docs/**'` empty in .ts/.json
+- `rg 'robomp|ROBOMP_' --glob '!transition-docs/**' --glob '!CHANGELOG.md'` only historical mentions
+- Commit messages are complete sentences; breaking changes noted with `!`
 
-Constraints: Follow AGENTS.md — no console.log in coding-agent, no source-grep tests, no editing packages/catalog/src/models.json by hand.
+Constraints: Follow AGENTS.md. User explicitly asked to commit and push.
 ```
 
 ---
 
-## Prompt 2 — Commit new scaffolds (github-app, android-app, superpowers specs)
+## Prompt B — Bootstrap dev environment
 
 ```
-Goal: Add untracked `github-app/`, `android-app/`, and `docs/superpowers/{specs,plans}/` to git in a coherent commit
-
-Read first:
-- github-app/README.md
-- android-app/README.md
-- docs/superpowers/specs/2026-06-30-github-app-design.md
-- docs/superpowers/specs/2026-07-01-android-app-design.md
-- docs/superpowers/plans/2026-07-01-github-app-v1.md
+Goal: Verify the repo is buildable from a clean checkout after the rebrand commits land.
 
 Steps:
-1. Review each new directory for secrets, `.env` files, or local paths — ensure `.gitignore` covers them.
-2. Run `cd github-app/gateway && go test ./...` (install Go if needed).
-3. Run `cd github-app/worker && pip install -e '.[dev]' && pytest -q` (or uv equivalent).
-4. For android-app: verify Gradle wrapper or document Android Studio setup in README if wrapper missing.
-5. Fix any broken references (e.g. README paths, docker-compose contexts).
-6. Single commit message suggestion: `feat: add prwatch github-app and android companion scaffolds`
+1. Read AGENTS.md.
+2. `bun install`
+3. `bun run build:native` (Rust natives)
+4. `bun run check:ts` — report pre-existing failures separately from regressions
+5. `bun run ci:test:smoke`
+6. `bun run autoawfixer:install` then `bun run test:py`
+7. Optionally `bun run install:local && agent --version && agent --smoke-test`
 
-Acceptance:
-- All new paths are tracked or explicitly gitignored with reason.
-- Gateway `go test ./...` passes.
-- Worker `pytest` passes for existing tests.
-- No credentials in committed files.
+Deliverable: Pass/fail table per command, env gaps (Go, uv, Android SDK, Docker), daily dev commands.
 
-Do not implement Tasks 1–18 of the github-app plan in this prompt — scaffold commit only.
+Do not commit unless fixing a blocking regression you introduced.
 ```
 
 ---
 
-## Prompt 3 — Phase 3: npm scope rename (@oh-my-pi → @awfixerai)
+## Prompt C — autoawfixer: fix test regression + deploy hardening
 
 ```
-Goal: Mechanical rename of published package scope from `@oh-my-pi/*` to `@awfixerai/*` across the monorepo, with a passing typecheck and tests.
-
-Read first:
-- transition-docs/REBRANDING.md (Phase 3 section)
-- transition-docs/update-checker-domains.md
-- scripts/ci-release-publish.ts
-- scripts/check-spoofed-versions.ts
-- root package.json workspaces.catalog
-
-Target mapping (from REBRANDING.md):
-  @awfixerai/pi-utils          ← @oh-my-pi/pi-utils
-  @awfixerai/pi-wire           ← @oh-my-pi/pi-wire
-  @awfixerai/pi-catalog        ← @oh-my-pi/pi-catalog
-  @awfixerai/pi-natives        ← @oh-my-pi/pi-natives
-  @awfixerai/pi-tui            ← @oh-my-pi/pi-tui
-  @awfixerai/pi-ai             ← @oh-my-pi/pi-ai
-  @awfixerai/pi-agent-core     ← @oh-my-pi/pi-agent-core
-  @awfixerai/pi-coding-agent   ← @oh-my-pi/pi-coding-agent
-
-Steps:
-1. Update every package.json `name` field (packages/*, examples, collab-web, etc.).
-2. Update root package.json `workspaces.catalog` keys.
-3. Codemod all imports: `@oh-my-pi/` → `@awfixerai/` in .ts/.tsx/.json (exclude CHANGELOG historical links unless updating fork URLs).
-4. Update scripts/ci-release-publish.ts, scripts/check-spoofed-versions.ts, install tests, Dockerfile COPY paths if any.
-5. Run `bun install` to refresh bun.lock.
-6. Run `bun run check` and `bun run test:ts`.
-7. Update packages/coding-agent/CHANGELOG.md [Unreleased] under ### Breaking Changes.
-8. Add a short transition-docs note if legacy `@oh-my-pi` metapackage redirect is planned.
-
-Acceptance:
-- `rg '@oh-my-pi' --glob '!CHANGELOG.md' --glob '!transition-docs/**' --glob '!docs/**'` is empty (or only intentional compat shims documented in Phase 5).
-- `bun run check` passes.
-- `bun run ci:test:smoke` passes.
-
-Constraints: Do not publish to npm unless user explicitly asks. Do not edit models.json by hand.
-```
-
----
-
-## Prompt 4 — Repoint self-update and install URLs
-
-```
-Goal: Re-enable self-update after fork repoint — wire poll URLs to awfixer fork assets.
-
-Read first:
-- transition-docs/update-checker-domains.md
-- packages/coding-agent/src/main.ts (checkForNewVersion)
-- packages/coding-agent/src/cli/update-cli.ts
-
-Targets (from update-checker-domains.md):
-- Site/docs: agent.awfixer.codes
-- GitHub repo: awfixers-stuff/awfixer-agent
-- npm package: @awfixerai/pi-coding-agent (assume Prompt 3 done, or use current scope consistently)
-
-Steps:
-1. Replace nulled `UPDATE_CHECK_URL`, `NPM_REGISTRY`, `REPO` constants with real targets.
-2. Update PACKAGE, NATIVES_PACKAGE, MISE_TOOL, HOMEBREW_FORMULA (or document TBD tap).
-3. Replace `https://omp.sh/install` hint with `https://agent.awfixer.codes/install` (or placeholder if site not live — document).
-4. Add regression tests only if they assert observable behavior (e.g. update --check returns version string from mocked fetch), not source grep.
-5. Run `bun run check` and relevant coding-agent tests.
-
-Acceptance:
-- `omp update --check` and startup update check hit fork npm metadata (or fail gracefully with clear message if package unpublished).
-- No fetches to can1357/oh-my-pi or @oh-my-pi/pi-coding-agent/latest in update path.
-- CHANGELOG [Unreleased] notes update checker repoint.
-
-Dependency: Prompt 3 should be done first, or scope strings must match interim state.
-```
-
----
-
-## Prompt 5 — Phase 4: Docker and infra string rebrand
-
-```
-Goal: Replace oh-my-pi / pi:dev / PI_ROOT strings with awfixer-agent naming in Docker and compose files.
-
-Read first:
-- transition-docs/REBRANDING.md (Phase 4)
-- Dockerfile, Dockerfile.autoawfixer, Dockerfile.dockerignore
-- python/autoawfixer/docker-compose.yml, .env.example
-- github-app/Dockerfile.gateway, Dockerfile.worker
-- root package.json pi:image / autoawfixer:* scripts
-
-Target renames (adjust if user prefers different tags):
-- Image: oh-my-pi/pi:dev → awfixer-agent/agent:dev (or agent:dev)
-- PI_ROOT env → AGENT_ROOT (with PI_ROOT fallback + deprecation warning in entrypoints)
-- PI_BASE build arg → AGENT_BASE
-- Homepage omp.sh → agent.awfixer.codes where user-facing
-
-Steps:
-1. Grep `oh-my-pi|pi:dev|PI_ROOT|PI_BASE` across repo (exclude CHANGELOG, transition-docs history).
-2. Update Dockerfiles, compose, entrypoint.sh, autoawfixer README setup commands.
-3. Keep backward-compat env reads where bots already deployed with PI_ROOT.
-4. Update root scripts: consider `agent:image` alias alongside `pi:image`.
-5. Run `bun run autoawfixer:build` if Docker available.
-6. CHANGELOG [Unreleased] + python/autoawfixer README.
-
-Acceptance:
-- `docker compose --project-directory python/autoawfixer config` validates.
-- New clones can follow README without oh-my-pi references in setup path.
-- Deprecation warnings documented for PI_ROOT.
-```
-
----
-
-## Prompt 6 — autoawfixer: deploy hardening and integration smoke
-
-```
-Goal: Make autoawfixer reliably runnable via docker-compose on a fresh machine; fix any rename regressions.
+Goal: Green `bun run test:py` and reliable docker-compose on a fresh machine.
 
 Read first:
 - python/autoawfixer/README.md
-- python/autoawfixer/.env.example
+- python/autoawfixer/tests/test_sandbox.py (failing `test_run_git_kills_hung_child`)
 - python/autoawfixer/docker-compose.yml
-- python/autoawfixer/tests/test_worker_smoke.py
+
+Known failure (2026-07-02):
+- `test_run_git_kills_hung_child` — fake `git` shim does not raise `GitCommandError` on timeout.
+  Fix the subprocess timeout/kill path in `git_ops.py` or adjust the test fixture.
 
 Steps:
-1. Ensure `bun run autoawfixer:install` and `bun run test:py` pass.
-2. Fix broken imports/paths from robomp→autoawfixer rename if any test fails.
-3. Run integration smoke if possible: `bun run autoawfixer:test:integration` (needs AUTOAWFIXER_INTEGRATION=1 and omp binary).
-4. Audit .env.example: every AUTOAWFIXER_* var documented; no ROBOMP_* left.
-5. Verify gh-proxy HMAC flow documented; healthz curl works after `autoawfixer:up`.
-6. Update python/autoawfixer/CHANGELOG or root coding-agent CHANGELOG if user-visible behavior changed.
+1. Fix the failing test (root cause, not skip).
+2. `uv run --directory python pytest -x autoawfixer/tests` — full pass.
+3. Audit `.env.example`: all `AUTOAWFIXER_*` documented; no `ROBOMP_*`.
+4. `bun run agent:image && bun run autoawfixer:build` (if Docker available).
+5. `bun run autoawfixer:up` then healthz curl.
+6. Optional: `AUTOAWFIXER_INTEGRATION=1 bun run autoawfixer:test:integration`.
 
 Acceptance:
-- `uv run --directory python pytest -x autoawfixer/tests` passes.
-- README setup commands work end-to-end (or gaps listed with exact fixes).
-- Web dashboard at python/autoawfixer/web builds: `bun run autoawfixer:web:build`.
+- `bun run test:py` passes
+- README setup commands work end-to-end (or gaps listed with exact fixes)
+- `bun run autoawfixer:web:build` succeeds
 
-Out of scope: new triggers (Slack, cron) — see Prompt 12.
+Out of scope: new triggers (Slack, cron) — see Prompt I.
 ```
 
 ---
 
-## Prompt 7 — prwatch v1: Gateway foundation (Tasks 1–5)
+## Prompt D — prwatch v1: Gateway (Tasks 1–5)
 
 ```
-Goal: Complete github-app gateway Tasks 1–5 from the implementation plan.
+Goal: Complete github-app gateway Tasks 1–5.
 
 Read first:
 - docs/superpowers/plans/2026-07-01-github-app-v1.md (Tasks 1–5)
 - docs/superpowers/specs/2026-06-30-github-app-design.md (§2–6)
-- github-app/gateway/ (existing scaffold)
-- Pattern refs: python/autoawfixer for webhook HMAC style (do not import its code)
+- github-app/gateway/ (webhook HMAC + enqueue already work; no store_test.go yet)
+
+Current state:
+- `go test ./internal/webhook/...` passes
+- `internal/store/` has EnqueueReviewJob but NO tests
+- No GitHub App JWT auth, Check Runs, or REST API yet
 
 Tasks:
-1. Task 1: Fixture JSON + TestEnqueueReviewJob_dedupDeliveryID (testcontainers Postgres).
-2. Task 2: Webhook handler integration test — valid HMAC → 202.
-3. Task 3: GitHub App JWT + installation token cache (Go), with mock HTTP test.
-4. Task 4: Check Run reporter — start/complete named `prwatch`.
-5. Task 5: OpenAPI from shared/openapi.yaml + REST handlers + wire main.go; Argon2id bearer on api_tokens.
+1. Fixture JSON + `TestEnqueueReviewJob_dedupDeliveryID` (testcontainers Postgres)
+2. Webhook integration test — valid HMAC → 202 (extend beyond route unit tests)
+3. GitHub App JWT + installation token cache (Go), mock HTTP test
+4. Check Run reporter — start/complete named `prwatch`
+5. OpenAPI from `shared/openapi.yaml` + REST handlers + wire main.go; Argon2id bearer on api_tokens
 
 Verification:
-- `cd github-app/gateway && go test ./...` — all pass.
-- `docker compose -f github-app/docker-compose.yml up --build` — healthz OK; POST fixture webhook enqueues job (manual or scripted).
+- `cd github-app/gateway && go test ./...` — all pass
+- `docker compose -f github-app/docker-compose.yml up --build` — healthz OK
 
-Constraints: Go gateway never calls omp. Issue triage stays in autoawfixer only.
-Commit per task or one squashed commit if user asked.
+Constraints: Go gateway never calls agent CLI directly. Issue triage stays in autoawfixer only.
 ```
 
 ---
 
-## Prompt 8 — prwatch v1: Worker review pipeline (Tasks 6–18)
+## Prompt E — prwatch v1: Worker pipeline (Tasks 6–18)
 
 ```
-Goal: Wire Python prwatch worker from job claim through omp-RPC review to GitHub output.
+Goal: Wire Python prwatch worker from job claim through agent-RPC review to GitHub output.
 
 Read first:
 - docs/superpowers/plans/2026-07-01-github-app-v1.md (Tasks 6–18)
 - github-app/worker/src/prwatch/ (runner, db, sandbox_exec stub)
-- python/autoawfixer/src/{worker,host_tools,sandbox,git_ops,github_client}.py as patterns only
+- python/autoawfixer/src/{worker,host_tools,sandbox,github_client,git_ops}.py as patterns only
 - python/omp-rpc/ for RPC client usage
 
+Current state:
+- Worker scaffold: config, cli, db claim SQL, runner semaphore loop
+- `sandbox_exec.py` is a stub (`StubSandboxRunner`)
+- No worktree materialization, omp_rpc driver, host_tools, or GitHub client yet
+- Only test: `test_sandbox_stub.py`
+
 Tasks (summary):
-- Task 6–8: config tests, asyncpg claim + LISTEN/NOTIFY, runner loop (partially done — finish NOTIFY + reset_stuck_running).
-- Task 9: PR worktree materialization (clone pool like autoawfixer).
-- Task 10: E2B run_in_sandbox full implementation (replace stub).
-- Task 11–13: omp_rpc driver, host_tools (record_finding, post review), kickoff prompts.
-- Task 14–16: github_client, full pipeline, API-triggered re-review.
-- Task 17: Kernel browser stub (optional flag).
-- Task 18: Integration smoke — webhook → queued → review posted (mock GitHub acceptable in CI).
+- Task 6–8: config tests, asyncpg LISTEN/NOTIFY in runner, `reset_stuck_running`
+- Task 9: PR worktree materialization (clone pool like autoawfixer)
+- Task 10: E2B `run_in_sandbox` full implementation (replace stub)
+- Task 11–13: omp_rpc driver, host_tools (record_finding, post review), kickoff prompts
+- Task 14–16: github_client, full pipeline, API-triggered re-review
+- Task 17: Kernel browser stub (optional flag)
+- Task 18: Integration smoke — webhook → queued → review posted
 
 Verification:
 - `cd github-app/worker && pytest -x`
 - End-to-end compose test documented in github-app/README.md
 
-Dependency: Prompt 7 (gateway enqueue + checks) should be done or stubbed for E2E.
-
+Dependency: Prompt D (gateway enqueue + checks) should be done or stubbed for E2E.
 Environment: E2B_API_KEY, DATABASE_URL, GitHub App credentials on worker service.
 ```
 
 ---
 
-## Prompt 9 — Android companion: Phase 1 polish and ship
+## Prompt F — Android companion: Phase 1 polish
 
 ```
-Goal: Make android-app Phase 1 buildable, tested, and usable against a LAN omp stats server.
+Goal: Make android-app Phase 1 buildable, tested, and rebranded.
 
 Read first:
 - docs/superpowers/specs/2026-07-01-android-app-design.md
-- android-app/README.md
+- android-app/README.md (still says "OMP" / "Oh My Pi" — update)
 - packages/stats/src/server.ts (API contract)
 - packages/stats/src/shared-types.ts (DTO shapes)
 
+Current state:
+- Kotlin + Compose UI scaffold exists under `io.ohmypi.agentcompanion`
+- `StatsApiUrlTest.kt` unit test exists
+- No `gradlew` wrapper — README says run `gradle wrapper` first
+- Manage tab is honest offline stub (ControlRepository)
+
 Steps:
-1. Ensure Gradle wrapper exists (`gradle wrapper` if missing).
-2. Align Kotlin DTOs with packages/stats shared types — fix any drift.
-3. JVM unit tests: URL building, JSON parsing with sample payloads from stats package tests.
-4. Manual test plan: emulator `10.0.2.2:3847`, host runs `omp stats` or `bun run stats`.
-5. Settings: base URL, bearer token, time range — persist via DataStore.
-6. Manage tab stays honest offline stub until Prompt 10.
-7. Update android-app README with screenshots placeholders and known limitations.
+1. `cd android-app && gradle wrapper` — commit gradlew + wrapper jar
+2. Rebrand README: awfixer-agent / agent stats, not OMP
+3. Align Kotlin DTOs with packages/stats shared types — fix drift
+4. Add JVM unit tests with sample payloads from stats package tests
+5. Manual test plan: emulator `10.0.2.2:3847`, host runs `agent stats`
+6. Settings: base URL, bearer token, time range — verify DataStore persistence
 
 Acceptance:
-- `./gradlew :app:assembleDebug` succeeds.
-- Unit tests pass: `./gradlew :app:testDebugUnitTest`
-- No hardcoded production secrets.
+- `./gradlew :app:assembleDebug` succeeds
+- `./gradlew :app:testDebugUnitTest` passes
+- No hardcoded production secrets
 
-Out of scope: live steer/abort (Phase 2).
+Out of scope: live steer/abort (Phase 2 — needs Prompt G).
 ```
 
 ---
 
-## Prompt 10 — HTTP control plane for agent (unblocks Android Phase 2)
+## Prompt G — HTTP control plane for agent (unblocks Android Phase 2)
 
 ```
-Goal: Design and implement a minimal HTTP (or WebSocket) control API in coding-agent so remote clients can list sessions, steer, and abort.
+Goal: Design and implement a minimal HTTP control API so remote clients can list sessions, steer, and abort.
 
 Read first:
-- docs/superpowers/specs/2026-07-01-android-app-design.md (§ Backend reality, Follow-ups)
+- docs/superpowers/specs/2026-07-01-android-app-design.md (§ Backend reality)
 - packages/coding-agent/src/modes/rpc/rpc-types.ts (steer, abort, abort_and_prompt)
 - packages/stats/src/server.ts (pattern for Bun.serve HTTP in this repo)
 
-Spec deliverables (do both):
-1. Write docs/superpowers/specs/YYYY-MM-DD-agent-control-api.md covering:
-   - Endpoints: list sessions, get session status, POST steer, POST abort, optional SSE event stream
+Current state: NOT IMPLEMENTED. No `control serve` command, no `/api/sessions` endpoints.
+
+Spec deliverables:
+1. Write docs/superpowers/specs/YYYY-MM-DD-agent-control-api.md:
+   - Endpoints: list sessions, get status, POST steer, POST abort, optional SSE
    - Auth: bearer token, bind address, LAN-only defaults
    - Mapping to existing JSON-RPC methods
-2. Implement v1 minimal server (e.g. `agent control serve --port 3848` or extend stats server behind flag):
-   - At least: GET /api/sessions, POST /api/sessions/:id/steer, POST /api/sessions/:id/abort
-   - Tests assert HTTP contract, not source grep
+2. Implement v1 server (e.g. `agent control serve --port 3848`):
+   - GET /api/sessions, POST /api/sessions/:id/steer, POST /api/sessions/:id/abort
+   - Tests assert HTTP contract (behavior, not source grep)
 
 Verification:
-- `bun run check`
-- New tests in packages/coding-agent/test/ for control API
-- Update android-app domain/ControlRepository interface doc pointing at real endpoints
+- `bun run check:ts`
+- New tests in packages/coding-agent/test/
+- Update android-app domain/ControlRepository to point at real endpoints
 
-Dependency: Prompt 9 can wire Android after this ships.
+Dependency: Prompt F can wire Android Manage tab after this ships.
 ```
 
 ---
 
-## Prompt 11 — Drop Windows platform support
+## Prompt H — Drop Windows platform support
 
 ```
-Goal: Execute transition-docs/dropping-windows.md — remove win32-x64 targets and Windows-only code paths.
+Goal: Execute transition-docs/dropping-windows.md.
 
 Read first:
 - transition-docs/dropping-windows.md (full inventory)
-- packages/natives/scripts/gen-npm-packages.ts
+
+Current state: `win32-x64` still present in:
+- packages/natives/scripts/gen-npm-packages.ts (LEAF_TARGETS)
 - scripts/ci-release-build-binaries.ts
-- crates/pi-natives/src/ (cfg(windows) gates)
+- packages/coding-agent/src/cli/update-cli.ts (platform list)
+- Various natives tests
 
 Steps:
-1. Remove win32-x64 from LEAF_TARGETS and binary release targets.
-2. Remove or gate Windows-specific modules (pi-shell windows, etc.) per inventory.
-3. Update CI workflows to stop building win32 artifacts.
-4. CHANGELOG [Unreleased] ### Breaking Changes — Windows no longer supported.
-5. Run `bun run check`, `bun run test:ts`, native build on Linux.
+1. Remove win32-x64 from LEAF_TARGETS and binary release targets
+2. Remove or gate Windows-specific modules per inventory
+3. Update CI workflows
+4. CHANGELOG [Unreleased] ### Breaking Changes
+5. `bun run check:ts`, native build on Linux
 
 Acceptance:
-- No CI job publishes win32-x64 binaries.
-- `rg 'win32-x64' scripts/ packages/natives/` only in changelog/history docs.
-- Linux and darwin targets still build.
+- No CI job publishes win32-x64 binaries
+- Linux and darwin targets still build
 
-Caution: Large diff — one focused commit; do not drive-by refactor unrelated code.
+Caution: Large diff — one focused commit; no drive-by refactors.
 ```
 
 ---
 
-## Prompt 12 — autoawfixer: trigger abstraction (expansion Phase 1)
+## Prompt I — autoawfixer: trigger abstraction
 
 ```
-Goal: First step toward general agent framework — extract GitHub webhook handling into a pluggable Trigger without changing behavior.
+Goal: Extract GitHub webhook handling into a pluggable Trigger without changing behavior.
 
 Read first:
-- transition-docs/expanding-robomp.md (Medium-term architecture)
+- transition-docs/expanding-robomp.md
 - python/autoawfixer/src/github_events.py, server.py, queue.py, worker.py
 
 Steps:
-1. Introduce `triggers/base.py` with Trigger ABC: `parse_event`, `route_to_task`, `dedup_key`.
-2. Move GitHub-specific logic to `triggers/github/` — same HTTP routes, same sqlite schema initially.
-3. WorkerPool and SandboxManager stay unchanged; only import paths change.
-4. All existing autoawfixer tests pass without behavior change.
-5. Add one contract test: GitHub issues.opened fixture → same TaskInputs as before refactor.
+1. `triggers/base.py` with Trigger ABC: `parse_event`, `route_to_task`, `dedup_key`
+2. Move GitHub logic to `triggers/github/` — same HTTP routes, same sqlite schema
+3. WorkerPool and SandboxManager unchanged; import paths only
+4. All existing tests pass
+5. Contract test: GitHub issues.opened fixture → same TaskInputs as before
 
 Acceptance:
-- `bun run test:py` / `pytest autoawfixer/tests` — full pass.
-- No new features (no Slack/cron yet) — refactor only.
-- Document extension point in python/autoawfixer/README.md Architecture section.
+- `bun run test:py` full pass
+- No new features (no Slack/cron)
+- Document extension point in python/autoawfixer/README.md
 
 Out of scope: output backend split, lean Docker image, PyPI publish.
 ```
 
 ---
 
-## Prompt 13 — Phase 5: Extension compat (@awfixer mirrors)
+## Prompt J — Docker/infra cleanup (remaining rebrand strings)
 
 ```
-Goal: Extension loader serves both legacy @oh-my-pi and new @awfixerai subpath IDs during transition.
+Goal: Finish optional infra renames left after the main rebrand.
 
 Read first:
-- transition-docs/REBRANDING.md (Phase 5)
-- packages/coding-agent/src/discovery/ (legacy-pi-bundled-registry, legacy-pi-compat, extension loader)
-- docs/extensions.md
+- transition-docs/REBRANDING.md (Phase 4 notes)
+- Dockerfile, Dockerfile.autoawfixer, python/autoawfixer/docker-compose.yml
+- github-app/docker-compose.yml
+
+Remaining items:
+- `PI_BASE` build arg → `AGENT_BASE` (with `PI_BASE` fallback + deprecation warning)
+- `pi:image`/`pi:run` scripts → already delegated to `agent:image`/`agent:run`; consider removing aliases in a later release
+- Stale `@awfixer-agent/agent-natives-*` references in docs/natives-*.md → `@awfixerai/natives` leaf naming
+- `qa.omp.sh` grievances endpoint default — decide fork URL or disable
 
 Steps:
-1. Identify where bundled extension IDs and npm specifiers are resolved.
-2. Add @awfixerai/agent/* mirrors for @oh-my-pi/pi-coding-agent/* bundled paths.
-3. Update bundled registry generator if present — emit both scopes or alias map.
-4. Tests: extension resolves by old ID and new ID to same module (behavior test, not source grep).
-5. Document in docs/extensions.md for plugin authors.
-
-Dependency: Prompt 3 (npm rename) should be complete.
+1. Grep `PI_BASE|@awfixer-agent/agent-natives|qa\.omp\.sh` outside CHANGELOG/transition-docs
+2. Apply mechanical fixes with backward compat
+3. `docker compose --project-directory python/autoawfixer config` validates
+4. CHANGELOG [Unreleased] if user-visible
 
 Acceptance:
-- Existing user plugins referencing @oh-my-pi still load.
-- New docs recommend @awfixerai paths.
+- `bun run agent:image` works (not just `pi:image`)
+- New clones follow README without dead script names
 ```
 
 ---
 
-## Prompt 14 — Fork README and user-facing docs sweep
+## Prompt K — Root README and contributor onboarding
 
 ```
-Goal: Replace upstream oh-my-pi / omp.sh user-facing references in READMEs and --help URLs with awfixer-agent branding.
+Goal: New contributors can onboard without hunting package READMEs.
 
 Read first:
-- transition-docs/REBRANDING.md
 - packages/coding-agent/README.md
-- Root lacks README — consider creating one pointing to agent CLI, autoawfixer, prwatch, android-app
+- transition-docs/REBRANDING.md
+- python/autoawfixer/README.md, github-app/README.md, android-app/README.md
 
 Steps:
-1. Audit: `rg 'oh-my-pi|omp\.sh|can1357/oh-my-pi' --glob '*.md' --glob '!CHANGELOG.md' --glob '!transition-docs/**'`
-2. Update package READMEs, DEVELOPMENT.md, install docs with fork repo awfixers-stuff/awfixer-agent and agent.awfixer.codes.
-3. Update CLI help strings in packages/coding-agent/src/cli.ts and packages/utils/src/cli.ts where URLs are printed.
-4. Keep historical CHANGELOG issue links unless fork tracks its own issues.
-5. `bun run check` — no type errors from string changes.
+1. Create repo-root README.md with:
+   - What awfixer-agent is (fork of oh-my-pi)
+   - Quick start: `bun install`, `bun run install:local`, `agent --version`
+   - Package map (table from AGENTS.md)
+   - Links to autoawfixer, prwatch, android companion
+   - Contributing: `bun run check`, `bun run test:ts`, `bun run test:py`
+2. Audit remaining `omp.sh` / `oh-my-pi` in user-facing help strings (not CHANGELOG history)
+3. `bun run check:ts`
 
 Acceptance:
-- New contributor can onboard from root README without hitting dead upstream-only instructions.
-- `agent --help` does not promise omp.sh update URLs (should match Prompt 4 state).
+- Root README exists and is accurate
+- `agent --help` URLs match fork (agent.awfixer.codes / awfixers-stuff/awfixer-agent)
 
-Do not rewrite 100+ docs/tools/*.md unless broken links — prioritize README, install, and help text.
+Do not rewrite all 100+ docs/tools/*.md — fix broken links only.
 ```
 
 ---
@@ -463,10 +418,12 @@ Do not rewrite 100+ docs/tools/*.md unless broken links — prioritize README, i
 
 | Area | Command |
 |------|---------|
-| Typecheck | `bun run check` |
+| Typecheck | `bun run check:ts` |
+| Full check (+ Rust) | `bun run check` |
 | TS tests | `bun run test:ts` |
 | Python | `bun run test:py` |
 | Smoke | `bun run ci:test:smoke` |
+| Agent Docker image | `bun run agent:image` |
 | autoawfixer Docker | `bun run autoawfixer:build && bun run autoawfixer:up` |
 | prwatch gateway | `cd github-app/gateway && go test ./...` |
 | prwatch worker | `cd github-app/worker && pytest -q` |
@@ -479,12 +436,15 @@ Do not rewrite 100+ docs/tools/*.md unless broken links — prioritize README, i
 
 | Can run in parallel | Must wait for |
 |---------------------|---------------|
-| Prompts 3, 5, 6, 7, 9, 11, 12, 14 | Prompt 0 (bootstrap) |
-| Prompt 4 | Prompt 3 |
-| Prompt 8 | Prompt 7 (partial gateway) |
-| Prompt 10 | none (but 9 benefits after) |
-| Prompt 13 | Prompt 3 |
+| B, C, D, F, H, I, J, K | A (commits landed) |
+| E | D (partial gateway) |
+| G | none (F benefits after) |
+| Android Phase 2 wiring | G |
 
-**Minimum path to “fork is real”:** 0 → 1 → 2 → 3 → 4 → 14
+**Minimum path to clean git:** A → B
 
-**Minimum path to “bots work”:** 0 → 1 → 5 → 6 (autoawfixer) OR 0 → 2 → 7 → 8 (prwatch)
+**Minimum path to green Python:** A → C
+
+**Minimum path to PR review bot:** A → D → E
+
+**Minimum path to mobile control:** A → F → G
