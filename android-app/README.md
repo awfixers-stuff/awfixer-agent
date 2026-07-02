@@ -22,6 +22,14 @@ cd android-app
 ./gradlew --no-daemon :app:assembleDebug
 ```
 
+From the repo root:
+
+```bash
+bun run ci:test:android
+```
+
+CI runs the same command on every push and pull request (`.github/workflows/ci.yml`, `android_app` job).
+
 On memory-constrained hosts, `gradle.properties` caps the JVM at 1024m and disables the daemon.
 
 Default stats URL for emulator: `http://10.0.2.2:3847`. Start stats on the host:

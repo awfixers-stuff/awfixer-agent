@@ -207,6 +207,22 @@ jobs:
          - name: Build collab web
            run: bun run collab:web:build
 
+   android_app:
+      name: Test Android companion
+      runs-on: ubuntu-22.04
+      steps:
+         - uses: actions/checkout@v4
+         - uses: actions/setup-java@v4
+           with:
+              distribution: temurin
+              java-version: "17"
+              cache: gradle
+              cache-dependency-path: android-app/**/*.gradle*
+         - uses: android-actions/setup-android@v3
+         - name: Test and assemble debug APK
+           working-directory: android-app
+           run: ./gradlew --no-daemon :app:testDebugUnitTest :app:assembleDebug
+
    # Linux x64 baseline + modern: required by `test`, so it runs on every PR
    # unless native_artifact_lookup found a cached run. Release runs always
    # rebuild for fresh artifacts.

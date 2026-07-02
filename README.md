@@ -6,17 +6,11 @@ The agent, apps, and services that power the backend of [AWFixer LLC](https://aw
 
 ## What this is
 
-A monorepo built around the **`agent`** coding-agent CLI. This repository is a **fork of [oh-my-pi](https://github.com/can1357/oh-my-pi)**, re-branded for AWFixer:
-
-| Today (fork) | Upstream |
-| --- | --- |
-| CLI binary: `agent` | `omp` |
-| npm scope: `@awfixerai/*` | `@oh-my-pi/*` |
-| User config: `~/.agent` | `~/.omp` |
+A monorepo built around the **`agent`** coding-agent CLI.
 
 Docs: [agent.awfixer.codes](https://agent.awfixer.codes) · Repo: [github.com/awfixers-stuff/awfixer-agent](https://github.com/awfixers-stuff/awfixer-agent)
 
-The monorepo consolidates what used to be a stack of separate tools — the Oh My Pi agent, CodeRabbit, Mergify, Sourcery AI, Semgrep, and more — into a single integrated platform:
+The monorepo consolidates what used to be a stack of separate tools — the local agent, CodeRabbit, Mergify, Sourcery AI, Semgrep, and more — into a single integrated platform:
 
 | Surface | Role |
 | --- | --- |
@@ -68,9 +62,10 @@ Full CLI reference: [packages/coding-agent/README.md](packages/coding-agent/READ
 Development conventions: [`AGENTS.md`](AGENTS.md). CLI internals map: [packages/coding-agent/DEVELOPMENT.md](packages/coding-agent/DEVELOPMENT.md).
 
 ```bash
-bun run check      # typecheck + lint (all workspaces)
-bun run test:ts    # TypeScript unit tests
-bun run test:py    # Python tests (autoawfixer, omp-rpc)
+bun run check           # typecheck + lint (all workspaces)
+bun run test:ts         # TypeScript unit tests
+bun run test:py         # Python tests (autoawfixer, omp-rpc)
+bun run ci:test:android # Android companion unit tests + debug APK
 ```
 
 Package-level docs live in each directory's `README.md`.

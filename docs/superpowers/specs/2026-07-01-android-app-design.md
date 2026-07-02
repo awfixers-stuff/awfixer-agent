@@ -2,7 +2,7 @@
 
 ## Goal
 
-Kotlin + Jetpack Compose companion at repo root `android-app/`: monitor Oh My Pi stats from LAN hosts, with a honest stub for future live agent control (interject / abort).
+Kotlin + Jetpack Compose companion at repo root `android-app/`: monitor awfixer-agent stats from LAN hosts (`agent stats`, port **3847**), with a honest stub for future live agent control (interject / abort).
 
 ## Backend reality (verified)
 
@@ -38,7 +38,7 @@ android-app/
 ```
 
 - **Phase 1:** `KtorStatsRepository` → existing stats API; pull-to-refresh + manual sync.
-- **Phase 2:** `ControlRepository` implementation against future `omp control` HTTP/WS; until then `OfflineControlRepository` shows empty state.
+- **Phase 2:** `ControlRepository` implementation against a future awfixer-agent control HTTP/WS API; until then `OfflineControlRepository` shows empty state.
 
 ## UX (Phase 1)
 
@@ -66,6 +66,6 @@ User chose **Phase 1 now + stub Phase 2** rather than blocking on a new control 
 
 ## Follow-ups
 
-1. Spec for `omp control` HTTP API (session list, steer, abort, events stream).
+1. Spec for awfixer-agent control HTTP API (session list, steer, abort, events stream).
 2. Wire `ControlRepository` when server exists.
 3. Optional: mTLS / Tailscale-only profiles.
