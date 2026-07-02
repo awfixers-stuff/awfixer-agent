@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM golang:1.23-alpine AS build
+FROM golang:1.25-alpine AS build
 WORKDIR /src
 COPY github-app/gateway/go.mod github-app/gateway/go.sum* ./
 RUN go mod download 2>/dev/null || true
