@@ -254,15 +254,15 @@ async function cmdRelease(versionOrBump: string): Promise<void> {
 	}
 	console.log();
 
-	// Update @oh-my-pi/* catalog entries in root package.json
+	// Update @awfixerai/* catalog entries in root package.json
 	console.log("Updating root catalog versions...");
 	let rootPkgRaw = await Bun.file("package.json").text();
 	rootPkgRaw = rootPkgRaw.replace(
-		/("@oh-my-pi\/[^"]+":\s*)"[^"]+"/g,
+		/("@awfixerai\/[^"]+":\s*)"[^"]+"/g,
 		`$1"${version}"`,
 	);
 	await Bun.write("package.json", rootPkgRaw);
-	console.log("  Updated root catalog @oh-my-pi/* entries");
+	console.log("  Updated root catalog @awfixerai/* entries");
 
 	// 3. Update Rust workspace version
 	console.log(`Updating Rust workspace version to ${version}…`);

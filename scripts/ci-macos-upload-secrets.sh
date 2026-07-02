@@ -16,7 +16,7 @@
 #
 # Usage:
 #   scripts/ci-macos-upload-secrets.sh [dir] [--dry-run]
-#   OMP_REPO=owner/repo scripts/ci-macos-upload-secrets.sh ~/omp-signing
+#   AGENT_REPO=owner/repo scripts/ci-macos-upload-secrets.sh ~/omp-signing
 
 set -euo pipefail
 
@@ -29,7 +29,7 @@ for arg in "$@"; do
 	esac
 done
 DIR="${DIR:-${OMP_SIGNING_DIR:-$HOME/omp-signing}}"
-REPO="${OMP_REPO:-can1357/oh-my-pi}"
+REPO="${AGENT_REPO:-awfixers-stuff/awfixer-agent}"
 
 die() {
 	echo "ci-macos-upload-secrets: $1" >&2

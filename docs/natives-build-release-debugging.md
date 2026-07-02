@@ -1,6 +1,6 @@
 # Natives Build, Release, and Debugging Runbook
 
-This runbook describes how `@oh-my-pi/pi-natives` produces `.node` addons, generated declarations, and compiled-binary embedded payloads, and how to debug loader/build failures.
+This runbook describes how `@awfixerai/natives` produces `.node` addons, generated declarations, and compiled-binary embedded payloads, and how to debug loader/build failures.
 
 It follows the architecture terms from `docs/natives-architecture.md`:
 
@@ -26,7 +26,7 @@ It follows the architecture terms from `docs/natives-architecture.md`:
 
 - `bun scripts/build-native.ts` (`build`) → N-API build, addon install, generated declarations install, explicit ESM export and enum runtime patch.
 - `bun scripts/embed-native.ts` (`gen:native`) → generate `native/embedded-addon.js` plus `native/embedded-addons.<tag>.tar.gz` from built files.
-- `bun scripts/gen-npm-packages.ts` (`gen:npm`) → generate per-platform npm leaf packages (`@oh-my-pi/pi-natives-<platform>-<arch>`, installed as optional dependencies of the core package) under `npm/` from built addon files.
+- `bun scripts/gen-npm-packages.ts` (`gen:npm`) → generate per-platform npm leaf packages (`@awfixer-agent/agent-natives-<platform>-<arch>`, installed as optional dependencies of the core package) under `npm/` from built addon files.
 
 Root scripts include `build:native` as `bun --cwd=packages/natives run build`.
 
@@ -87,7 +87,7 @@ Runtime x64 candidate order also includes the unsuffixed default filename after 
 ## Runtime flags
 
 - `PI_NATIVE_VARIANT`: x64 runtime override; valid values are `modern` and `baseline`.
-- `PI_COMPILED`: legacy compiled-mode signal. A populated embedded-addon manifest is also a compiled-mode signal; compiled release builds additionally define `process.env.PI_COMPILED="true"` during `bun build --compile`.
+- `AGENT_COMPILED`: legacy compiled-mode signal. A populated embedded-addon manifest is also a compiled-mode signal; compiled release builds additionally define `process.env.AGENT_COMPILED="true"` during `bun build --compile`.
 
 ## Build-time flags/options
 
@@ -142,19 +142,19 @@ Failure exits have explicit error text for invalid variants, failed napi build, 
 Typical local loop:
 
 1. Build addon: `bun --cwd=packages/natives run build`.
-2. Loader resolves platform npm leaf-package candidates (`@oh-my-pi/pi-natives-<platform>-<arch>`, when resolvable), then package-local `native/` and executable-dir fallback candidates.
+2. Loader resolves platform npm leaf-package candidates (`@awfixer-agent/agent-natives-<platform>-<arch>`, when resolvable), then package-local `native/` and executable-dir fallback candidates.
 3. Generated declarations in `native/index.d.ts` describe the public TS API.
 
 ## Shipped/compiled binary workflow
 
-In compiled mode (`PI_COMPILED`, Bun embedded URL markers, or populated embedded manifest):
+In compiled mode (`AGENT_COMPILED`, Bun embedded URL markers, or populated embedded manifest):
 
 1. Loader computes versioned cache dir: `<getNativesDir()>/<packageVersion>`.
 2. If embedded manifest matches current platform+version, loader extracts the selected file from `embedded-addons.<tag>.tar.gz` into that versioned dir when the cached file is absent or has the wrong size.
 3. Runtime candidate order includes:
    - extracted versioned cache path, if available,
    - versioned cache dir,
-   - legacy compiled-binary dir (`%LOCALAPPDATA%/omp` on Windows, `~/.local/bin` elsewhere),
+   - legacy compiled-binary dir (`%LOCALAPPDATA%/agent` on Windows, `~/.local/bin` elsewhere),
    - package/executable directories.
 4. First successfully loaded addon with the expected version sentinel is returned.
 
@@ -221,9 +221,9 @@ bun run gen:native
 bun run gen:native:reset
 ```
 
-## Orchestrator-side content-addressed build cache (robomp)
+## Orchestrator-side content-addressed build cache (autoawfixer)
 
-When `pi-natives` is built inside the robomp orchestrator (`python/robomp/`), workspaces share built artifacts through a content-addressed cache instead of rebuilding from scratch in every per-issue worktree. The cache is **orchestrator-side only** — `bun --cwd=packages/natives run build` itself is unchanged; the cache lives outside the build pipeline and is populated/captured around `ensure_workspace` and post-task success in `python/robomp/src/natives_cache.py`.
+When `pi-natives` is built inside the autoawfixer orchestrator (`python/autoawfixer/`), workspaces share built artifacts through a content-addressed cache instead of rebuilding from scratch in every per-issue worktree. The cache is **orchestrator-side only** — `bun --cwd=packages/natives run build` itself is unchanged; the cache lives outside the build pipeline and is populated/captured around `ensure_workspace` and post-task success in `python/autoawfixer/src/natives_cache.py`.
 
 ### What is cached
 
@@ -273,15 +273,15 @@ A periodic GC loop runs in `WorkerPool` with two caps per repo. When either cap 
 
 Workspaces that hardlinked a `.node` before GC retain access via the kernel inode refcount — `rmtree` of the cache entry does not delete the file from the workspace.
 
-### Configuration (settings on `robomp.config.Settings`)
+### Configuration (settings on `autoawfixer.config.Settings`)
 
 | Env var                                     | Default                  | Effect                                                                                              |
 | ------------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------- |
-| `ROBOMP_NATIVES_CACHE_ENABLED`              | `true`                   | Master switch. When false the populate/capture hooks no-op and every workspace builds from scratch. |
-| `ROBOMP_NATIVES_CACHE_ROOT`                 | `/data/cache/pi-natives` | Cache root directory. Must be `root:omp 02770` for cross-slot reads.                                |
-| `ROBOMP_NATIVES_CACHE_MAX_ENTRIES_PER_REPO` | `8`                      | LRU entry-count cap, per repo slug.                                                                 |
-| `ROBOMP_NATIVES_CACHE_MAX_BYTES`            | `4294967296` (4 GiB)     | LRU byte cap, per repo slug.                                                                        |
-| `ROBOMP_NATIVES_CACHE_GC_INTERVAL_SECONDS`  | `3600`                   | Period of the background GC loop in `WorkerPool`.                                                   |
+| `AUTOAWFIXER_NATIVES_CACHE_ENABLED`              | `true`                   | Master switch. When false the populate/capture hooks no-op and every workspace builds from scratch. |
+| `AUTOAWFIXER_NATIVES_CACHE_ROOT`                 | `/data/cache/pi-natives` | Cache root directory. Must be `root:omp 02770` for cross-slot reads.                                |
+| `AUTOAWFIXER_NATIVES_CACHE_MAX_ENTRIES_PER_REPO` | `8`                      | LRU entry-count cap, per repo slug.                                                                 |
+| `AUTOAWFIXER_NATIVES_CACHE_MAX_BYTES`            | `4294967296` (4 GiB)     | LRU byte cap, per repo slug.                                                                        |
+| `AUTOAWFIXER_NATIVES_CACHE_GC_INTERVAL_SECONDS`  | `3600`                   | Period of the background GC loop in `WorkerPool`.                                                   |
 
 ### Manual invalidation
 

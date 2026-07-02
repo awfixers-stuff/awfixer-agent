@@ -15,11 +15,11 @@ In the TUI, `/marketplace` with no arguments opens the interactive plugin browse
 
 A **marketplace** is a Git repository (or local directory) containing a catalog file at `.omp-plugin/marketplace.json` (preferred) or `.claude-plugin/marketplace.json` (Claude Code-compatible fallback). The catalog lists available plugins with their sources, descriptions, and metadata.
 
-A **plugin** is a directory containing Claude/OMP plugin content such as skills, commands, agents, hooks, tools, MCP servers, or LSP servers. Extension modules (`package.json` `omp.extensions` entry points) are not loaded from marketplace installs — they only load for npm-installed or `omp plugin link`ed plugins. Plugins are identified by `name@marketplace` (e.g. `code-review@claude-plugins-official`).
+A **plugin** is a directory containing Claude/agent plugin content such as skills, commands, agents, hooks, tools, MCP servers, or LSP servers. Extension modules (`package.json` `omp.extensions` entry points) are not loaded from marketplace installs — they only load for npm-installed or `agent plugin link`ed plugins. Plugins are identified by `name@marketplace` (e.g. `code-review@claude-plugins-official`).
 
 **Scopes**: marketplace plugins can be installed at two scopes:
 
-- **user** (default) -- available in all projects, stored in `~/.omp/plugins/installed_plugins.json`
+- **user** (default) -- available in all projects, stored in `~/.agent/plugins/installed_plugins.json`
 - **project** -- available only in the active project, stored in the nearest project `.omp/plugins/installed_plugins.json`
 
 Enabled project-scoped installs shadow enabled user-scoped installs of the same plugin. A disabled project install does not shadow the user install.
@@ -59,16 +59,16 @@ Enabled project-scoped installs shadow enabled user-scoped installs of the same 
 The same operations are available from the command line:
 
 ```
-omp plugin marketplace add <source>
-omp plugin marketplace remove <name>
-omp plugin marketplace update [name]
-omp plugin marketplace list
-omp plugin discover [marketplace]
-omp plugin install [--force] [--scope user|project] name@marketplace
-omp plugin uninstall [--scope user|project] name@marketplace
-omp plugin upgrade [--scope user|project] [name@marketplace]
-omp plugin enable [--scope user|project] name@marketplace
-omp plugin disable [--scope user|project] name@marketplace
+agent plugin marketplace add <source>
+agent plugin marketplace remove <name>
+agent plugin marketplace update [name]
+agent plugin marketplace list
+agent plugin discover [marketplace]
+agent plugin install [--force] [--scope user|project] name@marketplace
+agent plugin uninstall [--scope user|project] name@marketplace
+agent plugin upgrade [--scope user|project] [name@marketplace]
+agent plugin enable [--scope user|project] name@marketplace
+agent plugin disable [--scope user|project] name@marketplace
 ```
 
 ## Marketplace sources
@@ -87,7 +87,7 @@ Git and local sources must contain a catalog at `.omp-plugin/marketplace.json` (
 
 ## Catalog format (marketplace.json)
 
-A marketplace catalog lives at `.omp-plugin/marketplace.json` in the repository root. When omp is the only intended consumer, prefer this path. To remain Claude Code-compatible (omp loads the same shape from either path), publish at `.claude-plugin/marketplace.json` instead — omp uses it as a fallback when `.omp-plugin/marketplace.json` is absent. A repository may ship both: omp reads the `.omp-plugin/` copy, Claude Code reads the `.claude-plugin/` copy. Same catalog format either way:
+A marketplace catalog lives at `.omp-plugin/marketplace.json` in the repository root. When omp is the only intended consumer, prefer this path. To remain Claude Code-compatible (agent loads the same shape from either path), publish at `.claude-plugin/marketplace.json` instead — omp uses it as a fallback when `.omp-plugin/marketplace.json` is absent. A repository may ship both: omp reads the `.omp-plugin/` copy, Claude Code reads the `.claude-plugin/` copy. Same catalog format either way:
 
 ```json
 {
@@ -204,7 +204,7 @@ Current installer behavior rejects npm marketplace sources with `npm plugin sour
 ## On-disk layout
 
 ```
-~/.omp/
+~/.agent/
   marketplaces.json              # Registry of added marketplaces
   plugins/
     installed_plugins.json       # User-scoped marketplace plugins (version: 2)

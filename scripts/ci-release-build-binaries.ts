@@ -26,35 +26,35 @@ const targets: BinaryTarget[] = [
 		platform: "darwin",
 		arch: "arm64",
 		target: "bun-darwin-arm64",
-		outfile: "packages/coding-agent/binaries/omp-darwin-arm64",
+		outfile: "packages/coding-agent/binaries/agent-darwin-arm64",
 	},
 	{
 		id: "darwin-x64",
 		platform: "darwin",
 		arch: "x64",
 		target: "bun-darwin-x64",
-		outfile: "packages/coding-agent/binaries/omp-darwin-x64",
+		outfile: "packages/coding-agent/binaries/agent-darwin-x64",
 	},
 	{
 		id: "linux-x64",
 		platform: "linux",
 		arch: "x64",
 		target: "bun-linux-x64-baseline",
-		outfile: "packages/coding-agent/binaries/omp-linux-x64",
+		outfile: "packages/coding-agent/binaries/agent-linux-x64",
 	},
 	{
 		id: "linux-arm64",
 		platform: "linux",
 		arch: "arm64",
 		target: "bun-linux-arm64",
-		outfile: "packages/coding-agent/binaries/omp-linux-arm64",
+		outfile: "packages/coding-agent/binaries/agent-linux-arm64",
 	},
 	{
 		id: "win32-x64",
 		platform: "win32",
 		arch: "x64",
 		target: "bun-windows-x64-modern",
-		outfile: "packages/coding-agent/binaries/omp-windows-x64.exe",
+		outfile: "packages/coding-agent/binaries/agent-windows-x64.exe",
 	},
 ];
 
@@ -111,7 +111,7 @@ async function buildBinary(target: BinaryTarget): Promise<void> {
 	console.log(`Building ${target.outfile}...`);
 	await embedNative(target);
 	if (isDryRun) {
-		console.log(`DRY RUN bun build --compile --no-compile-autoload-bunfig --no-compile-autoload-dotenv --no-compile-autoload-tsconfig --no-compile-autoload-package-json --minify-identifiers --keep-names --define process.env.PI_COMPILED="true" --root . --target=${target.target} ${entrypoint} --outfile ${target.outfile}`);
+		console.log(`DRY RUN bun build --compile --no-compile-autoload-bunfig --no-compile-autoload-dotenv --no-compile-autoload-tsconfig --no-compile-autoload-package-json --minify-identifiers --keep-names --define process.env.AGENT_COMPILED="true" --root . --target=${target.target} ${entrypoint} --outfile ${target.outfile}`);
 		return;
 	}
 
@@ -130,7 +130,7 @@ async function buildBinary(target: BinaryTarget): Promise<void> {
 			"--minify-identifiers",
 			"--keep-names",
 			"--define",
-			'process.env.PI_COMPILED="true"',
+			'process.env.AGENT_COMPILED="true"',
 			"--root",
 			".",
 			"--target",

@@ -305,7 +305,7 @@ runs:
       - name: Upload native addon(s)
         uses: actions/upload-artifact@v4
         with:
-           name: pi-natives-${{ inputs.platform }}-${{ inputs.arch }}${{ inputs.variant && format('-{0}', inputs.variant) || '' }}-h${{ inputs.hash }}
+           name: agent-natives-${{ inputs.platform }}-${{ inputs.arch }}${{ inputs.variant && format('-{0}', inputs.variant) || '' }}-h${{ inputs.hash }}
            path: packages/natives/native/pi_natives.${{ inputs.platform }}-${{ inputs.arch }}*.node
            if-no-files-found: error
            # Explicit so the native_artifact_lookup canary keeps working even if

@@ -147,7 +147,7 @@ async function installLayout(prefix: string, version: string): Promise<void> {
 	const platformTag = `${process.platform}-${process.arch}`;
 
 	const manifest = {
-		name: "@oh-my-pi/pi-coding-agent",
+		name: "@awfixerai/agent",
 		version,
 		platform: platformTag,
 		installedAt: new Date().toISOString(),

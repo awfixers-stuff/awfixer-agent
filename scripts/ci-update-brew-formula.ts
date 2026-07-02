@@ -11,8 +11,8 @@
 
 import { $ } from "bun";
 
-const REPO = process.env.OMP_REPO ?? "can1357/oh-my-pi";
-const HOMEPAGE = "https://omp.sh";
+const REPO = process.env.AGENT_REPO ?? "awfixers-stuff/awfixer-agent";
+const HOMEPAGE = "https://agent.awfixer.codes";
 const DESC = "Coding agent with the IDE wired in";
 
 interface ReleaseAsset {
@@ -58,14 +58,14 @@ export function renderFormula(version: string, sums: Record<string, string>): st
 	// Each `url` carries `using: :nounzip` because the release assets are bare
 	// Mach-O/ELF executables, not archives. Without it Homebrew's default
 	// CurlDownloadStrategy routes through UnpackStrategy::Uncompressed#extract_nestedly,
-	// which nests the file outside the staging CWD; `Dir["omp-*"].first` then
-	// returns `nil` and `bin.install nil => "omp"` raises.
+	// which nests the file outside the staging CWD; `Dir["agent-*"].first` then
+	// returns `nil` and `bin.install nil => "agent"` raises.
 	//
 	// `with_env(HOME: buildpath)` redirects the CLI's `os.homedir()` lookup to
 	// the writable staging dir so `generate_completions_from_executable` does
 	// not touch the real `/Users/<user>/.omp` (denied by Homebrew's sandbox
 	// profile, which would otherwise fail the popen).
-	return `class Omp < Formula
+	return `class Agent < Formula
   desc "${DESC}"
   homepage "${HOMEPAGE}"
   version "${version}"
@@ -73,40 +73,40 @@ export function renderFormula(version: string, sums: Record<string, string>): st
 
   on_macos do
     on_arm do
-      url "https://github.com/${REPO}/releases/download/v#{version}/omp-darwin-arm64",
+      url "https://github.com/${REPO}/releases/download/v#{version}/agent-darwin-arm64",
           using: :nounzip
-      sha256 "${sums["omp-darwin-arm64"]}"
+      sha256 "${sums["agent-darwin-arm64"]}"
     end
     on_intel do
-      url "https://github.com/${REPO}/releases/download/v#{version}/omp-darwin-x64",
+      url "https://github.com/${REPO}/releases/download/v#{version}/agent-darwin-x64",
           using: :nounzip
-      sha256 "${sums["omp-darwin-x64"]}"
+      sha256 "${sums["agent-darwin-x64"]}"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/${REPO}/releases/download/v#{version}/omp-linux-arm64",
+      url "https://github.com/${REPO}/releases/download/v#{version}/agent-linux-arm64",
           using: :nounzip
-      sha256 "${sums["omp-linux-arm64"]}"
+      sha256 "${sums["agent-linux-arm64"]}"
     end
     on_intel do
-      url "https://github.com/${REPO}/releases/download/v#{version}/omp-linux-x64",
+      url "https://github.com/${REPO}/releases/download/v#{version}/agent-linux-x64",
           using: :nounzip
-      sha256 "${sums["omp-linux-x64"]}"
+      sha256 "${sums["agent-linux-x64"]}"
     end
   end
 
   def install
-    bin.install Dir["omp-*"].first => "omp"
-    (bin/"omp").chmod 0555
+    bin.install Dir["agent-*"].first => "agent"
+    (bin/"agent").chmod 0555
     with_env(HOME: buildpath) do
-      generate_completions_from_executable(bin/"omp", "completions", shells: [:bash, :zsh, :fish])
+      generate_completions_from_executable(bin/"agent", "completions", shells: [:bash, :zsh, :fish])
     end
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/omp --version")
+    assert_match version.to_s, shell_output("#{bin}/agent --version")
   end
 end
 `;
@@ -117,7 +117,7 @@ async function main(): Promise<void> {
 	const version = tag.replace(/^v/, "");
 	const assets = await fetchAssets(tag);
 
-	const targets = ["omp-darwin-arm64", "omp-darwin-x64", "omp-linux-arm64", "omp-linux-x64"];
+	const targets = ["agent-darwin-arm64", "agent-darwin-x64", "agent-linux-arm64", "agent-linux-x64"];
 	const sums: Record<string, string> = {};
 	for (const name of targets) sums[name] = sha256For(assets, name);
 

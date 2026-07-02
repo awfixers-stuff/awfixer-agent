@@ -8,7 +8,7 @@
  * the final shipped behavior belongs in release notes.
  *
  * For every non-empty `[Unreleased]` section this script hands the whole section
- * to a small model (default `google-vertex/gemini-3.5-flash` via `@oh-my-pi/pi-ai`)
+ * to a small model (default `google-vertex/gemini-3.5-flash` via `@awfixerai/ai`)
  * and asks for a complete replacement grouped by changelog category. The model
  * returns structured sections/items; markdown is rendered locally so only the
  * Unreleased section changes and formatting stays deterministic.
@@ -31,9 +31,9 @@
 
 import * as path from "node:path";
 import { parseArgs } from "node:util";
-import { type Api, AuthStorage, completeSimple, Effort, type Model, SqliteAuthCredentialStore, type Tool, type ToolCall } from "@oh-my-pi/pi-ai";
-import { type GeneratedProvider, getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { getAgentDbPath } from "@oh-my-pi/pi-utils";
+import { type Api, AuthStorage, completeSimple, Effort, type Model, SqliteAuthCredentialStore, type Tool, type ToolCall } from "@awfixerai/ai";
+import { type GeneratedProvider, getBundledModel } from "@awfixerai/catalog/models";
+import { getAgentDbPath } from "@awfixerai/utils";
 import { z } from "zod/v4";
 import {
 	changelogPaths,

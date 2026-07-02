@@ -98,7 +98,7 @@ jobs:
    # then look for any prior successful main run that already uploaded the
    # native artifacts for this hash. Two independent outputs:
    #   * `linux-x64-run-id` — set when the linux x64 canary
-   #     (`pi-natives-linux-x64-modern-h<hash>`) is present on a prior main run,
+   #     (`agent-natives-linux-x64-modern-h<hash>`) is present on a prior main run,
    #     so native-dependent TS test jobs and `native_linux_x64` can reuse it.
    #   * `cross-platform-run-id` — set when ALL cross-platform native artifacts
    #     also have non-expired artifacts on that same prior run, so
@@ -139,14 +139,14 @@ jobs:
               # Canary for native_linux_x64: presence of the modern artifact
               # implies the baseline sibling is also there (they upload from the
               # same job).
-              linux_canary="pi-natives-linux-x64-modern-h${hash}"
+              linux_canary="agent-natives-linux-x64-modern-h${hash}"
               # Required set for cross-platform reuse — names must match the
               # `actions/upload-artifact` `name:` template in build-native action.
               cross_platform_required=(
-                "pi-natives-linux-arm64-h${hash}"
-                "pi-natives-darwin-x64-baseline-h${hash}"
-                "pi-natives-darwin-arm64-h${hash}"
-                "pi-natives-win32-x64-baseline-h${hash}"
+                "agent-natives-linux-arm64-h${hash}"
+                "agent-natives-darwin-x64-baseline-h${hash}"
+                "agent-natives-darwin-arm64-h${hash}"
+                "agent-natives-win32-x64-baseline-h${hash}"
               )
               linux_x64_run_id=""
               cross_platform_run_id=""
@@ -303,7 +303,7 @@ jobs:
          - name: Download native addons
            uses: actions/download-artifact@v4
            with:
-              pattern: pi-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
+              pattern: agent-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
               path: packages/natives/native
               merge-multiple: true
               run-id: ${{ steps.source.outputs.artifact-run-id }}
@@ -333,7 +333,7 @@ jobs:
          - name: Download native addons
            uses: actions/download-artifact@v4
            with:
-              pattern: pi-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
+              pattern: agent-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
               path: packages/natives/native
               merge-multiple: true
               run-id: ${{ steps.source.outputs.artifact-run-id }}
@@ -366,7 +366,7 @@ jobs:
          - name: Download native addons
            uses: actions/download-artifact@v4
            with:
-              pattern: pi-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
+              pattern: agent-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
               path: packages/natives/native
               merge-multiple: true
               run-id: ${{ steps.source.outputs.artifact-run-id }}
@@ -397,7 +397,7 @@ jobs:
          - name: Download native addons
            uses: actions/download-artifact@v4
            with:
-              pattern: pi-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
+              pattern: agent-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
               path: packages/natives/native
               merge-multiple: true
               run-id: ${{ steps.source.outputs.artifact-run-id }}
@@ -427,7 +427,7 @@ jobs:
          - name: Download native addons
            uses: actions/download-artifact@v4
            with:
-              pattern: pi-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
+              pattern: agent-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
               path: packages/natives/native
               merge-multiple: true
               run-id: ${{ steps.source.outputs.artifact-run-id }}
@@ -460,7 +460,7 @@ jobs:
          - name: Download native addons
            uses: actions/download-artifact@v4
            with:
-              pattern: pi-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
+              pattern: agent-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
               path: packages/natives/native
               merge-multiple: true
               run-id: ${{ steps.source.outputs.artifact-run-id }}
@@ -491,7 +491,7 @@ jobs:
          - name: Download native addons
            uses: actions/download-artifact@v4
            with:
-              pattern: pi-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
+              pattern: agent-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
               path: packages/natives/native
               merge-multiple: true
               run-id: ${{ steps.source.outputs.artifact-run-id }}
@@ -574,35 +574,35 @@ jobs:
                     platform: linux,
                     arch: x64,
                     target_id: linux-x64,
-                    binary_path: packages/coding-agent/binaries/omp-linux-x64,
+                    binary_path: packages/coding-agent/binaries/agent-linux-x64,
                  }
                - {
                     os: ubuntu-24.04-arm,
                     platform: linux,
                     arch: arm64,
                     target_id: linux-arm64,
-                    binary_path: packages/coding-agent/binaries/omp-linux-arm64,
+                    binary_path: packages/coding-agent/binaries/agent-linux-arm64,
                  }
                - {
                     os: macos-15-intel,
                     platform: darwin,
                     arch: x64,
                     target_id: darwin-x64,
-                    binary_path: packages/coding-agent/binaries/omp-darwin-x64,
+                    binary_path: packages/coding-agent/binaries/agent-darwin-x64,
                  }
                - {
                     os: macos-14,
                     platform: darwin,
                     arch: arm64,
                     target_id: darwin-arm64,
-                    binary_path: packages/coding-agent/binaries/omp-darwin-arm64,
+                    binary_path: packages/coding-agent/binaries/agent-darwin-arm64,
                  }
                - {
                     os: ubuntu-22.04,
                     platform: win32,
                     arch: x64,
                     target_id: win32-x64,
-                    binary_path: packages/coding-agent/binaries/omp-windows-x64.exe,
+                    binary_path: packages/coding-agent/binaries/agent-windows-x64.exe,
                  }
       runs-on: ${{ matrix.os }}
       permissions:
@@ -635,7 +635,7 @@ jobs:
          - name: Download native addon(s)
            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
            with:
-              pattern: pi-natives-${{ matrix.platform }}-${{ matrix.arch }}*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
+              pattern: agent-natives-${{ matrix.platform }}-${{ matrix.arch }}*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
               path: packages/natives/native
               merge-multiple: true
          - name: Build release binary
@@ -676,7 +676,7 @@ jobs:
          - name: Upload release binary artifact
            uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
            with:
-              name: omp-binary-${{ matrix.target_id }}
+              name: agent-binary-${{ matrix.target_id }}
               path: ${{ matrix.binary_path }}
 
    release_github:
@@ -704,7 +704,7 @@ jobs:
          - name: Download release binaries
            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
            with:
-              pattern: omp-binary-*
+              pattern: agent-binary-*
               path: packages/coding-agent/binaries
               merge-multiple: true
          - name: Create GitHub Release
@@ -730,26 +730,26 @@ jobs:
       steps:
          - name: Download published macOS arm64 binary
            run: |
-              curl -fsSL -o omp-darwin-arm64 "https://github.com/${{ github.repository }}/releases/download/${{ needs.release_metadata.outputs.release-tag }}/omp-darwin-arm64"
-              chmod +x omp-darwin-arm64
+              curl -fsSL -o agent-darwin-arm64 "https://github.com/${{ github.repository }}/releases/download/${{ needs.release_metadata.outputs.release-tag }}/agent-darwin-arm64"
+              chmod +x agent-darwin-arm64
          - name: Verify published macOS arm64 binary
            run: |
-              codesign -dvvv ./omp-darwin-arm64
-              codesign --verify --strict --verbose=4 ./omp-darwin-arm64
+              codesign -dvvv ./agent-darwin-arm64
+              codesign --verify --strict --verbose=4 ./agent-darwin-arm64
               runtime_dir="$(mktemp -d)"
-              HOME="$runtime_dir/home" XDG_DATA_HOME="$runtime_dir/xdg" ./omp-darwin-arm64 --version
-              HOME="$runtime_dir/home" XDG_DATA_HOME="$runtime_dir/xdg" ./omp-darwin-arm64 --smoke-test
+              HOME="$runtime_dir/home" XDG_DATA_HOME="$runtime_dir/xdg" ./agent-darwin-arm64 --version
+              HOME="$runtime_dir/home" XDG_DATA_HOME="$runtime_dir/xdg" ./agent-darwin-arm64 --smoke-test
          - name: Assert signed release is not ad-hoc
            if: env.MACOS_SIGNING == 'true'
            run: |
-              if codesign -dvvv ./omp-darwin-arm64 2>&1 | grep -qE "flags=.*adhoc|Signature=adhoc"; then
+              if codesign -dvvv ./agent-darwin-arm64 2>&1 | grep -qE "flags=.*adhoc|Signature=adhoc"; then
                 echo "published binary is still ad-hoc signed (Developer ID signing did not run)" >&2
                 exit 1
               fi
               # Gatekeeper assessment: a notarized Developer ID binary is accepted.
               # Informational — a bare (unstapled) Mach-O relies on the online ticket
               # lookup, so surface the result without gating the release on it.
-              spctl -a -t exec -vv ./omp-darwin-arm64 || echo "spctl non-zero (expected for unstapled bare binary; ticket served online)"
+              spctl -a -t exec -vv ./agent-darwin-arm64 || echo "spctl non-zero (expected for unstapled bare binary; ticket served online)"
 
    release_npm:
       name: Publish to npm
@@ -792,7 +792,7 @@ jobs:
          - name: Download native addons
            uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
            with:
-              pattern: pi-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
+              pattern: agent-natives-linux-x64-*-h${{ needs.native_artifact_lookup.outputs.source-hash }}
               path: packages/natives/native
               merge-multiple: true
          - name: Publish to npm

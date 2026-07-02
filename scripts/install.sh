@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-# OMP Coding Agent Installer
-# Usage: curl -fsSL https://raw.githubusercontent.com/can1357/oh-my-pi/main/scripts/install.sh | sh
+# awfixer-agent installer
+# Usage: curl -fsSL https://agent-api.awfixer.codes/install | sh
 #
 # Options:
 #   --source       Install via bun (installs bun if needed)
@@ -10,9 +10,9 @@ set -e
 #   --ref <ref>    Install specific tag/commit/branch
 #   -r <ref>       Shorthand for --ref
 
-REPO="can1357/oh-my-pi"
-PACKAGE="@oh-my-pi/pi-coding-agent"
-INSTALL_DIR="${PI_INSTALL_DIR:-$HOME/.local/bin}"
+REPO="awfixers-stuff/awfixer-agent"
+PACKAGE="@awfixerai/agent"
+INSTALL_DIR="${AGENT_INSTALL_DIR:-$HOME/.local/bin}"
 MIN_BUN_VERSION="1.3.14"
 
 # Parse arguments
@@ -179,8 +179,8 @@ install_via_bun() {
         }
     fi
     echo ""
-    echo "✓ Installed omp via bun"
-    echo "Run 'omp' to get started!"
+    echo "✓ Installed agent via bun"
+    echo "Run 'agent' to get started!"
 }
 
 # Install binary from GitHub releases
@@ -201,7 +201,7 @@ install_binary() {
         *)             echo "Unsupported architecture: $ARCH"; exit 1 ;;
     esac
 
-    BINARY="omp-${PLATFORM}-${ARCH}"
+    BINARY="agent-${PLATFORM}-${ARCH}"
     # Get release tag
     if [ -n "$REF" ]; then
         echo "Fetching release $REF..."
@@ -227,14 +227,12 @@ install_binary() {
     mkdir -p "$INSTALL_DIR"
     # Download binary
     BINARY_URL="https://github.com/${REPO}/releases/download/${LATEST}/${BINARY}"
-    curl -fsSL "$BINARY_URL" -o "${INSTALL_DIR}/omp"
-    chmod +x "${INSTALL_DIR}/omp"
-    ln -sf "${INSTALL_DIR}/omp" "${INSTALL_DIR}/agent"
+    curl -fsSL "$BINARY_URL" -o "${INSTALL_DIR}/agent"
+    chmod +x "${INSTALL_DIR}/agent"
     echo ""
-    echo "✓ Installed agent (and omp alias) to ${INSTALL_DIR}"
+    echo "✓ Installed agent to ${INSTALL_DIR}"
     echo ""
     echo "  agent: ${INSTALL_DIR}/agent"
-    echo "  omp:   ${INSTALL_DIR}/omp"
     echo ""
     # Check if in PATH
     case ":$PATH:" in

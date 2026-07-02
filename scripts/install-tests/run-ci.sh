@@ -118,8 +118,8 @@ cp "$agent_pkg_backup" "$ROOT_DIR/packages/coding-agent/package.json"
 
 utils_tgz="$(find_tarball "$TARBALL_DIR"/oh-my-pi-pi-utils-*.tgz)"
 wire_tgz="$(find_tarball "$TARBALL_DIR"/oh-my-pi-pi-wire-*.tgz)"
-natives_tgz="$(find_tarball "$TARBALL_DIR"/oh-my-pi-pi-natives-[0-9]*.tgz)"
-natives_leaf_tgz="$(find_tarball "$TARBALL_DIR"/oh-my-pi-pi-natives-"$host_tag"-*.tgz)"
+natives_tgz="$(find_tarball "$TARBALL_DIR"/oh-my-pi-agent-natives-[0-9]*.tgz)"
+natives_leaf_tgz="$(find_tarball "$TARBALL_DIR"/oh-my-pi-agent-natives-"$host_tag"-*.tgz)"
 hashline_tgz="$(find_tarball "$TARBALL_DIR"/oh-my-pi-hashline-*.tgz)"
 catalog_tgz="$(find_tarball "$TARBALL_DIR"/oh-my-pi-pi-catalog-*.tgz)"
 ai_tgz="$(find_tarball "$TARBALL_DIR"/oh-my-pi-pi-ai-*.tgz)"
@@ -142,20 +142,20 @@ mkdir -p "$TARBALL_APP_DIR"
    node -e "
 		const pkg = JSON.parse(require('fs').readFileSync('package.json', 'utf8'));
 		pkg.overrides = {
-			'@oh-my-pi/pi-utils': '$utils_tgz',
-			'@oh-my-pi/pi-wire': '$wire_tgz',
-			'@oh-my-pi/pi-natives': '$natives_tgz',
-			'@oh-my-pi/pi-natives-$host_tag': '$natives_leaf_tgz',
-			'@oh-my-pi/hashline': '$hashline_tgz',
-			'@oh-my-pi/pi-ai': '$ai_tgz',
-			'@oh-my-pi/pi-catalog': '$catalog_tgz',
-			'@oh-my-pi/pi-mnemopi': '$mnemopi_tgz',
-			'@oh-my-pi/snapcompact': '$snapcompact_tgz',
-			'@oh-my-pi/pi-agent-core': '$agent_tgz',
-			'@oh-my-pi/pi-tui': '$tui_tgz',
-			'@oh-my-pi/omp-stats': '$stats_tgz',
-			'@oh-my-pi/pi-coding-agent': '$coding_agent_tgz',
-			'@oh-my-pi/collab-web': '$collab_web_tgz'
+			'@awfixerai/utils': '$utils_tgz',
+			'@awfixerai/wire': '$wire_tgz',
+			'@awfixerai/natives': '$natives_tgz',
+			'@awfixerai/natives-$host_tag': '$natives_leaf_tgz',
+			'@awfixerai/hashline': '$hashline_tgz',
+			'@awfixerai/ai': '$ai_tgz',
+			'@awfixerai/catalog': '$catalog_tgz',
+			'@awfixerai/mnemopi': '$mnemopi_tgz',
+			'@awfixerai/snapcompact': '$snapcompact_tgz',
+			'@awfixerai/agent-core': '$agent_tgz',
+			'@awfixerai/tui': '$tui_tgz',
+			'@awfixerai/stats': '$stats_tgz',
+			'@awfixerai/agent': '$coding_agent_tgz',
+			'@awfixerai/collab-web': '$collab_web_tgz'
 		};
 		require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));
 	"
@@ -164,17 +164,17 @@ mkdir -p "$TARBALL_APP_DIR"
    # The platform leaf must arrive through the core's optionalDependencies +
    # override, not as a direct dependency — assert it landed before smoking so a
    # resolution regression is distinguishable from a runtime loader bug.
-   leaf_dir="node_modules/@oh-my-pi/pi-natives-$host_tag"
+   leaf_dir="node_modules/@awfixerai/natives-$host_tag"
    [ -d "$leaf_dir" ] || {
       echo "Platform leaf package not installed: $leaf_dir"
       exit 1
    }
-   wire_proto="$(bun -e 'import { COLLAB_PROTO } from "@oh-my-pi/pi-wire"; process.stdout.write(String(COLLAB_PROTO));')"
+   wire_proto="$(bun -e 'import { COLLAB_PROTO } from "@awfixerai/wire"; process.stdout.write(String(COLLAB_PROTO));')"
    [ "$wire_proto" = "2" ] || {
-      echo "Unexpected @oh-my-pi/pi-wire COLLAB_PROTO: $wire_proto"
+      echo "Unexpected @awfixerai/wire COLLAB_PROTO: $wire_proto"
       exit 1
    }
-   [ -f "node_modules/@oh-my-pi/collab-web/dist/index.html" ] || {
+   [ -f "node_modules/@awfixerai/collab-web/dist/index.html" ] || {
       echo "Collab web tarball did not install built dist/index.html"
       exit 1
    }

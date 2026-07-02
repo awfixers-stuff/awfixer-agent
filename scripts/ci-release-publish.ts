@@ -2,7 +2,7 @@
 /**
  * Publish workspace packages.
  *
- * The default mode publishes public JS packages and the `@oh-my-pi/pi-natives`
+ * The default mode publishes public JS packages and the `@awfixerai/natives`
  * core package. Generated native leaf packages are published separately with
  * `--native-leaf <tag>` from the release_binary matrix after that matrix entry
  * downloads the matching `.node` artifacts.
@@ -101,7 +101,7 @@ export const packages: PublishPackage[] = [
 		extraTypeConfigs: ["tsconfig.publish.client.json"],
 	},
 	{ dir: "packages/agent", kind: "typescript" },
-	{ dir: "packages/coding-agent", kind: "typescript", publishBin: { omp: "dist/cli.js" } },
+	{ dir: "packages/coding-agent", kind: "typescript", publishBin: { agent: "dist/cli.js" } },
 ];
 
 function rewriteSrcPath(value: string): string {
@@ -183,7 +183,7 @@ export async function applyPublishBin(pkgRelDir: string, write: boolean): Promis
 function buildNativeOptionalDependencies(version: string): JsonObject {
 	const optionalDependencies: JsonObject = {};
 	for (const target of LEAF_TARGETS) {
-		optionalDependencies[`@oh-my-pi/pi-natives-${target.tag}`] = version;
+		optionalDependencies[`@awfixerai/natives-${target.tag}`] = version;
 	}
 	return optionalDependencies;
 }
