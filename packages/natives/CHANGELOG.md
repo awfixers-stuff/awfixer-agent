@@ -2,13 +2,15 @@
 
 ## [Unreleased]
 
-### Added
-
-- Published `@awfixerai/natives` and platform leaf packages to npm at `0.0.1-rc.1`.
+## [0.0.1-rc.1] - 2026-07-02
 
 ### Breaking Changes
 
 - Dropped `@awfixerai/natives-win32-x64` leaf package and Windows npm addon staging.
+
+### Added
+
+- Published `@awfixerai/natives` and platform leaf packages to npm at `0.0.1-rc.1`.
 
 ## [16.2.5] - 2026-06-28
 

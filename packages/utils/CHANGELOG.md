@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.0.1-rc.1] - 2026-07-02
+
 ### Added
 
 - Published `@awfixerai/utils` to npm at `0.0.1-rc.1`.

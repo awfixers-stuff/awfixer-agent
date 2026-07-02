@@ -1,9 +1,8 @@
 # Changelog
+
 ## [Unreleased]
 
-### Added
-
-- Published `@awfixerai/*` packages to npm at `0.0.1-rc.1` (first public release under the `@awfixerai` scope).
+## [0.0.1-rc.1] - 2026-07-02
 
 ### Breaking Changes
 
@@ -14,6 +13,7 @@
 
 ### Added
 
+- Published `@awfixerai/*` packages to npm at `0.0.1-rc.1` (first public release under the `@awfixerai` scope).
 - Added `agent control serve` HTTP control API on port **3848** for listing live sessions and remote steer/abort (maps to JSON-RPC `get_state` / `steer` / `abort`). Spec: `docs/superpowers/specs/2026-07-02-agent-control-api.md`.
 - Registered `agent` as the sole CLI binary (`packages/coding-agent/package.json` `bin` map).
 
