@@ -69,7 +69,7 @@ These are abstracted by `brush-core` and `portable-pty` crates — the agent cod
 ## Binary Compilation
 
 - `build-binary.ts`: `CROSS_TARGET=win32-x64` maps to `bun-windows-x64-modern`.
-- `ci-release-build-binaries.ts`: produces `packages/coding-agent/binaries/omp-windows-x64.exe`.
+- `ci-release-build-binaries.ts`: produces `packages/coding-agent/binaries/agent-windows-x64.exe`.
 
 Windows binary name gets `.exe` suffix (others don't).
 

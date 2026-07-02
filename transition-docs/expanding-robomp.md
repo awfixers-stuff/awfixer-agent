@@ -2,6 +2,8 @@
 
 Broad exploration of how the existing robomp (self-hosted GitHub triage/fix bot) could be rebranded and expanded into **auto-awfixer** — a general-purpose autonomous agent framework.
 
+> **Superseded (2026-07):** The bot was renamed to **autoawfixer** (`python/autoawfixer/`, `AUTOAWFIXER_*`, `Dockerfile.autoawfixer`). This document remains as historical exploration; see `REBRANDING.md` and `python/autoawfixer/README.md` for the shipped layout.
+
 ---
 
 ## Current State: robomp Architecture
@@ -29,13 +31,13 @@ Renaming from `robomp` to `auto-awfixer` (or similar) touches:
 | PyPI package | `robomp` | `auto-awfixer` |
 | CLI entrypoint | `robomp serve / triage / replay / status / cleanup` | `auto-awfixer ...` |
 | Env prefix | `ROBOMP_*` | `AWFIXER_*` (e.g., `AWFIXER_BOT_LOGIN`) |
-| Docker image | `oh-my-pi/pi:dev` (extended by `Dockerfile.robomp`) | `awfixer/agent:dev` or split into base + worker |
+| Docker image | `awfixer-agent/agent:dev` (extended by `Dockerfile.robomp`) | `awfixer/agent:dev` or split into base + worker |
 | Docker compose | `docker-compose.yml` in `python/robomp/` | Move to repo root and adapt |
 | Directory | `python/robomp/` | `python/auto-awfixer/` or `services/auto-awfixer/` |
 | Bot login | `robomp` (GitHub mention) | `auto-awfixer` or `awfixer-bot` |
 | Config file | `robomp.sqlite` | `awfixer.sqlite` |
 | Data dir | `/data/` (container) | `/data/awfixer/` or configurable |
-| GitHub repo refs | `can1357/oh-my-pi` | `awfixer/auto-awfixer` |
+| GitHub repo refs | `awfixers-stuff/awfixer-agent` | `awfixer/auto-awfixer` |
 
 The prompt templates in `src/prompts/` reference the bot's identity — these need updating:
 
@@ -117,13 +119,13 @@ The framework could evolve into a general-purpose autonomous devops agent:
 
 ### Blocker: Tight pi Image Coupling
 
-The current bot requires the full `oh-my-pi/pi:dev` image (Bun + Rust natives + omp source + python). This is ~2GB+ and includes the entire monorepo. For auto-awfixer to be a standalone product, it needs a **lean runtime image** that ships only:
+The current bot requires the full `awfixer-agent/agent:dev` image (Bun + Rust natives + omp source + python). This is ~2GB+ and includes the entire monorepo. For auto-awfixer to be a standalone product, it needs a **lean runtime image** that ships only:
 
 - The compiled `agent` binary (or `omp --mode rpc`).
 - Python runtime + auto-awfixer package.
 - Minimal system dependencies (git, ssh, ca-certificates).
 
-The monorepo-at-runtime model (`PI_ROOT` mount) was convenient for development but is not a deployment artifact.
+The monorepo-at-runtime model (`AGENT_ROOT` mount) was convenient for development but is not a deployment artifact.
 
 ### Blocker: Agent Session Model
 

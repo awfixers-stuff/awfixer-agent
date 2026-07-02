@@ -41,7 +41,7 @@ const targets: BinaryTarget[] = [
         platform: "win32",
         arch: "x64",
         target: "bun-windows-x64-modern",
-        outfile: "packages/coding-agent/binaries/omp-windows-x64.exe",
+        outfile: "packages/coding-agent/binaries/agent-windows-x64.exe",
     },
 ];
 ```
@@ -154,7 +154,7 @@ Remove the Windows runner entry from:
 
 ### Docker / Container
 
-No change — Windows containers are not used. The Docker images (`Dockerfile`, `Dockerfile.robomp`) target Linux only.
+No change — Windows containers are not used. The Docker images (`Dockerfile`, `Dockerfile.autoawfixer`) target Linux only.
 
 ### Install Scripts
 
@@ -167,7 +167,7 @@ Check `scripts/install.sh` and `scripts/install-local.ts` for any Windows-specif
 | Change | Impact |
 |--------|--------|
 | No Windows binary distribution | Users on Windows must use WSL2 or a VM. Document this. |
-| No `@oh-my-pi/pi-natives-win32-x64` npm leaf package | npm `optionalDependencies` resolution will skip it. |
+| No `@oh-my-pi/agent-natives-win32-x64` npm leaf package | npm `optionalDependencies` resolution will skip it. |
 | No Windows-native shell PATH config | Shell commands in brush-core use whatever `PATH` the user has set. |
 
 ---

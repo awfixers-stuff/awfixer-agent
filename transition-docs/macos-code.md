@@ -86,8 +86,8 @@ The crash handler in `crash_handler.rs` uses platform signal handling. On macOS,
 ## Binary Compilation (`ci-release-build-binaries.ts`)
 
 Produces:
-- `packages/coding-agent/binaries/omp-darwin-arm64`
-- `packages/coding-agent/binaries/omp-darwin-x64`
+- `packages/coding-agent/binaries/agent-darwin-arm64`
+- `packages/coding-agent/binaries/agent-darwin-x64`
 
 These are compiled on a Darwin host or cross-compiled. The CI release pipeline builds macOS binaries on macOS runners (ARM64 native, x64 via Rosetta or separate runner).
 

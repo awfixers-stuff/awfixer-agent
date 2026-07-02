@@ -2,19 +2,21 @@
 
 Planning document for renaming the product, CLI, config paths, and npm scope from the upstream **oh-my-pi** / **omp** identity to **awfixer-agent** / **agent**. This is a fork-local rebrand guide — not an upstream change.
 
+> **Status (2026-07):** Phases 0–5 landed in this fork. CLI is **`agent` only** (no `omp` bin alias). Published scope is **`@awfixerai/*`** with deduplicated names (`@awfixerai/agent`, `@awfixerai/utils`, …). User config defaults to **`~/.agent`**; project config stays **`.omp/`**. Docs sweep: `bun scripts/docs-rebrand-sweep.ts`.
+
 ## Goals
 
-| Today | Target |
-| --- | --- |
-| Product name: oh-my-pi, pi | **awfixer-agent** (user-facing), **agent** (short) |
-| CLI binary: `omp` | **`agent`** primary; keep `omp` as compatibility alias during transition |
-| Config root: `~/.omp` | **`~/.agent`** (with `~/.omp` fallback reads for migration) |
-| Agent config: `~/.omp/agent` | **`~/.agent`** (or `$XDG_CONFIG_HOME/agent` when XDG is enabled) |
-| Env prefix: `PI_*`, `OMP_*` | **`AGENT_*`** primary; accept legacy vars with deprecation warnings |
-| npm scope: `@oh-my-pi/*` | **`@awfixer/*`** (or `@awfixer-agent/*` for the main package) |
-| Repo / image names: `oh-my-pi`, `pi:dev` | **`awfixer-agent`**, `agent:dev` |
-| Docs site: omp.sh | **awfixer-agent docs** (TBD host) |
-| GitHub org/repo: `can1357/oh-my-pi` | **awfixer fork** (this checkout) |
+| Today | Target | Status |
+| --- | --- | --- |
+| Product name: oh-my-pi, pi | **awfixer-agent** (user-facing), **agent** (short) | [x] |
+| CLI binary: `omp` | **`agent`** only | [x] |
+| Config root: `~/.omp` | **`~/.agent`** (with `~/.omp` fallback reads for migration) | [x] |
+| Agent config: `~/.omp/agent` | **`~/.agent`** (flat default profile; named profiles under `profiles/<name>/agent`) | [x] |
+| Env prefix: `PI_*`, `OMP_*` | **`AGENT_*`** for profile/dir; broker/MCP `OMP_*` retained where still wired | [x] partial |
+| npm scope: `@oh-my-pi/*` | **`@awfixerai/*`** (deduplicated package names) | [x] |
+| Repo / image names: `oh-my-pi`, `pi:dev` | **`awfixer-agent`**, `agent:dev` | [x] |
+| Docs site: omp.sh | **agent.awfixer.codes** | [x] |
+| GitHub org/repo: `can1357/oh-my-pi` | **awfixers-stuff/awfixer-agent** | [x] |
 
 ## Non-goals (first pass)
 
@@ -40,18 +42,18 @@ Runtime **user config** (models, settings, sessions) stays out of this tree — 
 
 ## Phased rollout
 
-### Phase 0 — Documentation and aliases (now)
+### Phase 0 — Documentation and aliases [done]
 
-- [x] `install:local` installs `bin/agent` alongside `bin/omp`.
+- [x] `install:local` installs `bin/agent`.
 - [x] Document rebrand in this file; no user-visible breakage.
-- [x] Fork README points at awfixer-agent naming.
+- [x] Package READMEs and `docs/` updated via `scripts/docs-rebrand-sweep.ts`.
 
-### Phase 1 — CLI and env (low risk)
+### Phase 1 — CLI and env [done]
 
 **User-visible**
 
-- Register `agent` as the primary `bin` name in `packages/coding-agent/package.json`.
-- Keep `omp` as a published alias (`bin: { agent: ..., omp: ... }` → same entry).
+- [x] Register `agent` as the sole `bin` name in `packages/coding-agent/package.json`.
+- [x] Removed `omp` bin alias and `omp-*` release asset names.
 - Add `AGENT_*` env vars in `packages/utils/src/dirs.ts` and `env.ts`:
   - `AGENT_CONFIG_DIR` (replaces `PI_CONFIG_DIR`)
   - `AGENT_PROFILE` (replaces `OMP_PROFILE` / `PI_PROFILE`)
@@ -66,7 +68,7 @@ Runtime **user config** (models, settings, sessions) stays out of this tree — 
 | Config dirs | `packages/utils/src/dirs.ts` |
 | Compiled detection | `packages/utils/src/env.ts`, `packages/natives/native/loader-state.js` |
 | Install scripts | `scripts/install.sh`, `scripts/install-local.ts` |
-| Docker | `Dockerfile`, `Dockerfile.robomp`, `/usr/local/bin/omp` shim → `agent` |
+| Docker | `Dockerfile`, `Dockerfile.autoawfixer`, `/usr/local/bin/omp` shim → `agent` |
 
 ### Phase 2 — Config path migration [done]
 
@@ -107,51 +109,45 @@ The DirResolver now sets `agentDir = configRoot` for the default profile, elimin
 - 20 test files updated: `fallbackAgentDir` changed from `path.join(getConfigRootDir(), "agent")` to `getConfigRootDir()`
 - Profile test expectations updated for flattened default profile
 
-### Phase 3 — npm scope and package names
+### Phase 3 — npm scope and package names [done]
 
-Rename published packages in dependency order (leaves first):
+Published scope **`@awfixerai/*`** with deduplicated names (leaves first):
 
 ```
-@awfixer/utils          ← @oh-my-pi/pi-utils
-@awfixer/wire           ← @oh-my-pi/pi-wire
-@awfixer/catalog        ← @oh-my-pi/pi-catalog
-@awfixer/natives        ← @oh-my-pi/pi-natives
-@awfixer/tui            ← @oh-my-pi/pi-tui
-@awfixer/ai             ← @oh-my-pi/pi-ai
-@awfixer/agent-core     ← @oh-my-pi/pi-agent-core
-@awfixer/coding-agent   ← @oh-my-pi/pi-coding-agent   (main CLI package)
-@awfixer/agent          ← optional short publish name for the CLI
+@awfixerai/utils        ← @oh-my-pi/pi-utils
+@awfixerai/wire         ← @oh-my-pi/pi-wire
+@awfixerai/catalog      ← @oh-my-pi/pi-catalog
+@awfixerai/natives      ← @oh-my-pi/pi-natives
+@awfixerai/tui          ← @oh-my-pi/pi-tui
+@awfixerai/ai           ← @oh-my-pi/pi-ai
+@awfixerai/agent-core   ← @oh-my-pi/pi-agent-core
+@awfixerai/agent        ← @oh-my-pi/pi-coding-agent (main CLI package)
+@awfixerai/stats        ← @oh-my-pi/omp-stats
 ```
 
-**Mechanical steps**
+**Mechanical steps** — all done via `scripts/rebrand-codemod.ts` + `bun run check`.
 
-1. Update root `package.json` `workspaces.catalog` and every `package.json` `name` field.
-2. Rewrite imports (`@oh-my-pi/` → `@awfixer/`) — codemod + `bun run check`.
-3. Update `bun.lock` via `bun install`.
-4. Update `scripts/ci-release-publish.ts`, `scripts/check-spoofed-versions.ts`, install tests.
-5. Publish under `@awfixer` scope; keep `@oh-my-pi` as deprecated metapackage redirects if needed.
-
-### Phase 4 — Repository and infra strings
+### Phase 4 — Repository and infra strings [done]
 
 | String | Occurrences | Notes |
 | --- | --- | --- |
-| `oh-my-pi` | Docker tags, compose, robomp `PI_ROOT`, docs | → `awfixer-agent` |
-| `pi:dev` image | `docker build`, `bun run pi:image` | → `agent:dev` |
-| `PI_ROOT` | Docker env, robomp entrypoint | → `AGENT_ROOT` |
-| `roboomp` / `ROBOMP_*` | `python/robomp/` | Optional later rename to `awfixer-bot` |
+| `oh-my-pi` | Docker tags, compose, autoawfixer `AGENT_ROOT`, docs | → `awfixer-agent` |
+| `pi:dev` image | `docker build`, `bun run agent:image` | → `agent:dev` |
+| `AGENT_ROOT` | Docker env, autoawfixer entrypoint | → `AGENT_ROOT` |
+| `autoawfixer` / `AUTOAWFIXER_*` | `python/autoawfixer/` | Renamed from `robomp` / `ROBOMP_*` |
 | `omp.sh` | homepage, README, help URLs | → fork docs URL |
 | `APP_NAME` / `CONFIG_DIR_NAME` | `packages/utils`, coding-agent | → `agent` / `.agent` |
 
-### Phase 5 — Extension and plugin compatibility
+### Phase 5 — Extension and plugin compatibility [done]
 
-- **Legacy pi extension compat** (`legacy-pi-bundled-registry.ts`, `legacy-pi-compat.ts`): keep serving `@oh-my-pi/pi-coding-agent/*` subpath IDs indefinitely; add `@awfixer/agent/*` mirrors.
-- **Bundled registry generator**: emit both scopes during transition.
-- **User plugins** referencing `@oh-my-pi/*`: document alias resolution in extension loader.
+- [x] **Legacy pi extension compat** (`legacy-pi-bundled-registry.ts`, `legacy-pi-compat.ts`): serves `@oh-my-pi/pi-coding-agent/*` and `@awfixerai/agent/*` subpath IDs.
+- [x] Bundled registry regenerated (1009 entries).
+- [x] User plugins referencing old scopes: alias resolution in `legacy-pi-compat.ts`.
 
 ## Grep checklist (run before each phase)
 
 ```bash
-rg -n 'oh-my-pi|@oh-my-pi|omp\.sh|PI_ROOT|PI_CONFIG|PI_PROFILE|OMP_PROFILE|/\.omp' \
+rg -n 'oh-my-pi|@oh-my-pi|omp\.sh|AGENT_ROOT|PI_CONFIG|PI_PROFILE|OMP_PROFILE|/\.omp' \
   --glob '!node_modules' --glob '!bun.lock' --glob '!CHANGELOG.md'
 rg -n '\bomp\b' packages/coding-agent/src/cli.ts packages/utils/src
 ```

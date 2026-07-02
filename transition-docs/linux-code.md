@@ -52,7 +52,7 @@ Wayland (`wl-clipboard-rs`) forks its own serving process so it doesn't require 
 ## Binary Compilation (`build-binary.ts` and `ci-release-build-binaries.ts`)
 
 - `build-binary.ts`: `CROSS_TARGET=linux-x64` maps to `bun-linux-x64-baseline` (baseline for Rosetta compat).
-- `ci-release-build-binaries.ts`: produces `omp-linux-x64` and `omp-linux-arm64` outputs.
+- `ci-release-build-binaries.ts`: produces `agent-linux-x64` and `agent-linux-arm64` outputs.
 
 ## Linux-Only Features
 
@@ -79,6 +79,6 @@ Cross-compilation is handled through `napi` CLI with `CROSS_TARGET` env. The `bu
 ## Docker / Container
 
 Linux is the primary deployment target for:
-- `Dockerfile` → `oh-my-pi/pi:dev` image (Debian-based).
-- `Dockerfile.robomp` → extends pi-base for robomp deployment.
+- `Dockerfile` → `awfixer-agent/agent:dev` image (Debian-based).
+- `Dockerfile.autoawfixer` → extends pi-base for autoawfixer deployment.
 - All CI runs on Linux x64 runners.
