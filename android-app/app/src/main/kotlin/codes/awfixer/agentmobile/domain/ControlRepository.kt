@@ -1,8 +1,9 @@
-package io.ohmypi.agentcompanion.domain
+package codes.awfixer.agentmobile.domain
 
 /**
  * Future contract for live agent control (steer / abort / session list).
- * No OMP HTTP control server exists yet — see docs/superpowers/specs/2026-07-01-android-app-design.md.
+ * No awfixer-agent HTTP control server exists yet — see
+ * docs/superpowers/specs/2026-07-01-android-app-design.md.
  */
 data class LiveSessionSummary(
     val id: String,

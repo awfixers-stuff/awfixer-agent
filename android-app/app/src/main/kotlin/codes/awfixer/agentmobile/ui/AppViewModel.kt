@@ -1,17 +1,17 @@
-package io.ohmypi.agentcompanion.ui
+package codes.awfixer.agentmobile.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import io.ohmypi.agentcompanion.data.AppSettings
-import io.ohmypi.agentcompanion.data.SettingsStore
-import io.ohmypi.agentcompanion.data.StatsApi
-import io.ohmypi.agentcompanion.data.StatsApiException
-import io.ohmypi.agentcompanion.data.OfflineControlRepository
-import io.ohmypi.agentcompanion.data.dto.DashboardStatsDto
-import io.ohmypi.agentcompanion.data.dto.MessageStatsDto
-import io.ohmypi.agentcompanion.domain.ControlState
-import io.ohmypi.agentcompanion.domain.StatsRepository
+import codes.awfixer.agentmobile.data.AppSettings
+import codes.awfixer.agentmobile.data.OfflineControlRepository
+import codes.awfixer.agentmobile.data.SettingsStore
+import codes.awfixer.agentmobile.data.StatsApi
+import codes.awfixer.agentmobile.data.StatsApiException
+import codes.awfixer.agentmobile.data.dto.DashboardStatsDto
+import codes.awfixer.agentmobile.data.dto.MessageStatsDto
+import codes.awfixer.agentmobile.domain.ControlState
+import codes.awfixer.agentmobile.domain.StatsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

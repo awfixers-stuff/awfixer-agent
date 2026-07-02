@@ -1,4 +1,4 @@
-package io.ohmypi.agentcompanion.ui
+package codes.awfixer.agentmobile.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,11 +38,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.ohmypi.agentcompanion.data.dto.AggregatedStatsDto
-import io.ohmypi.agentcompanion.data.dto.FolderStatsDto
-import io.ohmypi.agentcompanion.data.dto.MessageStatsDto
-import io.ohmypi.agentcompanion.data.dto.ModelStatsDto
-import io.ohmypi.agentcompanion.domain.ControlState
+import codes.awfixer.agentmobile.data.dto.AggregatedStatsDto
+import codes.awfixer.agentmobile.data.dto.DashboardStatsDto
+import codes.awfixer.agentmobile.data.dto.FolderStatsDto
+import codes.awfixer.agentmobile.data.dto.MessageStatsDto
+import codes.awfixer.agentmobile.data.dto.ModelStatsDto
+import codes.awfixer.agentmobile.domain.ControlState
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -77,7 +78,7 @@ fun AgentCompanionApp(viewModel: AppViewModel = viewModel()) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("OMP Companion") },
+                title = { Text("Agent Mobile") },
                 actions = {
                     TextButton(onClick = { viewModel.sync(settings) }) {
                         Text("Sync")
@@ -131,7 +132,7 @@ fun AgentCompanionApp(viewModel: AppViewModel = viewModel()) {
 @Composable
 private fun OverviewScreen(
     padding: PaddingValues,
-    state: UiLoadState<io.ohmypi.agentcompanion.data.dto.DashboardStatsDto>,
+    state: UiLoadState<DashboardStatsDto>,
     baseUrl: String,
 ) {
     ScreenFrame(padding, state.loading, state.error) {
@@ -153,7 +154,7 @@ private fun OverviewScreen(
 @Composable
 private fun ModelsScreen(
     padding: PaddingValues,
-    state: UiLoadState<io.ohmypi.agentcompanion.data.dto.DashboardStatsDto>,
+    state: UiLoadState<DashboardStatsDto>,
 ) {
     ScreenFrame(padding, state.loading, state.error) {
         val models = state.data?.byModel.orEmpty()
@@ -188,8 +189,8 @@ private fun ManageScreen(padding: PaddingValues, control: ControlState) {
         when (control) {
             ControlState.Offline -> {
                 Text(
-                    "No control server detected. Live interject/abort requires a future OMP control HTTP API " +
-                        "(today only JSON-RPC in the desktop CLI).",
+                    "No control server detected. Live interject/abort requires a future awfixer-agent " +
+                        "control HTTP API (today only JSON-RPC in the desktop CLI).",
                     modifier = Modifier.padding(top = 12.dp),
                 )
             }

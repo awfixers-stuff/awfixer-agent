@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "io.ohmypi.agentcompanion"
+    namespace = "codes.awfixer.agentmobile"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "io.ohmypi.agentcompanion"
+        applicationId = "codes.awfixer.agentmobile"
         minSdk = 30
         targetSdk = 35
         versionCode = 1

@@ -1,0 +1,95 @@
+{
+  "overall": {
+    "totalRequests": 3,
+    "successfulRequests": 3,
+    "failedRequests": 0,
+    "errorRate": 0,
+    "totalInputTokens": 310,
+    "totalOutputTokens": 155,
+    "totalCacheReadTokens": 30,
+    "totalCacheWriteTokens": 0,
+    "cacheRate": 0.08,
+    "totalCost": 0.05,
+    "totalPremiumRequests": 0,
+    "avgDuration": 1000,
+    "avgTtft": 100,
+    "avgTokensPerSecond": 50,
+    "firstTimestamp": 1719849600000,
+    "lastTimestamp": 1719849700000
+  },
+  "byModel": [
+    {
+      "model": "claude-sonnet-4.5",
+      "provider": "anthropic",
+      "totalRequests": 3,
+      "successfulRequests": 3,
+      "failedRequests": 0,
+      "errorRate": 0,
+      "totalInputTokens": 310,
+      "totalOutputTokens": 155,
+      "totalCacheReadTokens": 30,
+      "totalCacheWriteTokens": 0,
+      "cacheRate": 0.08,
+      "totalCost": 0.05,
+      "totalPremiumRequests": 0,
+      "avgDuration": 1000,
+      "avgTtft": 100,
+      "avgTokensPerSecond": 50,
+      "firstTimestamp": 1719849600000,
+      "lastTimestamp": 1719849700000
+    }
+  ],
+  "byFolder": [
+    {
+      "folder": "/tmp/project",
+      "totalRequests": 3,
+      "successfulRequests": 3,
+      "failedRequests": 0,
+      "errorRate": 0,
+      "totalInputTokens": 310,
+      "totalOutputTokens": 155,
+      "totalCacheReadTokens": 30,
+      "totalCacheWriteTokens": 0,
+      "cacheRate": 0.08,
+      "totalCost": 0.05,
+      "totalPremiumRequests": 0,
+      "avgDuration": 1000,
+      "avgTtft": 100,
+      "avgTokensPerSecond": 50,
+      "firstTimestamp": 1719849600000,
+      "lastTimestamp": 1719849700000
+    }
+  ],
+  "byAgentType": [
+    {
+      "agentType": "main",
+      "totalRequests": 2,
+      "totalInputTokens": 200,
+      "totalOutputTokens": 100,
+      "totalCacheReadTokens": 20,
+      "totalCacheWriteTokens": 0,
+      "totalCost": 0.03
+    },
+    {
+      "agentType": "advisor",
+      "totalRequests": 1,
+      "totalInputTokens": 10,
+      "totalOutputTokens": 5,
+      "totalCacheReadTokens": 0,
+      "totalCacheWriteTokens": 0,
+      "totalCost": 0.01
+    }
+  ],
+  "timeSeries": [
+    {
+      "timestamp": 1719849600000,
+      "requests": 3,
+      "errors": 0,
+      "tokens": 495,
+      "cost": 0.05
+    }
+  ],
+  "modelSeries": [],
+  "modelPerformanceSeries": [],
+  "costSeries": []
+}

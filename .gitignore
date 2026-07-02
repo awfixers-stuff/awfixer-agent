@@ -5,6 +5,10 @@ node_modules/
 .frameworks
 .source
 
+.gradle
+.gradel
+gradle
+
 # Build output
 dist/
 packages/*/dist/

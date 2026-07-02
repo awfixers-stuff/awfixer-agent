@@ -1,0 +1,31 @@
+{
+  "id": 7,
+  "sessionFile": "/tmp/session.jsonl",
+  "entryId": "detail-entry",
+  "folder": "/tmp/project",
+  "model": "gpt-5.4",
+  "provider": "openai-codex",
+  "api": "openai-codex-responses",
+  "timestamp": 1719849600000,
+  "duration": 1000,
+  "ttft": 100,
+  "stopReason": "stop",
+  "errorMessage": null,
+  "usage": {
+    "input": 1000,
+    "output": 500,
+    "cacheRead": 200,
+    "cacheWrite": 0,
+    "totalTokens": 1700,
+    "cost": {
+      "input": 0.01,
+      "output": 0.02,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "total": 0.03
+    }
+  },
+  "agentType": "main",
+  "messages": [],
+  "output": null
+}

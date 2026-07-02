@@ -1,9 +1,11 @@
-package io.ohmypi.agentcompanion.data
+package codes.awfixer.agentmobile.data
 
-import io.ohmypi.agentcompanion.data.dto.DashboardStatsDto
-import io.ohmypi.agentcompanion.data.dto.FolderStatsDto
-import io.ohmypi.agentcompanion.data.dto.MessageStatsDto
-import io.ohmypi.agentcompanion.data.dto.ModelStatsDto
+import codes.awfixer.agentmobile.data.dto.DashboardStatsDto
+import codes.awfixer.agentmobile.data.dto.FolderStatsDto
+import codes.awfixer.agentmobile.data.dto.MessageStatsDto
+import codes.awfixer.agentmobile.data.dto.ModelStatsDto
+import codes.awfixer.agentmobile.data.dto.RequestDetailsDto
+import codes.awfixer.agentmobile.data.dto.SyncResultDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -46,7 +48,7 @@ class StatsApi {
         get(baseUrl, "/api/request/$id", emptyMap(), bearer)
 
     suspend fun syncSessions(baseUrl: String, bearer: String?): SyncResultDto {
-        val url = buildUrl(baseUrl, "/api/sync", emptyMap())
+        val url = buildStatsUrl(baseUrl, "/api/sync", emptyMap())
         val response = client.post(url) {
             if (!bearer.isNullOrBlank()) header("Authorization", "Bearer $bearer")
         }
@@ -62,7 +64,7 @@ class StatsApi {
         query: Map<String, String>,
         bearer: String?,
     ): T {
-        val url = buildUrl(baseUrl, path, query)
+        val url = buildStatsUrl(baseUrl, path, query)
         val response = client.get(url) {
             if (!bearer.isNullOrBlank()) header("Authorization", "Bearer $bearer")
         }
@@ -70,14 +72,6 @@ class StatsApi {
             throw StatsApiException("GET $path failed: HTTP ${response.status.value}")
         }
         return response.body()
-    }
-
-    private fun buildUrl(baseUrl: String, path: String, query: Map<String, String>): String {
-        val base = baseUrl.trim().trimEnd('/')
-        val q = query.entries.joinToString("&") { (k, v) ->
-            "${java.net.URLEncoder.encode(k, "UTF-8")}=${java.net.URLEncoder.encode(v, "UTF-8")}"
-        }
-        return if (q.isEmpty()) "$base$path" else "$base$path?$q"
     }
 }
 

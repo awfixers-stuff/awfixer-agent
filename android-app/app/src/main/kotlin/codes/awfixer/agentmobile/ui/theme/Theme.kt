@@ -1,4 +1,4 @@
-package io.ohmypi.agentcompanion.ui.theme
+package codes.awfixer.agentmobile.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

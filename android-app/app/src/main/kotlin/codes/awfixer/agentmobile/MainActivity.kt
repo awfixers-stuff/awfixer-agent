@@ -1,11 +1,11 @@
-package io.ohmypi.agentcompanion
+package codes.awfixer.agentmobile
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import io.ohmypi.agentcompanion.ui.AgentCompanionApp
-import io.ohmypi.agentcompanion.ui.theme.AgentCompanionTheme
+import codes.awfixer.agentmobile.ui.AgentCompanionApp
+import codes.awfixer.agentmobile.ui.theme.AgentCompanionTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

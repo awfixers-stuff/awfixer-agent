@@ -1,4 +1,4 @@
-package io.ohmypi.agentcompanion.data.dto
+package codes.awfixer.agentmobile.data.dto
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -15,7 +15,7 @@ data class AggregatedStatsDto(
     val totalCacheWriteTokens: Long = 0,
     val cacheRate: Double = 0.0,
     val totalCost: Double = 0.0,
-    val totalPremiumRequests: Double = 0.0,
+    val totalPremiumRequests: Int = 0,
     val avgDuration: Double? = null,
     val avgTtft: Double? = null,
     val avgTokensPerSecond: Double? = null,
@@ -37,7 +37,7 @@ data class ModelStatsDto(
     val totalCacheWriteTokens: Long = 0,
     val cacheRate: Double = 0.0,
     val totalCost: Double = 0.0,
-    val totalPremiumRequests: Double = 0.0,
+    val totalPremiumRequests: Int = 0,
     val avgDuration: Double? = null,
     val avgTtft: Double? = null,
     val avgTokensPerSecond: Double? = null,
@@ -58,7 +58,7 @@ data class FolderStatsDto(
     val totalCacheWriteTokens: Long = 0,
     val cacheRate: Double = 0.0,
     val totalCost: Double = 0.0,
-    val totalPremiumRequests: Double = 0.0,
+    val totalPremiumRequests: Int = 0,
     val avgDuration: Double? = null,
     val avgTtft: Double? = null,
     val avgTokensPerSecond: Double? = null,
@@ -67,10 +67,66 @@ data class FolderStatsDto(
 )
 
 @Serializable
+data class AgentTypeStatsDto(
+    val agentType: String = "main",
+    val totalRequests: Int = 0,
+    val totalInputTokens: Long = 0,
+    val totalOutputTokens: Long = 0,
+    val totalCacheReadTokens: Long = 0,
+    val totalCacheWriteTokens: Long = 0,
+    val totalCost: Double = 0.0,
+)
+
+@Serializable
+data class TimeSeriesPointDto(
+    val timestamp: Long = 0,
+    val requests: Int = 0,
+    val errors: Int = 0,
+    val tokens: Long = 0,
+    val cost: Double = 0.0,
+)
+
+@Serializable
+data class ModelTimeSeriesPointDto(
+    val timestamp: Long = 0,
+    val model: String = "",
+    val provider: String = "",
+    val requests: Int = 0,
+)
+
+@Serializable
+data class ModelPerformancePointDto(
+    val timestamp: Long = 0,
+    val model: String = "",
+    val provider: String = "",
+    val requests: Int = 0,
+    val avgTtft: Double? = null,
+    val avgTokensPerSecond: Double? = null,
+)
+
+@Serializable
+data class CostTimeSeriesPointDto(
+    val timestamp: Long = 0,
+    val model: String = "",
+    val provider: String = "",
+    val cost: Double = 0.0,
+    val costInput: Double = 0.0,
+    val costOutput: Double = 0.0,
+    val costCacheRead: Double = 0.0,
+    val costCacheWrite: Double = 0.0,
+    val requests: Int = 0,
+)
+
+@Serializable
 data class DashboardStatsDto(
     val overall: AggregatedStatsDto = AggregatedStatsDto(),
     val byModel: List<ModelStatsDto> = emptyList(),
     val byFolder: List<FolderStatsDto> = emptyList(),
+    val byAgentType: List<AgentTypeStatsDto> = emptyList(),
+    val timeSeries: List<TimeSeriesPointDto> = emptyList(),
+    val modelSeries: List<ModelTimeSeriesPointDto> = emptyList(),
+    val modelPerformanceSeries: List<ModelPerformancePointDto> = emptyList(),
+    val costSeries: List<CostTimeSeriesPointDto> = emptyList(),
 )
 
 @Serializable
@@ -89,7 +145,7 @@ data class UsageDto(
     val cacheRead: Int = 0,
     val cacheWrite: Int = 0,
     val totalTokens: Int = 0,
-    val premiumRequests: Double? = null,
+    val premiumRequests: Int? = null,
     val cost: UsageCostDto = UsageCostDto(),
 )
 
@@ -108,6 +164,7 @@ data class MessageStatsDto(
     val stopReason: String = "",
     val errorMessage: String? = null,
     val usage: UsageDto = UsageDto(),
+    val agentType: String = "main",
 )
 
 @Serializable
@@ -125,11 +182,14 @@ data class RequestDetailsDto(
     val stopReason: String = "",
     val errorMessage: String? = null,
     val usage: UsageDto = UsageDto(),
+    val agentType: String = "main",
     val messages: List<JsonElement> = emptyList(),
     val output: JsonElement? = null,
 )
 
 @Serializable
 data class SyncResultDto(
+    val processed: Int = 0,
+    val files: Int = 0,
     val totalMessages: Int? = null,
 )

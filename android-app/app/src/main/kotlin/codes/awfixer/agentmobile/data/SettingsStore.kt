@@ -1,4 +1,4 @@
-package io.ohmypi.agentcompanion.data
+package codes.awfixer.agentmobile.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -9,7 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "omp_companion")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "agentmobile_settings")
 
 data class AppSettings(
     val baseUrl: String = DEFAULT_BASE_URL,

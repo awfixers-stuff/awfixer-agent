@@ -1,10 +1,10 @@
-package io.ohmypi.agentcompanion.domain
+package codes.awfixer.agentmobile.domain
 
-import io.ohmypi.agentcompanion.data.AppSettings
-import io.ohmypi.agentcompanion.data.StatsApi
-import io.ohmypi.agentcompanion.data.dto.DashboardStatsDto
-import io.ohmypi.agentcompanion.data.dto.MessageStatsDto
-import io.ohmypi.agentcompanion.data.dto.RequestDetailsDto
+import codes.awfixer.agentmobile.data.AppSettings
+import codes.awfixer.agentmobile.data.StatsApi
+import codes.awfixer.agentmobile.data.dto.DashboardStatsDto
+import codes.awfixer.agentmobile.data.dto.MessageStatsDto
+import codes.awfixer.agentmobile.data.dto.RequestDetailsDto
 
 class StatsRepository(private val api: StatsApi) {
     suspend fun loadDashboard(settings: AppSettings): DashboardStatsDto =

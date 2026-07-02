@@ -1,7 +1,7 @@
-package io.ohmypi.agentcompanion.data
+package codes.awfixer.agentmobile.data
 
-import io.ohmypi.agentcompanion.domain.ControlRepository
-import io.ohmypi.agentcompanion.domain.ControlState
+import codes.awfixer.agentmobile.domain.ControlRepository
+import codes.awfixer.agentmobile.domain.ControlState
 
 class OfflineControlRepository : ControlRepository {
     override suspend fun refresh(): ControlState = ControlState.Offline
