@@ -27,7 +27,7 @@ Sibling packages (`hashline`, `omp-stats`, `snapcompact`, `pi-mnemopi`, `collab-
 
 ## Local monorepo install (pre-publish)
 
-Until `@awfixerai/*` is published to npm, root `package.json` `overrides` pin every workspace package to `workspace:*` so `catalog:` resolutions do not 404 against the registry. Remove or narrow these overrides after the first `@awfixerai` publish if npm tarballs should satisfy `catalog:` again.
+Until `@awfixerai/*` is published to npm, root `package.json` `overrides` pin dev-only workspace packages to `workspace:*`. Published `@awfixerai/*` entries resolve via `catalog:` once tarballs are on the registry (first publish: `0.0.1-rc.1`).
 
 ## Update checker repoint
 
