@@ -1,17 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as path from "node:path";
 import { scheduler } from "node:timers/promises";
-import { Agent } from "@oh-my-pi/pi-agent-core";
-import type { ApiKeyResolveContext, AssistantMessage, ToolCall } from "@oh-my-pi/pi-ai";
-import { createMockModel } from "@oh-my-pi/pi-ai/providers/mock";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { AgentSession, type AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { AgentSession, type AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent } from "@awfixerai/agent-core";
+import type { ApiKeyResolveContext, AssistantMessage, ToolCall } from "@awfixerai/ai";
+import { createMockModel } from "@awfixerai/ai/providers/mock";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { TempDir } from "@awfixerai/utils";
 
 type AutoRetryEndEvent = Extract<AgentSessionEvent, { type: "auto_retry_end" }>;
 type AutoRetryStartEvent = Extract<AgentSessionEvent, { type: "auto_retry_start" }>;

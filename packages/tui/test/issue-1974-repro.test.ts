@@ -1,8 +1,8 @@
 import { describe, expect, it } from "bun:test";
-import { type Component, CURSOR_MARKER, type NativeScrollbackLiveRegion, TUI } from "@oh-my-pi/pi-tui";
+import { type Component, CURSOR_MARKER, type NativeScrollbackLiveRegion, TUI } from "@awfixerai/tui";
 import { VirtualTerminal } from "./virtual-terminal";
 
-// Regression test for https://github.com/can1357/oh-my-pi/issues/1974
+// Regression test for https://github.com/awfixers-stuff/awfixer-agent/issues/1974
 //
 // Inside tmux (and other multiplexers), a long streamed reply that grows past
 // the viewport lost its scrolled-off head from pane history and, after a

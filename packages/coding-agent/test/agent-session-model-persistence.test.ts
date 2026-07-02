@@ -1,17 +1,17 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "bun:test";
 import * as path from "node:path";
-import { Agent } from "@oh-my-pi/pi-agent-core";
-import { type Api, Effort, type Model } from "@oh-my-pi/pi-ai";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { type CreateAgentSessionResult, createAgentSession } from "@oh-my-pi/pi-coding-agent/sdk";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { getRestorableSessionModels } from "@oh-my-pi/pi-coding-agent/session/session-context";
-import { EPHEMERAL_MODEL_CHANGE_ROLE } from "@oh-my-pi/pi-coding-agent/session/session-entries";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { type CreateAgentSessionResult, createAgentSession } from "@awfixerai/agent/sdk";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { getRestorableSessionModels } from "@awfixerai/agent/session/session-context";
+import { EPHEMERAL_MODEL_CHANGE_ROLE } from "@awfixerai/agent/session/session-entries";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent } from "@awfixerai/agent-core";
+import { type Api, Effort, type Model } from "@awfixerai/ai";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { TempDir } from "@awfixerai/utils";
 
 describe("AgentSession model persistence", () => {
 	let tempDir: TempDir;

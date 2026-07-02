@@ -1,8 +1,8 @@
-import { countTokens } from "@oh-my-pi/pi-agent-core";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { estimateToolSchemaTokens } from "@oh-my-pi/pi-coding-agent/modes/utils/context-usage";
-import { buildSystemPrompt } from "@oh-my-pi/pi-coding-agent/system-prompt";
-import { createTools, type Tool, type ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { estimateToolSchemaTokens } from "@awfixerai/agent/modes/utils/context-usage";
+import { buildSystemPrompt } from "@awfixerai/agent/system-prompt";
+import { createTools, type Tool, type ToolSession } from "@awfixerai/agent/tools";
+import { countTokens } from "@awfixerai/agent-core";
 
 function bytes(s: string): number {
 	return Buffer.byteLength(s, "utf-8");

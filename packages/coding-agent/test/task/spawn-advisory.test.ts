@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { AgentLifecycleManager } from "@oh-my-pi/pi-coding-agent/registry/agent-lifecycle";
-import { AgentRegistry } from "@oh-my-pi/pi-coding-agent/registry/agent-registry";
-import { buildSpecializationAdvisory, TaskTool } from "@oh-my-pi/pi-coding-agent/task";
-import * as discoveryModule from "@oh-my-pi/pi-coding-agent/task/discovery";
-import * as executorModule from "@oh-my-pi/pi-coding-agent/task/executor";
-import type { AgentDefinition, SingleResult, TaskItem, TaskParams } from "@oh-my-pi/pi-coding-agent/task/types";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { AgentLifecycleManager } from "@awfixerai/agent/registry/agent-lifecycle";
+import { AgentRegistry } from "@awfixerai/agent/registry/agent-registry";
+import { buildSpecializationAdvisory, TaskTool } from "@awfixerai/agent/task";
+import * as discoveryModule from "@awfixerai/agent/task/discovery";
+import * as executorModule from "@awfixerai/agent/task/executor";
+import type { AgentDefinition, SingleResult, TaskItem, TaskParams } from "@awfixerai/agent/task/types";
+import type { ToolSession } from "@awfixerai/agent/tools";
 
 // Contract: the task tool appends an advisory (never a rejection) steering the
 // spawner toward tailored specialists when it spawns generic role-less workers

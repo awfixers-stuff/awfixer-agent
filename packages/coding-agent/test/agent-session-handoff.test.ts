@@ -1,20 +1,20 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as path from "node:path";
-import { Agent, type AgentMessage, type StreamFn } from "@oh-my-pi/pi-agent-core";
-import * as compactionModule from "@oh-my-pi/pi-agent-core/compaction";
-import type { AssistantMessage, Model, ToolCall } from "@oh-my-pi/pi-ai";
-import { createMockModel } from "@oh-my-pi/pi-ai/providers/mock";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { ExtensionRunner, loadExtensions } from "@oh-my-pi/pi-coding-agent/extensibility/extensions";
-import { SecretObfuscator } from "@oh-my-pi/pi-coding-agent/secrets";
-import { AgentSession, type AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
-import * as snapcompact from "@oh-my-pi/snapcompact";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { ExtensionRunner, loadExtensions } from "@awfixerai/agent/extensibility/extensions";
+import { SecretObfuscator } from "@awfixerai/agent/secrets";
+import { AgentSession, type AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent, type AgentMessage, type StreamFn } from "@awfixerai/agent-core";
+import * as compactionModule from "@awfixerai/agent-core/compaction";
+import type { AssistantMessage, Model, ToolCall } from "@awfixerai/ai";
+import { createMockModel } from "@awfixerai/ai/providers/mock";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import * as snapcompact from "@awfixerai/snapcompact";
+import { TempDir } from "@awfixerai/utils";
 
 const HANDOFF_SECRET = "HANDOFF_SECRET_TOKEN_12345";
 

@@ -1,10 +1,10 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "bun:test";
 import * as os from "node:os";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { InternalUrlRouter } from "@oh-my-pi/pi-coding-agent/internal-urls/router";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
-import { GlobTool } from "@oh-my-pi/pi-coding-agent/tools/glob";
-import { resolveToolSearchScope } from "@oh-my-pi/pi-coding-agent/tools/path-utils";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { InternalUrlRouter } from "@awfixerai/agent/internal-urls/router";
+import type { ToolSession } from "@awfixerai/agent/tools";
+import { GlobTool } from "@awfixerai/agent/tools/glob";
+import { resolveToolSearchScope } from "@awfixerai/agent/tools/path-utils";
 
 // Minimal ToolSession stub (ssh-url-approval.test.ts shape). The ssh:// guard
 // fires before any session/SSH access, so no real cwd/fs is needed.

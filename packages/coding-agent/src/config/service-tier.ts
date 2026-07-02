@@ -1,4 +1,4 @@
-import type { ServiceTier } from "@oh-my-pi/pi-ai";
+import type { ServiceTier } from "@awfixerai/ai";
 import type { SubmenuOption } from "./settings-schema";
 
 /**

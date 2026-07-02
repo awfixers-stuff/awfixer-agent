@@ -6,7 +6,7 @@ import {
 	DEFAULT_COMPACTION_SETTINGS,
 	prepareCompaction,
 	type SessionEntry,
-} from "@oh-my-pi/pi-agent-core/compaction";
+} from "@awfixerai/agent-core/compaction";
 import {
 	buildCompactionV2Request,
 	buildOpenAiNativeHistory,
@@ -15,12 +15,12 @@ import {
 	requestOpenAiRemoteCompaction,
 	shouldUseCompactionV2Streaming,
 	shouldUseOpenAiRemoteCompaction,
-} from "@oh-my-pi/pi-agent-core/compaction/openai";
-import * as ai from "@oh-my-pi/pi-ai";
-import type { AssistantMessage, FetchImpl, Model, ToolResultMessage } from "@oh-my-pi/pi-ai/types";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import type { ModelSpec } from "@oh-my-pi/pi-catalog/types";
-import { isRecord } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent-core/compaction/openai";
+import * as ai from "@awfixerai/ai";
+import type { AssistantMessage, FetchImpl, Model, ToolResultMessage } from "@awfixerai/ai/types";
+import { buildModel } from "@awfixerai/catalog/build";
+import type { ModelSpec } from "@awfixerai/catalog/types";
+import { isRecord } from "@awfixerai/utils";
 
 function makeOpenAiModel(overrides: Partial<ModelSpec<"openai-responses">> = {}): Model<"openai-responses"> {
 	return buildModel({

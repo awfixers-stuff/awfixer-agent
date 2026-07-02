@@ -3,13 +3,13 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } fr
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { Effort, type FetchImpl, type Model, type OpenAICompat, type ThinkingConfig } from "@oh-my-pi/pi-ai";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { writeModelCache } from "@oh-my-pi/pi-catalog/model-cache";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { removeSyncWithRetries, Snowflake } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { Effort, type FetchImpl, type Model, type OpenAICompat, type ThinkingConfig } from "@awfixerai/ai";
+import { buildModel } from "@awfixerai/catalog/build";
+import { writeModelCache } from "@awfixerai/catalog/model-cache";
+import { removeSyncWithRetries, Snowflake } from "@awfixerai/utils";
 
 describe("ModelRegistry", () => {
 	let tempDir: string;

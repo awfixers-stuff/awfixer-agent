@@ -4,10 +4,10 @@ import type {
 	AgentToolResult,
 	AgentToolUpdateCallback,
 	CustomMessage,
-} from "@oh-my-pi/pi-agent-core";
-import type { Component } from "@oh-my-pi/pi-tui";
-import { Text } from "@oh-my-pi/pi-tui";
-import { prompt, untilAborted } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent-core";
+import type { Component } from "@awfixerai/tui";
+import { Text } from "@awfixerai/tui";
+import { prompt, untilAborted } from "@awfixerai/utils";
 import { type } from "arktype";
 import type { RenderResultOptions } from "../extensibility/custom-tools/types";
 import type { Theme } from "../modes/theme/theme";

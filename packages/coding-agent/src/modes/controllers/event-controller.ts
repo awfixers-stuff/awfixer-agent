@@ -1,9 +1,9 @@
-import type { ImageContent } from "@oh-my-pi/pi-ai";
-import * as AIError from "@oh-my-pi/pi-ai/error";
-import { getStreamingPartialJson } from "@oh-my-pi/pi-ai/utils/block-symbols";
-import { type Component, Loader, TERMINAL } from "@oh-my-pi/pi-tui";
-import { logger, prompt } from "@oh-my-pi/pi-utils";
-import { INTENT_FIELD } from "@oh-my-pi/pi-wire";
+import type { ImageContent } from "@awfixerai/ai";
+import * as AIError from "@awfixerai/ai/error";
+import { getStreamingPartialJson } from "@awfixerai/ai/utils/block-symbols";
+import { type Component, Loader, TERMINAL } from "@awfixerai/tui";
+import { logger, prompt } from "@awfixerai/utils";
+import { INTENT_FIELD } from "@awfixerai/wire";
 import { extractTextContent } from "../../commit/utils";
 import { settings } from "../../config/settings";
 import { getFileSnapshotStore } from "../../edit/file-snapshot-store";

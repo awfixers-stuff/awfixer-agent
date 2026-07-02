@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, spyOn } from "bun:test";
-import { generateRoomKey, importRoomKey } from "@oh-my-pi/pi-coding-agent/collab/crypto";
-import { CollabGuestLink } from "@oh-my-pi/pi-coding-agent/collab/guest";
+import { generateRoomKey, importRoomKey } from "@awfixerai/agent/collab/crypto";
+import { CollabGuestLink } from "@awfixerai/agent/collab/guest";
 import {
 	type AgentSnapshot,
 	COLLAB_PROTO,
@@ -8,14 +8,14 @@ import {
 	formatCollabLink,
 	rewriteEnvelopePeer,
 	unpackEnvelope,
-} from "@oh-my-pi/pi-coding-agent/collab/protocol";
-import { CollabSocket } from "@oh-my-pi/pi-coding-agent/collab/relay-client";
+} from "@awfixerai/agent/collab/protocol";
+import { CollabSocket } from "@awfixerai/agent/collab/relay-client";
 import {
 	countRunningSubagentBadgeAgents,
 	getRunningSubagentBadgeRegistry,
-} from "@oh-my-pi/pi-coding-agent/modes/running-subagent-badge";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
-import { AgentRegistry } from "@oh-my-pi/pi-coding-agent/registry/agent-registry";
+} from "@awfixerai/agent/modes/running-subagent-badge";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import { AgentRegistry } from "@awfixerai/agent/registry/agent-registry";
 
 let activeRelay: InMemoryRelay | null = null;
 const RealWebSocket = globalThis.WebSocket;

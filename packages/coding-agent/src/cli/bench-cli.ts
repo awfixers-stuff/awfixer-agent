@@ -1,4 +1,4 @@
-import type { ResolvedThinkingLevel } from "@oh-my-pi/pi-agent-core";
+import type { ResolvedThinkingLevel } from "@awfixerai/agent-core";
 import type {
 	Api,
 	ApiKeyResolver,
@@ -9,11 +9,11 @@ import type {
 	Effort,
 	Model,
 	SimpleStreamOptions,
-} from "@oh-my-pi/pi-ai";
-import { streamSimple } from "@oh-my-pi/pi-ai";
-import { buildModelProviderPriorityRank, type CanonicalModelVariant } from "@oh-my-pi/pi-catalog/identity";
-import { replaceTabs, truncateToWidth } from "@oh-my-pi/pi-tui";
-import { formatDuration, getProjectDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/ai";
+import { streamSimple } from "@awfixerai/ai";
+import { buildModelProviderPriorityRank, type CanonicalModelVariant } from "@awfixerai/catalog/identity";
+import { replaceTabs, truncateToWidth } from "@awfixerai/tui";
+import { formatDuration, getProjectDir } from "@awfixerai/utils";
 import chalk from "chalk";
 import type { ApiKeyResolverModel } from "../config/api-key-resolver";
 import { type CanonicalModelQueryOptions, ModelRegistry } from "../config/model-registry";

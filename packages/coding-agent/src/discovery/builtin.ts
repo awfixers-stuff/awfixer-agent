@@ -4,7 +4,7 @@
  * Primary provider for OMP native configs. Supports all capabilities.
  */
 import * as path from "node:path";
-import { getAgentDir, logger, parseFrontmatter, tryParseJson } from "@oh-my-pi/pi-utils";
+import { getAgentDir, logger, parseFrontmatter, tryParseJson } from "@awfixerai/utils";
 import { YAML } from "bun";
 import { getManagedSkillsDir, MANAGED_SKILLS_PROVIDER_ID } from "../autolearn/managed-skills";
 import { registerProvider } from "../capability";
@@ -375,7 +375,7 @@ async function loadRules(ctx: LoadContext): Promise<LoadResult<Rule>> {
 	}
 
 	// Top-level RULES.md is a sticky always-apply rule. Documented in
-	// https://omp.sh/docs/context-files as the file that gets "re-injected near
+	// https://agent.awfixer.codes/docs/context-files as the file that gets "re-injected near
 	// the current turn so they keep hold across long conversations".
 	// User scope:    ~/.omp/agent/RULES.md
 	// Project scope: nearest .omp/RULES.md walking up from cwd to repoRoot

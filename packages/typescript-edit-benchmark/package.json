@@ -1,15 +1,14 @@
 {
   "type": "module",
   "private": true,
-  "name": "@oh-my-pi/typescript-edit-benchmark",
+  "name": "@awfixerai/typescript-edit-benchmark",
   "version": "0.0.0",
   "description": "Edit benchmark suite using TypeScript source code mutations",
-  "homepage": "https://omp.sh",
-  "author": "Can Boluk",
+  "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/can1357/oh-my-pi.git",
+    "url": "git+https://github.com/awfixers-stuff/awfixer-agent.git",
     "directory": "packages/typescript-edit-benchmark"
   },
   "main": "./src/index.ts",
@@ -42,15 +41,15 @@
     "@babel/parser": "catalog:",
     "@babel/traverse": "catalog:",
     "@babel/types": "catalog:",
-    "@oh-my-pi/hashline": "catalog:",
-    "@oh-my-pi/pi-agent-core": "catalog:",
-    "@oh-my-pi/pi-coding-agent": "catalog:",
-    "@oh-my-pi/pi-utils": "catalog:",
+    "@awfixerai/hashline": "catalog:",
+    "@awfixerai/agent-core": "catalog:",
+    "@awfixerai/agent": "catalog:",
+    "@awfixerai/utils": "catalog:",
     "diff": "catalog:",
     "prettier": "catalog:",
     "regexp-tree": "catalog:",
-    "@oh-my-pi/pi-ai": "catalog:",
-    "@oh-my-pi/pi-tui": "catalog:"
+    "@awfixerai/ai": "catalog:",
+    "@awfixerai/tui": "catalog:"
   },
   "devDependencies": {
     "@types/babel__generator": "catalog:",

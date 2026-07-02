@@ -7,8 +7,8 @@
  */
 import * as os from "node:os";
 import * as path from "node:path";
-import { getProjectDir, Snowflake } from "@oh-my-pi/pi-utils";
-import { Args, Command, Flags } from "@oh-my-pi/pi-utils/cli";
+import { getProjectDir, Snowflake } from "@awfixerai/utils";
+import { Args, Command, Flags } from "@awfixerai/utils/cli";
 import chalk from "chalk";
 import { Settings, settings } from "../config/settings";
 import { playAudioFile, removeTempFile } from "../tts/player";

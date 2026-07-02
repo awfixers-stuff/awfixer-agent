@@ -7,22 +7,22 @@
  */
 import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from "bun:test";
 import * as path from "node:path";
-import { Agent } from "@oh-my-pi/pi-agent-core";
-import type { ImageContent } from "@oh-my-pi/pi-ai";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { EventController } from "@oh-my-pi/pi-coding-agent/modes/controllers/event-controller";
-import { InputController } from "@oh-my-pi/pi-coding-agent/modes/controllers/input-controller";
-import { getThemeByName, setThemeInstance } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { CompactionQueuedMessage, InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
-import { UiHelpers } from "@oh-my-pi/pi-coding-agent/modes/utils/ui-helpers";
-import { AgentSession, type AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SKILL_PROMPT_MESSAGE_TYPE, type SkillPromptDetails } from "@oh-my-pi/pi-coding-agent/session/messages";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { Container } from "@oh-my-pi/pi-tui";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { EventController } from "@awfixerai/agent/modes/controllers/event-controller";
+import { InputController } from "@awfixerai/agent/modes/controllers/input-controller";
+import { getThemeByName, setThemeInstance } from "@awfixerai/agent/modes/theme/theme";
+import type { CompactionQueuedMessage, InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import { UiHelpers } from "@awfixerai/agent/modes/utils/ui-helpers";
+import { AgentSession, type AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SKILL_PROMPT_MESSAGE_TYPE, type SkillPromptDetails } from "@awfixerai/agent/session/messages";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent } from "@awfixerai/agent-core";
+import type { ImageContent } from "@awfixerai/ai";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { Container } from "@awfixerai/tui";
+import { TempDir } from "@awfixerai/utils";
 
 type StubEditor = {
 	setText: (text: string) => void;

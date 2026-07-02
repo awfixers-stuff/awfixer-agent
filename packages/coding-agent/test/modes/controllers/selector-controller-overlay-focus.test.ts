@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it, vi } from "bun:test";
-import { SelectorController } from "@oh-my-pi/pi-coding-agent/modes/controllers/selector-controller";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
+import { SelectorController } from "@awfixerai/agent/modes/controllers/selector-controller";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
 
 beforeAll(async () => {
 	await initTheme();

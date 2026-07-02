@@ -3,18 +3,11 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { getOverviewStats } from "@oh-my-pi/omp-stats/aggregator";
-import { closeDb, getStatsByAgentType, initDb, insertMessageStats } from "@oh-my-pi/omp-stats/db";
-import { classifyAgentType } from "@oh-my-pi/omp-stats/parser";
-import type { AgentType, MessageStats } from "@oh-my-pi/omp-stats/types";
-import {
-	getAgentDir,
-	getConfigRootDir,
-	getSessionsDir,
-	getStatsDbPath,
-	setAgentDir,
-	TempDir,
-} from "@oh-my-pi/pi-utils";
+import { getOverviewStats } from "@awfixerai/stats/aggregator";
+import { closeDb, getStatsByAgentType, initDb, insertMessageStats } from "@awfixerai/stats/db";
+import { classifyAgentType } from "@awfixerai/stats/parser";
+import type { AgentType, MessageStats } from "@awfixerai/stats/types";
+import { getAgentDir, getConfigRootDir, getSessionsDir, getStatsDbPath, setAgentDir, TempDir } from "@awfixerai/utils";
 
 const originalConfigDir = process.env.PI_CONFIG_DIR;
 const originalAgentDir = getAgentDir();

@@ -21,10 +21,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { ImageContent } from "@oh-my-pi/pi-ai";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { InputController } from "@oh-my-pi/pi-coding-agent/modes/controllers/input-controller";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { InputController } from "@awfixerai/agent/modes/controllers/input-controller";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import type { ImageContent } from "@awfixerai/ai";
 
 const ONE_PX_PNG = Buffer.from(
 	"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M8AAAMBAQDJ/pLvAAAAAElFTkSuQmCC",

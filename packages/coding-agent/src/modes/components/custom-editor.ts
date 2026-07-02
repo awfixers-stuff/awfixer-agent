@@ -1,7 +1,7 @@
 import { fileURLToPath } from "node:url";
-import type { ImageContent } from "@oh-my-pi/pi-ai";
-import { addKeyAliases, canonicalKeyId, Editor, type KeyId, parseKey, parseKittySequence } from "@oh-my-pi/pi-tui";
-import { BracketedPasteHandler } from "@oh-my-pi/pi-tui/bracketed-paste";
+import type { ImageContent } from "@awfixerai/ai";
+import { addKeyAliases, canonicalKeyId, Editor, type KeyId, parseKey, parseKittySequence } from "@awfixerai/tui";
+import { BracketedPasteHandler } from "@awfixerai/tui/bracketed-paste";
 import type { AppKeybinding } from "../../config/keybindings";
 import { isSettingsInitialized, settings } from "../../config/settings";
 import { imageReferenceHyperlink, PLACEHOLDER_REGEX, renderPlaceholders } from "../image-references";

@@ -1,16 +1,17 @@
 /**
  * Regression: plugin extensions must resolve `pi-*` imports across every scope
  * that has ever been used to publish or alias the internal packages —
- * `@mariozechner` (original), `@earendil-works` (fork), and `@oh-my-pi`
- * (canonical). The shim in `legacy-pi-compat.ts` remaps all three to the same
+ * `@mariozechner` (original), `@earendil-works` (fork), legacy `@oh-my-pi`,
+ * and `@awfixerai` (canonical). The shim in `legacy-pi-compat.ts` remaps all
+ * historical scopes to the same
  * in-process bundled copy so that plugins observe a single module registry
  * regardless of which scope name their peerDependencies happened to declare.
  *
  * Reported failures the test covers:
  *   - `@juicesharp/rpiv-ask-user-question` ⇒ `@earendil-works/pi-tui`
- *   - `@oh-my-pi/swarm-extension`         ⇒ `@oh-my-pi/pi-utils`
- *   - `@plannotator/pi-extension`         ⇒ `@oh-my-pi/pi-agent-core`
- *   - `@runfusion/fusion`                 ⇒ `@oh-my-pi/pi-coding-agent/...`
+ *   - `@awfixerai/swarm-extension`         ⇒ `@awfixerai/utils`
+ *   - `@plannotator/pi-extension`         ⇒ `@awfixerai/agent-core`
+ *   - `@runfusion/fusion`                 ⇒ `@awfixerai/agent/...`
  *
  * Plus the two upstream-only surfaces that turned up via real-plugin E2E:
  *   - `Key` runtime helper from `pi-tui` (used by plannotator + rpiv-*).
@@ -19,20 +20,17 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { loadExtensions } from "@oh-my-pi/pi-coding-agent/extensibility/extensions/loader";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { loadExtensions } from "@awfixerai/agent/extensibility/extensions/loader";
+import { TempDir } from "@awfixerai/utils";
 
-const canonicalCodingAgent = Bun.resolveSync("@oh-my-pi/pi-coding-agent", import.meta.dir);
-const canonicalCodingAgentExtensions = Bun.resolveSync(
-	"@oh-my-pi/pi-coding-agent/extensibility/extensions",
-	import.meta.dir,
-);
-const canonicalUtils = Bun.resolveSync("@oh-my-pi/pi-utils", import.meta.dir);
-const canonicalTui = Bun.resolveSync("@oh-my-pi/pi-tui", import.meta.dir);
+const canonicalCodingAgent = Bun.resolveSync("@awfixerai/agent", import.meta.dir);
+const canonicalCodingAgentExtensions = Bun.resolveSync("@awfixerai/agent/extensibility/extensions", import.meta.dir);
+const canonicalUtils = Bun.resolveSync("@awfixerai/utils", import.meta.dir);
+const canonicalTui = Bun.resolveSync("@awfixerai/tui", import.meta.dir);
 // Subpath: upstream `pi-ai/oauth` re-exported `utils/oauth/index`; our pi-ai now
-// exposes the same surface at the real `@oh-my-pi/pi-ai/oauth` export, so the
+// exposes the same surface at the real `@awfixerai/ai/oauth` export, so the
 // legacy `@mariozechner/pi-ai/oauth` specifier canonicalizes straight to it.
-const canonicalAiOauth = Bun.resolveSync("@oh-my-pi/pi-ai/oauth", import.meta.dir);
+const canonicalAiOauth = Bun.resolveSync("@awfixerai/ai/oauth", import.meta.dir);
 
 interface AliasCase {
 	id: string;
@@ -49,14 +47,21 @@ const CASES: readonly AliasCase[] = [
 		canonicalPath: canonicalTui,
 		symbol: "visibleWidth",
 	},
-	// @oh-my-pi self-import — canonical scope must still flow through the shim
+	// @awfixerai self-import — canonical scope must still flow through the shim
 	// so a duplicate copy is never dragged in from a plugin's own node_modules.
-	{ id: "ohmypi-utils", aliasSpecifier: "@oh-my-pi/pi-utils", canonicalPath: canonicalUtils, symbol: "logger" },
+	{ id: "awfixerai-utils", aliasSpecifier: "@awfixerai/utils", canonicalPath: canonicalUtils, symbol: "logger" },
 	{
-		id: "ohmypi-coding-agent",
-		aliasSpecifier: "@oh-my-pi/pi-coding-agent",
+		id: "awfixerai-coding-agent",
+		aliasSpecifier: "@awfixerai/agent",
 		canonicalPath: canonicalCodingAgent,
 		symbol: "isToolCallEventType",
+	},
+	// Legacy @oh-my-pi scope — plugins published before the fork rebrand.
+	{
+		id: "ohmypi-utils-legacy",
+		aliasSpecifier: "@oh-my-pi/pi-utils",
+		canonicalPath: canonicalUtils,
+		symbol: "logger",
 	},
 	// @mariozechner — defends the original remap (regression: issue #973).
 	{
@@ -65,7 +70,7 @@ const CASES: readonly AliasCase[] = [
 		canonicalPath: canonicalCodingAgentExtensions,
 		symbol: "isToolCallEventType",
 	},
-	// Subpath: legacy `pi-ai/oauth` resolves to the real `@oh-my-pi/pi-ai/oauth`.
+	// Subpath: legacy `pi-ai/oauth` resolves to the real `@awfixerai/ai/oauth`.
 	{
 		id: "mariozechner-ai-oauth",
 		aliasSpecifier: "@mariozechner/pi-ai/oauth",

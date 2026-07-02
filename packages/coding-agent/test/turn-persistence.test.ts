@@ -15,8 +15,8 @@
  *     (the earliest turn message whose later sibling is already persisted).
  */
 import { describe, expect, test } from "bun:test";
-import type { AgentMessage } from "@oh-my-pi/pi-agent-core";
-import { planTurnPersistence, sessionMessagePersistenceKey } from "@oh-my-pi/pi-coding-agent/session/turn-persistence";
+import { planTurnPersistence, sessionMessagePersistenceKey } from "@awfixerai/agent/session/turn-persistence";
+import type { AgentMessage } from "@awfixerai/agent-core";
 
 function assistant(overrides: Partial<Extract<AgentMessage, { role: "assistant" }>> = {}) {
 	return {

@@ -4,10 +4,10 @@ import {
 	buildCursorSystemPromptJsons,
 	resolveExecHandler,
 	streamCursor,
-} from "@oh-my-pi/pi-ai/providers/cursor";
-import type { Context, Model } from "@oh-my-pi/pi-ai/types";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import type { AgentRunRequest } from "@oh-my-pi/pi-catalog/discovery/cursor-gen/agent_pb";
+} from "@awfixerai/ai/providers/cursor";
+import type { Context, Model } from "@awfixerai/ai/types";
+import { buildModel } from "@awfixerai/catalog/build";
+import type { AgentRunRequest } from "@awfixerai/catalog/discovery/cursor-gen/agent_pb";
 
 const cursorModel: Model<"cursor-agent"> = buildModel({
 	id: "cursor-composer-2.5",

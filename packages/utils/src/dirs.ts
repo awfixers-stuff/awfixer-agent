@@ -32,7 +32,7 @@ export const VERSION: string = version;
 export const MIN_BUN_VERSION: string = engines.bun.replace(/[^0-9.]/g, "");
 
 const PROFILE_NAME_RE = /^[a-z0-9][a-z0-9._-]{0,63}$/;
-const PROFILE_ENV_KEYS = ["AGENT_PROFILE", "OMP_PROFILE", "PI_PROFILE"] as const;
+const PROFILE_ENV_KEYS = ["AGENT_PROFILE", "PI_PROFILE"] as const;
 
 /** Track one-time deprecation warnings so they fire at most once per session per key. */
 const emittedWarnings = new Set<string>();
@@ -57,7 +57,7 @@ const WINDOWS_RESERVED_BASENAME_RE = /^(?:CON|PRN|AUX|NUL|COM[0-9]|LPT[0-9])(?:\
  * default (empty string, whitespace, or the explicit "default" sentinel) and
  * throws for syntactically invalid or platform-reserved names.
  *
- * Exported so consumers of `@oh-my-pi/pi-utils/dirs` (CLI bootstrap, tests,
+ * Exported so consumers of `@awfixerai/utils/dirs` (CLI bootstrap, tests,
  * downstream tools) can validate user input without re-deriving the rules.
  */
 export function normalizeProfileName(profile: string | undefined): string | undefined {
@@ -88,18 +88,28 @@ export function normalizeProfileName(profile: string | undefined): string | unde
  * `OMP_PROFILE` or `PI_PROFILE`. Delegates validation/normalization to
  * {@link normalizeProfileName} (which throws on a syntactically invalid value).
  */
-export function resolveProfileEnv(agent: string | undefined, omp: string | undefined, pi: string | undefined): string | undefined {
-	return normalizeProfileName(agent !== undefined ? agent : omp !== undefined ? omp : pi);
+export function resolveProfileEnv(agent: string | undefined, pi: string | undefined): string | undefined {
+	return normalizeProfileName(agent !== undefined ? agent : pi);
+}
+
+function readAgentDirFromEnv(): string | undefined {
+	return process.env.AGENT_DIR ?? process.env.AGENT_CODING_AGENT_DIR ?? process.env.PI_CODING_AGENT_DIR;
 }
 
 function getProfileFromEnv(): string | undefined {
 	if (process.env.OMP_PROFILE !== undefined && process.env.AGENT_PROFILE === undefined) {
 		emitDeprecatedEnvVar("OMP_PROFILE", "AGENT_PROFILE");
 	}
-	if (process.env.PI_PROFILE !== undefined && process.env.AGENT_PROFILE === undefined && process.env.OMP_PROFILE === undefined) {
+	if (process.env.PI_PROFILE !== undefined && process.env.AGENT_PROFILE === undefined) {
 		emitDeprecatedEnvVar("PI_PROFILE", "AGENT_PROFILE");
 	}
-	return resolveProfileEnv(process.env.AGENT_PROFILE, process.env.OMP_PROFILE, process.env.PI_PROFILE);
+	if (process.env.AGENT_CODING_AGENT_DIR !== undefined && process.env.AGENT_DIR === undefined) {
+		emitDeprecatedEnvVar("AGENT_CODING_AGENT_DIR", "AGENT_DIR");
+	}
+	if (process.env.PI_CODING_AGENT_DIR !== undefined && process.env.AGENT_DIR === undefined) {
+		emitDeprecatedEnvVar("PI_CODING_AGENT_DIR", "AGENT_DIR");
+	}
+	return resolveProfileEnv(process.env.AGENT_PROFILE, process.env.PI_PROFILE);
 }
 
 /**
@@ -215,7 +225,6 @@ export async function directoryExists(dir: string): Promise<boolean> {
 	} catch {
 		return false;
 	}
-
 }
 
 /** Get the config directory name relative to home (e.g. ".agent" or AGENT_CONFIG_DIR / PI_CONFIG_DIR override). */
@@ -369,13 +378,8 @@ function resolvePreProfileAgentDir(
 let activeProfile = readProfileFromEnvSafe();
 
 function resolveActiveAgentDirOverride(): string | undefined {
-	const agentDir = process.env.AGENT_CODING_AGENT_DIR ?? process.env.PI_CODING_AGENT_DIR;
-	if (agentDir !== process.env.PI_CODING_AGENT_DIR && process.env.PI_CODING_AGENT_DIR !== undefined) {
-		emitDeprecatedEnvVar("PI_CODING_AGENT_DIR", "AGENT_CODING_AGENT_DIR");
-	}
-	return activeProfile
-		? undefined
-		: resolvePreProfileAgentDir(undefined, agentDir, readPiProfileFromEnvSafe());
+	const agentDir = readAgentDirFromEnv();
+	return activeProfile ? undefined : resolvePreProfileAgentDir(undefined, agentDir, readPiProfileFromEnvSafe());
 }
 /**
  * Snapshot of `PI_CODING_AGENT_DIR` from before the first named-profile
@@ -390,7 +394,7 @@ function resolveActiveAgentDirOverride(): string | undefined {
  */
 let preProfileAgentDirEnv: string | undefined = resolvePreProfileAgentDir(
 	activeProfile,
-	process.env.AGENT_CODING_AGENT_DIR ?? process.env.PI_CODING_AGENT_DIR,
+	readAgentDirFromEnv(),
 	activeProfile ?? readPiProfileFromEnvSafe(),
 );
 // Anchor home for the resolver. Captured at module load to stay stable across
@@ -428,11 +432,14 @@ export function getConfigRootDir(): string {
 export function setAgentDir(dir: string): void {
 	activeProfile = undefined;
 	dirs = new DirResolver({ agentDirOverride: dir });
-	process.env.PI_CODING_AGENT_DIR = dir;
+	process.env.AGENT_DIR = dir;
+	delete process.env.AGENT_CODING_AGENT_DIR;
+	delete process.env.PI_CODING_AGENT_DIR;
 	preProfileAgentDirEnv = dir;
 	for (const key of PROFILE_ENV_KEYS) {
 		delete process.env[key];
 	}
+	delete process.env.OMP_PROFILE;
 }
 
 /**
@@ -446,7 +453,7 @@ export function setAgentDir(dir: string): void {
 export function __resetProfileSnapshotForTests(): void {
 	preProfileAgentDirEnv = resolvePreProfileAgentDir(
 		activeProfile,
-		process.env.AGENT_CODING_AGENT_DIR ?? process.env.PI_CODING_AGENT_DIR,
+		readAgentDirFromEnv(),
 		activeProfile ?? readPiProfileFromEnvSafe(),
 	);
 }
@@ -472,29 +479,28 @@ export function setProfile(profile: string | undefined): void {
 		// explicit override. Subsequent profile switches keep the original
 		// snapshot — the "pre-profile" baseline is the state before profiles
 		// entered the picture, not the state between two activations.
-		preProfileAgentDirEnv = resolvePreProfileAgentDir(
-			undefined,
-			process.env.AGENT_CODING_AGENT_DIR ?? process.env.PI_CODING_AGENT_DIR,
-			readPiProfileFromEnvSafe(),
-		);
+		preProfileAgentDirEnv = resolvePreProfileAgentDir(undefined, readAgentDirFromEnv(), readPiProfileFromEnvSafe());
 	}
 	activeProfile = next;
 	if (activeProfile) {
 		dirs = new DirResolver({ profile: activeProfile });
 		process.env.AGENT_PROFILE = activeProfile;
-		process.env.OMP_PROFILE = activeProfile;
-		process.env.PI_PROFILE = activeProfile;
-		process.env.AGENT_CODING_AGENT_DIR = dirs.agentDir;
-		process.env.PI_CODING_AGENT_DIR = dirs.agentDir;
+		process.env.AGENT_DIR = dirs.agentDir;
+		delete process.env.AGENT_CODING_AGENT_DIR;
+		delete process.env.PI_CODING_AGENT_DIR;
+		delete process.env.OMP_PROFILE;
+		delete process.env.PI_PROFILE;
 	} else {
 		for (const key of PROFILE_ENV_KEYS) {
 			delete process.env[key];
 		}
 		delete process.env.AGENT_CODING_AGENT_DIR;
+		delete process.env.OMP_PROFILE;
+		delete process.env.PI_CODING_AGENT_DIR;
 		if (preProfileAgentDirEnv === undefined) {
-			delete process.env.PI_CODING_AGENT_DIR;
+			delete process.env.AGENT_DIR;
 		} else {
-			process.env.PI_CODING_AGENT_DIR = preProfileAgentDirEnv;
+			process.env.AGENT_DIR = preProfileAgentDirEnv;
 		}
 		dirs = new DirResolver({ agentDirOverride: preProfileAgentDirEnv });
 	}
@@ -565,9 +571,9 @@ export function getPluginsPackageJson(home?: string): string {
 	return path.join(getPluginsDir(home), "package.json");
 }
 
-/** Plugin lock file (~/.omp/plugins/omp-plugins.lock.json). */
+/** Plugin lock file (~/.omp/plugins/agent-plugins.lock.json). */
 export function getPluginsLockfile(home?: string): string {
-	return path.join(getPluginsDir(home), "omp-plugins.lock.json");
+	return path.join(getPluginsDir(home), "agent-plugins.lock.json");
 }
 
 /** Get the remote mount directory (~/.omp/remote). */
@@ -619,10 +625,12 @@ export function setWorktreesDir(dir: string | undefined): string | undefined {
  * ignored and resolution falls through.
  */
 export function getWorktreesDir(): string {
-	return resolveWorktreeBase(process.env.AGENT_WORKTREE_DIR)
-		?? resolveWorktreeBase(process.env.OMP_WORKTREE_DIR)
-		?? worktreesDirOverride
-		?? dirs.rootSubdir("wt", "data");
+	return (
+		resolveWorktreeBase(process.env.AGENT_WORKTREE_DIR) ??
+		resolveWorktreeBase(process.env.OMP_WORKTREE_DIR) ??
+		worktreesDirOverride ??
+		dirs.rootSubdir("wt", "data")
+	);
 }
 
 /** Get the SSH control socket directory (~/.omp/ssh-control). */
@@ -823,12 +831,12 @@ export function getTerminalSessionsDir(agentDir?: string): string {
 	return dirs.agentSubdir(agentDir, "terminal-sessions", "state");
 }
 
-/** Get the crash log path (~/.omp/agent/omp-crash.log). */
+/** Get the crash log path (~/.omp/agent/agent-crash.log). */
 export function getCrashLogPath(agentDir?: string): string {
-	return dirs.agentSubdir(agentDir, "omp-crash.log", "state");
+	return dirs.agentSubdir(agentDir, "agent-crash.log", "state");
 }
 
-/** Get the debug log path (~/.omp/agent/omp-debug.log). */
+/** Get the debug log path (~/.omp/agent/agent-debug.log). */
 export function getDebugLogPath(agentDir?: string): string {
 	return dirs.agentSubdir(agentDir, `${APP_NAME}-debug.log`, "state");
 }

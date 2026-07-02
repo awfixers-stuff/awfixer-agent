@@ -1,15 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
-import { Agent } from "@oh-my-pi/pi-agent-core";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import type { SettingPath } from "@oh-my-pi/pi-coding-agent/config/settings-schema";
-import { IrcBus, type IrcMessage } from "@oh-my-pi/pi-coding-agent/irc/bus";
-import { AgentLifecycleManager } from "@oh-my-pi/pi-coding-agent/registry/agent-lifecycle";
-import { AgentRegistry } from "@oh-my-pi/pi-coding-agent/registry/agent-registry";
-import { AgentSession, type AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import type { CustomMessage } from "@oh-my-pi/pi-coding-agent/session/messages";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
-import { IrcTool } from "@oh-my-pi/pi-coding-agent/tools/irc";
+import { Settings } from "@awfixerai/agent/config/settings";
+import type { SettingPath } from "@awfixerai/agent/config/settings-schema";
+import { IrcBus, type IrcMessage } from "@awfixerai/agent/irc/bus";
+import { AgentLifecycleManager } from "@awfixerai/agent/registry/agent-lifecycle";
+import { AgentRegistry } from "@awfixerai/agent/registry/agent-registry";
+import { AgentSession, type AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import type { CustomMessage } from "@awfixerai/agent/session/messages";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import type { ToolSession } from "@awfixerai/agent/tools";
+import { IrcTool } from "@awfixerai/agent/tools/irc";
+import { Agent } from "@awfixerai/agent-core";
 
 interface FakeSession {
 	session: AgentSession;

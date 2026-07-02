@@ -1,5 +1,5 @@
 /**
- * Regression for the [#3751](https://github.com/can1357/oh-my-pi/pull/3751)
+ * Regression for the [#3751](https://github.com/awfixers-stuff/awfixer-agent/pull/3751)
  * chatgpt-codex follow-up: the per-LLM-turn provider concurrency wrapper
  * (`wrapStreamFnWithProviderConcurrency`) was only attached to
  * `Agent.streamFn` / `Agent.sideStreamFn`, so direct compaction oneshots
@@ -20,20 +20,20 @@
  *     unrelated provider call.
  */
 import { afterEach, describe, expect, it, vi } from "bun:test";
-import type { StreamFn } from "@oh-my-pi/pi-agent-core";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { wrapStreamFnWithProviderConcurrency } from "@awfixerai/agent/task/provider-concurrency";
+import type { StreamFn } from "@awfixerai/agent-core";
 import {
 	type CompactionPreparation,
 	compact,
 	createFileOps,
 	DEFAULT_COMPACTION_SETTINGS,
-} from "@oh-my-pi/pi-agent-core/compaction";
-import type { AgentMessage } from "@oh-my-pi/pi-agent-core/types";
-import type { AssistantMessage, Model } from "@oh-my-pi/pi-ai";
-import * as ai from "@oh-my-pi/pi-ai";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { wrapStreamFnWithProviderConcurrency } from "@oh-my-pi/pi-coding-agent/task/provider-concurrency";
+} from "@awfixerai/agent-core/compaction";
+import type { AgentMessage } from "@awfixerai/agent-core/types";
+import type { AssistantMessage, Model } from "@awfixerai/ai";
+import * as ai from "@awfixerai/ai";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
+import { getBundledModel } from "@awfixerai/catalog/models";
 
 interface Deferred {
 	promise: Promise<void>;

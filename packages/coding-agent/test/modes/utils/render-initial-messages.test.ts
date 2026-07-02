@@ -12,16 +12,16 @@
  */
 
 import { afterEach, beforeAll, describe, expect, it, type Mock, vi } from "bun:test";
-import type { AgentMessage } from "@oh-my-pi/pi-agent-core";
-import type { AssistantMessage, ImageContent, Usage } from "@oh-my-pi/pi-ai";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
-import { UiHelpers } from "@oh-my-pi/pi-coding-agent/modes/utils/ui-helpers";
-import type { SessionContext } from "@oh-my-pi/pi-coding-agent/session/session-context";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { type Component, Container, Image, ImageProtocol, setTerminalImageProtocol, TERMINAL } from "@oh-my-pi/pi-tui";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import { UiHelpers } from "@awfixerai/agent/modes/utils/ui-helpers";
+import type { SessionContext } from "@awfixerai/agent/session/session-context";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import type { AgentMessage } from "@awfixerai/agent-core";
+import type { AssistantMessage, ImageContent, Usage } from "@awfixerai/ai";
+import { type Component, Container, Image, ImageProtocol, setTerminalImageProtocol, TERMINAL } from "@awfixerai/tui";
+import { TempDir } from "@awfixerai/utils";
 
 beforeAll(() => {
 	initTheme();

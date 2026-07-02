@@ -1,7 +1,7 @@
 import { mkdirSync } from "node:fs";
-import { type ApiKey, getOpenRouterHeaders, withAuth } from "@oh-my-pi/pi-ai";
-import { ProviderHttpError } from "@oh-my-pi/pi-ai/error";
-import { hostMatchesUrl } from "@oh-my-pi/pi-catalog/hosts";
+import { type ApiKey, getOpenRouterHeaders, withAuth } from "@awfixerai/ai";
+import { ProviderHttpError } from "@awfixerai/ai/error";
+import { hostMatchesUrl } from "@awfixerai/catalog/hosts";
 import {
 	$env,
 	$flag,
@@ -9,7 +9,7 @@ import {
 	fetchWithRetry,
 	getFastembedCacheDir,
 	logger,
-} from "@oh-my-pi/pi-utils";
+} from "@awfixerai/utils";
 import type { EmbeddingModel } from "fastembed";
 import { LRUCache } from "lru-cache/raw";
 import { ensureFastembedModelSidecars } from "./fastembed-model-cache";

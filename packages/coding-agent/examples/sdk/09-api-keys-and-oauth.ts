@@ -10,10 +10,10 @@ import {
 	discoverModels,
 	ModelRegistry,
 	SessionManager,
-} from "@oh-my-pi/pi-coding-agent";
+} from "@awfixerai/agent";
 
-// Default: discoverAuthStorage() uses ~/.omp/agent/agent.db
-// discoverModels() loads built-in + custom models from ~/.omp/agent/models.json
+// Default: discoverAuthStorage() uses ~/.agent/agent.db
+// discoverModels() loads built-in + custom models from ~/.agent/models.json
 const authStorage = await discoverAuthStorage();
 const modelRegistry = await discoverModels(authStorage);
 

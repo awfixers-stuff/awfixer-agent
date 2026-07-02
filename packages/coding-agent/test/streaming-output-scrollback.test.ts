@@ -1,10 +1,10 @@
 import { afterEach, beforeAll, describe, expect, test } from "bun:test";
-import { ToolExecutionComponent } from "@oh-my-pi/pi-coding-agent/modes/components/tool-execution";
-import { TranscriptContainer } from "@oh-my-pi/pi-coding-agent/modes/components/transcript-container";
-import { theme as activeTheme, initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { evalToolRenderer } from "@oh-my-pi/pi-coding-agent/tools/eval-render";
-import { previewWindowRows } from "@oh-my-pi/pi-coding-agent/tools/render-utils";
-import { type Component, TUI } from "@oh-my-pi/pi-tui";
+import { ToolExecutionComponent } from "@awfixerai/agent/modes/components/tool-execution";
+import { TranscriptContainer } from "@awfixerai/agent/modes/components/transcript-container";
+import { theme as activeTheme, initTheme } from "@awfixerai/agent/modes/theme/theme";
+import { evalToolRenderer } from "@awfixerai/agent/tools/eval-render";
+import { previewWindowRows } from "@awfixerai/agent/tools/render-utils";
+import { type Component, TUI } from "@awfixerai/tui";
 import { VirtualTerminal } from "../../tui/test/virtual-terminal";
 
 // Long, path-like output that wraps at the box's inner width — the case that

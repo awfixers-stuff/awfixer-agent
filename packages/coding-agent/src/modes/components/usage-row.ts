@@ -1,6 +1,6 @@
-import type { Usage } from "@oh-my-pi/pi-ai";
-import { Container, Spacer, Text } from "@oh-my-pi/pi-tui";
-import { formatNumber } from "@oh-my-pi/pi-utils";
+import type { Usage } from "@awfixerai/ai";
+import { Container, Spacer, Text } from "@awfixerai/tui";
+import { formatNumber } from "@awfixerai/utils";
 import { theme } from "../../modes/theme/theme";
 
 export function createUsageRowBlock(usage: Usage): Container {

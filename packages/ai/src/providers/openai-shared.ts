@@ -1,8 +1,8 @@
-import type { Effort } from "@oh-my-pi/pi-catalog/effort";
-import { toFirepassWireModelId, toFireworksWireModelId } from "@oh-my-pi/pi-catalog/fireworks-model-id";
-import { isGlm52ReasoningEffortModelId } from "@oh-my-pi/pi-catalog/identity";
-import { getSupportedEfforts } from "@oh-my-pi/pi-catalog/model-thinking";
-import { calculateCost } from "@oh-my-pi/pi-catalog/models";
+import type { Effort } from "@awfixerai/catalog/effort";
+import { toFirepassWireModelId, toFireworksWireModelId } from "@awfixerai/catalog/fireworks-model-id";
+import { isGlm52ReasoningEffortModelId } from "@awfixerai/catalog/identity";
+import { getSupportedEfforts } from "@awfixerai/catalog/model-thinking";
+import { calculateCost } from "@awfixerai/catalog/models";
 import type {
 	OpenAICompat,
 	OpenAIReasoningDisableMode,
@@ -12,13 +12,13 @@ import type {
 	ResolvedOpenAIResponsesCompat,
 	ResolvedOpenAISharedCompat,
 	VercelGatewayRouting,
-} from "@oh-my-pi/pi-catalog/types";
+} from "@awfixerai/catalog/types";
 import {
 	COREWEAVE_PROJECT_HEADER,
 	coreWeaveProjectHeaders,
 	hasCoreWeaveProjectHeader,
-} from "@oh-my-pi/pi-catalog/wire/coreweave";
-import { parseGitHubCopilotApiKey } from "@oh-my-pi/pi-catalog/wire/github-copilot";
+} from "@awfixerai/catalog/wire/coreweave";
+import { parseGitHubCopilotApiKey } from "@awfixerai/catalog/wire/github-copilot";
 import {
 	$env,
 	extractHttpStatusFromError,
@@ -26,7 +26,7 @@ import {
 	parseStreamingJson,
 	parseStreamingJsonThrottled,
 	structuredCloneJSON,
-} from "@oh-my-pi/pi-utils";
+} from "@awfixerai/utils";
 import * as AIError from "../error";
 import {
 	type Api,
@@ -1787,7 +1787,7 @@ export async function processResponsesStream<TApi extends Api>(
 
 	// Multiple items (parallel function_calls in particular) can be open at the same
 	// time. OpenAI's spec routes every per-item event by `output_index`/`item_id`;
-	// see https://github.com/can1357/oh-my-pi/issues/1880 — llama.cpp emits parallel
+	// see https://github.com/awfixers-stuff/awfixer-agent/issues/1880 — llama.cpp emits parallel
 	// function_call deltas interleaved, and a singleton `current` reference would
 	// fold them into the wrong block and drop arguments on every call but the last.
 	//

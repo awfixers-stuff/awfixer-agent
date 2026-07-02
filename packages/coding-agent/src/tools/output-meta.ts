@@ -10,9 +10,9 @@ import type {
 	AgentToolExecFn,
 	AgentToolResult,
 	AgentToolUpdateCallback,
-} from "@oh-my-pi/pi-agent-core";
-import type { ImageContent, TextContent } from "@oh-my-pi/pi-ai";
-import { logger } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent-core";
+import type { ImageContent, TextContent } from "@awfixerai/ai";
+import { logger } from "@awfixerai/utils";
 import { getDefault, type Settings } from "../config/settings";
 import { formatGroupedDiagnosticMessages } from "../lsp/utils";
 import type { Theme } from "../modes/theme/theme";

@@ -10,11 +10,11 @@ import type {
 	OAuthAccess,
 	OAuthAccessResolution,
 	SimpleStreamOptions,
-} from "@oh-my-pi/pi-ai";
-import { streamSimple } from "@oh-my-pi/pi-ai";
-import type { CanonicalModelVariant } from "@oh-my-pi/pi-catalog/identity";
-import { replaceTabs, truncateToWidth } from "@oh-my-pi/pi-tui";
-import { formatDuration, getProjectDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/ai";
+import { streamSimple } from "@awfixerai/ai";
+import type { CanonicalModelVariant } from "@awfixerai/catalog/identity";
+import { replaceTabs, truncateToWidth } from "@awfixerai/tui";
+import { formatDuration, getProjectDir } from "@awfixerai/utils";
 import chalk from "chalk";
 import { type CanonicalModelQueryOptions, ModelRegistry } from "../config/model-registry";
 import {

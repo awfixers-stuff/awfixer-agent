@@ -17,27 +17,27 @@ import {
 	zPromptResponse,
 	zSessionNotification,
 } from "@agentclientprotocol/sdk/dist/schema/zod.gen.js";
-import type { Model } from "@oh-my-pi/pi-ai";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { resolveLocalUrlToPath } from "@oh-my-pi/pi-coding-agent/internal-urls";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { resolveLocalUrlToPath } from "@awfixerai/agent/internal-urls";
 import {
 	ACP_BOOTSTRAP_RACE_GUARD_MS,
 	AcpAgent,
 	createAcpExtensionUiContext,
-} from "@oh-my-pi/pi-coding-agent/modes/acp/acp-agent";
-import type { PlanModeState } from "@oh-my-pi/pi-coding-agent/plan-mode/state";
-import type { AgentSession, AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { SILENT_ABORT_MARKER } from "@oh-my-pi/pi-coding-agent/session/messages";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { DEFAULT_STT_MODEL_KEY, STT_MODEL_OPTIONS } from "@oh-my-pi/pi-coding-agent/stt/models";
+} from "@awfixerai/agent/modes/acp/acp-agent";
+import type { PlanModeState } from "@awfixerai/agent/plan-mode/state";
+import type { AgentSession, AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import { SILENT_ABORT_MARKER } from "@awfixerai/agent/session/messages";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { DEFAULT_STT_MODEL_KEY, STT_MODEL_OPTIONS } from "@awfixerai/agent/stt/models";
 import {
 	DEFAULT_TTS_LOCAL_MODEL_KEY,
 	DEFAULT_TTS_VOICE,
 	TTS_LOCAL_MODELS,
 	TTS_LOCAL_VOICE_OPTIONS,
-} from "@oh-my-pi/pi-coding-agent/tts/models";
-import { getConfigRootDir, setAgentDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent/tts/models";
+import type { Model } from "@awfixerai/ai";
+import { buildModel } from "@awfixerai/catalog/build";
+import { getConfigRootDir, setAgentDir } from "@awfixerai/utils";
 import type { z } from "zod/v4";
 
 /**
@@ -418,7 +418,7 @@ function expectAcpNotifications(updates: SessionNotification[]): void {
 
 const cleanupRoots: string[] = [];
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = getConfigRootDir()
+const fallbackAgentDir = getConfigRootDir();
 
 afterEach(async () => {
 	if (originalAgentDir) {

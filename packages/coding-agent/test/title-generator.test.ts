@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "bun:test";
-import type { Api, Model } from "@oh-my-pi/pi-ai";
-import * as ai from "@oh-my-pi/pi-ai";
-import { type GeneratedProvider, getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { generateSessionTitle } from "@oh-my-pi/pi-coding-agent/utils/title-generator";
-import { logger } from "@oh-my-pi/pi-utils";
+import { generateSessionTitle } from "@awfixerai/agent/utils/title-generator";
+import type { Api, Model } from "@awfixerai/ai";
+import * as ai from "@awfixerai/ai";
+import { type GeneratedProvider, getBundledModel } from "@awfixerai/catalog/models";
+import { logger } from "@awfixerai/utils";
 
 function getModelOrThrow(id: string): Model<Api> {
 	const model = getBundledModel("anthropic", id);

@@ -1,14 +1,14 @@
 import { afterEach, describe, expect, it, vi } from "bun:test";
-import { streamSimple } from "@oh-my-pi/pi-ai";
+import { streamSimple } from "@awfixerai/ai";
 import {
 	getOpenAICodexTransportDetails,
 	getOpenAICodexWebSocketDebugStats,
 	prewarmOpenAICodexResponses,
 	streamOpenAICodexResponses,
-} from "@oh-my-pi/pi-ai/providers/openai-codex-responses";
-import type { Context, FetchImpl, Model, ModelSpec, ProviderSessionState } from "@oh-my-pi/pi-ai/types";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { getAgentDir, setAgentDir, TempDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/ai/providers/openai-codex-responses";
+import type { Context, FetchImpl, Model, ModelSpec, ProviderSessionState } from "@awfixerai/ai/types";
+import { buildModel } from "@awfixerai/catalog/build";
+import { getAgentDir, setAgentDir, TempDir } from "@awfixerai/utils";
 
 const originalAgentDir = getAgentDir();
 const originalWebSocket = global.WebSocket;

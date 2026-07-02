@@ -1,7 +1,7 @@
-import type { InMemorySnapshotStore } from "@oh-my-pi/hashline";
-import type { AgentTelemetryConfig, AgentTool } from "@oh-my-pi/pi-agent-core";
-import type { FetchImpl, ImageContent, Model, ServiceTier, ToolChoice } from "@oh-my-pi/pi-ai";
-import { logger } from "@oh-my-pi/pi-utils";
+import type { AgentTelemetryConfig, AgentTool } from "@awfixerai/agent-core";
+import type { FetchImpl, ImageContent, Model, ServiceTier, ToolChoice } from "@awfixerai/ai";
+import type { InMemorySnapshotStore } from "@awfixerai/hashline";
+import { logger } from "@awfixerai/utils";
 import type { AsyncJobManager } from "../async/job-manager";
 import type { Rule } from "../capability/rule";
 import type { PromptTemplate } from "../config/prompt-templates";

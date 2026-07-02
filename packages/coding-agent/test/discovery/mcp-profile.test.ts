@@ -16,13 +16,13 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { clearCache as clearFsCache } from "@oh-my-pi/pi-coding-agent/capability/fs";
-import { type MCPServer, mcpCapability } from "@oh-my-pi/pi-coding-agent/capability/mcp";
-import { loadCapability } from "@oh-my-pi/pi-coding-agent/discovery";
-import { getConfigRootDir, removeWithRetries, setAgentDir } from "@oh-my-pi/pi-utils";
+import { clearCache as clearFsCache } from "@awfixerai/agent/capability/fs";
+import { type MCPServer, mcpCapability } from "@awfixerai/agent/capability/mcp";
+import { loadCapability } from "@awfixerai/agent/discovery";
+import { getConfigRootDir, removeWithRetries, setAgentDir } from "@awfixerai/utils";
 
 const originalAgentDirEnv = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = getConfigRootDir()
+const fallbackAgentDir = getConfigRootDir();
 
 async function writeMcpJson(dir: string, servers: Record<string, unknown>): Promise<void> {
 	await fs.mkdir(dir, { recursive: true });

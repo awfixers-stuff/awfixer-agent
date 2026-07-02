@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it } from "bun:test";
-import type { ApiKeyResolveContext } from "@oh-my-pi/pi-ai";
-import { registerCustomApi, unregisterCustomApis } from "@oh-my-pi/pi-ai";
-import { streamSimple } from "@oh-my-pi/pi-ai/stream";
-import type { Api, AssistantMessage, Context, Model, SimpleStreamOptions, Usage } from "@oh-my-pi/pi-ai/types";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
+import type { ApiKeyResolveContext } from "@awfixerai/ai";
+import { registerCustomApi, unregisterCustomApis } from "@awfixerai/ai";
+import { streamSimple } from "@awfixerai/ai/stream";
+import type { Api, AssistantMessage, Context, Model, SimpleStreamOptions, Usage } from "@awfixerai/ai/types";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
 
 const SOURCE_ID = "stream-auth-retry-test";
 const API = "stream-auth-retry-test" as Api;

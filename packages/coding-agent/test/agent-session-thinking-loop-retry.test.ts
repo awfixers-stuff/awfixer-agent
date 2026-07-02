@@ -1,7 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as path from "node:path";
 import { scheduler } from "node:timers/promises";
-import { Agent } from "@oh-my-pi/pi-agent-core";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { AgentSession, type AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent } from "@awfixerai/agent-core";
 import type {
 	Api,
 	AssistantMessage,
@@ -10,17 +15,12 @@ import type {
 	SimpleStreamOptions,
 	TextContent,
 	ThinkingContent,
-} from "@oh-my-pi/pi-ai";
-import * as AIError from "@oh-my-pi/pi-ai/error";
-import { createMockModel } from "@oh-my-pi/pi-ai/providers/mock";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
-import { withGeminiThinkingLoopGuard } from "@oh-my-pi/pi-ai/utils/thinking-loop";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { AgentSession, type AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/ai";
+import * as AIError from "@awfixerai/ai/error";
+import { createMockModel } from "@awfixerai/ai/providers/mock";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
+import { withGeminiThinkingLoopGuard } from "@awfixerai/ai/utils/thinking-loop";
+import { TempDir } from "@awfixerai/utils";
 
 const LOOP_PARAGRAPHS = [
 	"I am now verifying the test module to guarantee there are no compile errors and the code is completely safe.",

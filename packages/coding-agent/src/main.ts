@@ -7,8 +7,8 @@
 import * as fsSync from "node:fs";
 import * as os from "node:os";
 import { createInterface } from "node:readline/promises";
-import { EventLoopKeepalive } from "@oh-my-pi/pi-agent-core";
-import type { ImageContent } from "@oh-my-pi/pi-ai";
+import { EventLoopKeepalive } from "@awfixerai/agent-core";
+import type { ImageContent } from "@awfixerai/ai";
 import {
 	$env,
 	directoryExists,
@@ -19,7 +19,7 @@ import {
 	postmortem,
 	setProjectDir,
 	VERSION,
-} from "@oh-my-pi/pi-utils";
+} from "@awfixerai/utils";
 import chalk from "chalk";
 import { reset as resetCapabilities } from "./capability";
 import { type Args, reportUnrecognizedFlags } from "./cli/args";
@@ -96,12 +96,17 @@ export function writeStartupNotice(parsedArgs: Pick<Args, "mode">, text: string)
 	(parsedArgs.mode === "json" ? process.stderr : process.stdout).write(text);
 }
 
+// Update-checker poll endpoint — see transition-docs/update-checker-domains.md.
+// Served by packages/agent-api on Vercel (npm proxy with GitHub /latest fallback).
+const UPDATE_CHECK_URL = "https://agent-api.awfixer.codes/@awfixerai/agent/latest" as const;
+
 async function checkForNewVersion(currentVersion: string): Promise<string | undefined> {
 	if (!settings.get("startup.checkUpdate")) {
 		return;
 	}
 	try {
-		const response = await fetch("https://registry.npmjs.org/@oh-my-pi/pi-coding-agent/latest");
+		if (!UPDATE_CHECK_URL) return undefined;
+		const response = await fetch(UPDATE_CHECK_URL);
 		if (!response.ok) return undefined;
 
 		const data = (await response.json()) as { version?: string };

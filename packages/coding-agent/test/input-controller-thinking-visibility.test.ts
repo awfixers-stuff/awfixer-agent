@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "bun:test";
-import { AssistantMessageComponent } from "@oh-my-pi/pi-coding-agent/modes/components/assistant-message";
-import { InputController } from "@oh-my-pi/pi-coding-agent/modes/controllers/input-controller";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
+import { AssistantMessageComponent } from "@awfixerai/agent/modes/components/assistant-message";
+import { InputController } from "@awfixerai/agent/modes/controllers/input-controller";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
 
 describe("InputController thinking visibility", () => {
 	it("keeps pre-stream pending transcript content mounted when Ctrl+T toggles thinking blocks", () => {

@@ -15,22 +15,17 @@
  *   with `{ summary, shortSummary? }`.
  */
 
-import { ProviderHttpError } from "@oh-my-pi/pi-ai/error";
-import { parseAzureDeploymentNameMap, parseTextSignature } from "@oh-my-pi/pi-ai/providers/openai-shared";
-import { transformMessages } from "@oh-my-pi/pi-ai/providers/transform-messages";
-import type { Api, AssistantMessage, FetchImpl, Message, Model } from "@oh-my-pi/pi-ai/types";
+import { ProviderHttpError } from "@awfixerai/ai/error";
+import { parseAzureDeploymentNameMap, parseTextSignature } from "@awfixerai/ai/providers/openai-shared";
+import { transformMessages } from "@awfixerai/ai/providers/transform-messages";
+import type { Api, AssistantMessage, FetchImpl, Message, Model } from "@awfixerai/ai/types";
 import {
 	getOpenAIResponsesHistoryItems,
 	getOpenAIResponsesHistoryPayload,
 	normalizeResponsesToolCallId,
-} from "@oh-my-pi/pi-ai/utils";
-import {
-	CODEX_BASE_URL,
-	getCodexAccountId,
-	OPENAI_HEADER_VALUES,
-	OPENAI_HEADERS,
-} from "@oh-my-pi/pi-catalog/wire/codex";
-import { $env, logger } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/ai/utils";
+import { CODEX_BASE_URL, getCodexAccountId, OPENAI_HEADER_VALUES, OPENAI_HEADERS } from "@awfixerai/catalog/wire/codex";
+import { $env, logger } from "@awfixerai/utils";
 
 export * from "./compaction-v2-streaming";
 

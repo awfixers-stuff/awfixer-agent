@@ -4,7 +4,7 @@ import {
 	type NativeScrollbackCommittedRows,
 	type NativeScrollbackLiveRegion,
 	TUI,
-} from "@oh-my-pi/pi-tui";
+} from "@awfixerai/tui";
 import { VirtualTerminal } from "./virtual-terminal";
 
 class LineList implements Component {

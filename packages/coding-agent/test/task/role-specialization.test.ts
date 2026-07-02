@@ -1,15 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "bun:test";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { TaskTool, taskSchema } from "@oh-my-pi/pi-coding-agent/task";
-import * as discoveryModule from "@oh-my-pi/pi-coding-agent/task/discovery";
-import {
-	getTaskSchema,
-	oneLineLabel,
-	ROLE_INPUT_MAX,
-	resolveSubagentDisplayName,
-} from "@oh-my-pi/pi-coding-agent/task/types";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
-import { prompt } from "@oh-my-pi/pi-utils";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { TaskTool, taskSchema } from "@awfixerai/agent/task";
+import * as discoveryModule from "@awfixerai/agent/task/discovery";
+import { getTaskSchema, oneLineLabel, ROLE_INPUT_MAX, resolveSubagentDisplayName } from "@awfixerai/agent/task/types";
+import type { ToolSession } from "@awfixerai/agent/tools";
+import { prompt } from "@awfixerai/utils";
 import { type } from "arktype";
 import subagentSystemPromptTemplate from "../../src/prompts/system/subagent-system-prompt.md" with { type: "text" };
 

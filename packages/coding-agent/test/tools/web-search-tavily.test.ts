@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
-import type { AuthStorage } from "@oh-my-pi/pi-ai";
-import { searchTavily } from "@oh-my-pi/pi-coding-agent/web/search/providers/tavily";
-import type { SearchProviderError } from "@oh-my-pi/pi-coding-agent/web/search/types";
+import { searchTavily } from "@awfixerai/agent/web/search/providers/tavily";
+import type { SearchProviderError } from "@awfixerai/agent/web/search/types";
+import type { AuthStorage } from "@awfixerai/ai";
 
 describe("Tavily web search provider", () => {
 	beforeEach(() => {

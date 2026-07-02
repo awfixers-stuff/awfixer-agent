@@ -18,17 +18,17 @@
  *     follow-up stays queued for the next explicit resume rather than auto-running.
  */
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { Agent, type AgentMessage } from "@oh-my-pi/pi-agent-core";
-import { createMockModel, type MockModel, type MockResponse } from "@oh-my-pi/pi-ai/providers/mock";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import type { IrcMessage } from "@oh-my-pi/pi-coding-agent/irc/bus";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { USER_INTERRUPT_LABEL } from "@oh-my-pi/pi-coding-agent/session/messages";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { Snowflake, TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import type { IrcMessage } from "@awfixerai/agent/irc/bus";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { USER_INTERRUPT_LABEL } from "@awfixerai/agent/session/messages";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent, type AgentMessage } from "@awfixerai/agent-core";
+import { createMockModel, type MockModel, type MockResponse } from "@awfixerai/ai/providers/mock";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { Snowflake, TempDir } from "@awfixerai/utils";
 
 const ADVISOR_TYPE = "advisor";
 

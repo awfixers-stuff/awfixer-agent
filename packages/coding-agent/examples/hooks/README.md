@@ -1,15 +1,15 @@
 # Hooks Examples
 
-Example hooks for omp-coding-agent.
+Example hooks for @awfixerai/agent.
 
 ## Usage
 
 ```bash
 # Load a hook with --hook flag
-omp --hook examples/hooks/permission-gate.ts
+agent --hook examples/hooks/permission-gate.ts
 
 # Or copy to hooks directory for auto-discovery
-cp permission-gate.ts ~/.omp/agent/hooks/
+cp permission-gate.ts ~/.agent/hooks/
 ```
 
 ## Examples
@@ -34,7 +34,7 @@ cp permission-gate.ts ~/.omp/agent/hooks/
 See [docs/hooks.md](../../docs/hooks.md) for full documentation.
 
 ```typescript
-import type { HookAPI } from "@oh-my-pi/pi-coding-agent/hooks";
+import type { HookAPI } from "@awfixerai/agent/hooks";
 
 export default function (pi: HookAPI) {
 	// Subscribe to events

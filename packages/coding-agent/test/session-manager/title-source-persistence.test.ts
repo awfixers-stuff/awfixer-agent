@@ -7,12 +7,12 @@ import {
 	SESSION_TITLE_SLOT_BYTES,
 	type SessionHeader,
 	TITLE_CHANGE_ENTRY_TYPE,
-} from "@oh-my-pi/pi-coding-agent/session/session-entries";
-import { loadEntriesFromFile } from "@oh-my-pi/pi-coding-agent/session/session-loader";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { FileSessionStorage } from "@oh-my-pi/pi-coding-agent/session/session-storage";
-import type { SessionTitleUpdate } from "@oh-my-pi/pi-coding-agent/session/session-title-slot";
-import { getConfigRootDir, removeSyncWithRetries, setAgentDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent/session/session-entries";
+import { loadEntriesFromFile } from "@awfixerai/agent/session/session-loader";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { FileSessionStorage } from "@awfixerai/agent/session/session-storage";
+import type { SessionTitleUpdate } from "@awfixerai/agent/session/session-title-slot";
+import { getConfigRootDir, removeSyncWithRetries, setAgentDir } from "@awfixerai/utils";
 
 import { makeAssistantMessage } from "./helpers";
 
@@ -62,7 +62,7 @@ describe("session title source persistence", () => {
 	let testAgentDir: string;
 	let cwd: string;
 	const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-	const fallbackAgentDir = getConfigRootDir()
+	const fallbackAgentDir = getConfigRootDir();
 
 	beforeEach(() => {
 		testAgentDir = fs.mkdtempSync(path.join(os.tmpdir(), "omp-title-source-"));

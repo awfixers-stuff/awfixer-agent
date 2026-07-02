@@ -6,12 +6,12 @@
  * internals, which massively overcounts.
  */
 import { describe, expect, it } from "bun:test";
-import { arkToWireSchema } from "@oh-my-pi/pi-ai/utils/schema";
 import {
 	type ContextBreakdown,
 	estimateToolSchemaTokens,
 	renderContextUsage,
-} from "@oh-my-pi/pi-coding-agent/modes/utils/context-usage";
+} from "@awfixerai/agent/modes/utils/context-usage";
+import { arkToWireSchema } from "@awfixerai/ai/utils/schema";
 import { type } from "arktype";
 
 describe("estimateToolSchemaTokens", () => {

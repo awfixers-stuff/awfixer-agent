@@ -1,18 +1,17 @@
 {
   "type": "module",
-  "name": "@oh-my-pi/pi-catalog",
+  "name": "@awfixerai/catalog",
   "version": "0.0.0",
   "description": "Model catalog for omp: bundled model database, provider discovery descriptors, model identity, classification, and equivalence",
-  "homepage": "https://omp.sh",
-  "author": "Can Boluk",
+  "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/can1357/oh-my-pi.git",
+    "url": "git+https://github.com/awfixers-stuff/awfixer-agent.git",
     "directory": "packages/catalog"
   },
   "bugs": {
-    "url": "https://github.com/can1357/oh-my-pi/issues"
+    "url": "https://github.com/awfixers-stuff/awfixer-agent/issues"
   },
   "keywords": [
     "ai",
@@ -34,12 +33,12 @@
   },
   "dependencies": {
     "@bufbuild/protobuf": "catalog:",
-    "@oh-my-pi/pi-utils": "catalog:",
+    "@awfixerai/utils": "catalog:",
     "arktype": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@oh-my-pi/pi-ai": "catalog:",
+    "@awfixerai/ai": "catalog:",
     "@types/bun": "catalog:"
   },
   "engines": {

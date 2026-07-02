@@ -1,7 +1,7 @@
 import { describe, expect, it } from "bun:test";
-import type { AuthStorage, FetchImpl } from "@oh-my-pi/pi-ai";
-import { searchDuckDuckGo } from "@oh-my-pi/pi-coding-agent/web/search/providers/duckduckgo";
-import { SearchProviderError } from "@oh-my-pi/pi-coding-agent/web/search/types";
+import { searchDuckDuckGo } from "@awfixerai/agent/web/search/providers/duckduckgo";
+import { SearchProviderError } from "@awfixerai/agent/web/search/types";
+import type { AuthStorage, FetchImpl } from "@awfixerai/ai";
 
 const fakeAuthStorage = {
 	async getApiKey() {

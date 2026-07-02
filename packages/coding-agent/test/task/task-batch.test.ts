@@ -15,16 +15,16 @@
  *    runtime for internal callers.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
-import { toolWireSchema } from "@oh-my-pi/pi-ai/utils/schema";
-import { AsyncJobManager } from "@oh-my-pi/pi-coding-agent/async/job-manager";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { AgentLifecycleManager } from "@oh-my-pi/pi-coding-agent/registry/agent-lifecycle";
-import { AgentRegistry } from "@oh-my-pi/pi-coding-agent/registry/agent-registry";
-import { TaskTool } from "@oh-my-pi/pi-coding-agent/task";
-import * as discoveryModule from "@oh-my-pi/pi-coding-agent/task/discovery";
-import * as executorModule from "@oh-my-pi/pi-coding-agent/task/executor";
-import type { AgentDefinition, SingleResult, TaskParams } from "@oh-my-pi/pi-coding-agent/task/types";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
+import { AsyncJobManager } from "@awfixerai/agent/async/job-manager";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { AgentLifecycleManager } from "@awfixerai/agent/registry/agent-lifecycle";
+import { AgentRegistry } from "@awfixerai/agent/registry/agent-registry";
+import { TaskTool } from "@awfixerai/agent/task";
+import * as discoveryModule from "@awfixerai/agent/task/discovery";
+import * as executorModule from "@awfixerai/agent/task/executor";
+import type { AgentDefinition, SingleResult, TaskParams } from "@awfixerai/agent/task/types";
+import type { ToolSession } from "@awfixerai/agent/tools";
+import { toolWireSchema } from "@awfixerai/ai/utils/schema";
 
 const taskAgent: AgentDefinition = {
 	name: "task",

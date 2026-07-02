@@ -16,9 +16,9 @@ import {
 	type AuthCredentialStore,
 	AuthStorage,
 	type StoredAuthCredential,
-} from "@oh-my-pi/pi-ai/auth-storage";
-import type { UsageLimit, UsageReport } from "@oh-my-pi/pi-ai/usage";
-import * as claudeUsage from "@oh-my-pi/pi-ai/usage/claude";
+} from "@awfixerai/ai/auth-storage";
+import type { UsageLimit, UsageReport } from "@awfixerai/ai/usage";
+import * as claudeUsage from "@awfixerai/ai/usage/claude";
 
 function anthropicReports(reports: UsageReport[] | null): UsageReport[] {
 	return (reports ?? []).filter(r => r.provider === "anthropic");

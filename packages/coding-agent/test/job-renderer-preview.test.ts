@@ -5,10 +5,10 @@
  * passes through unchanged.
  */
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { initTheme, theme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { jobToolRenderer } from "@oh-my-pi/pi-coding-agent/tools/job";
-import { prompt } from "@oh-my-pi/pi-utils";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { initTheme, theme } from "@awfixerai/agent/modes/theme/theme";
+import { jobToolRenderer } from "@awfixerai/agent/tools/job";
+import { prompt } from "@awfixerai/utils";
 import taskSummaryTemplate from "../src/prompts/tools/task-summary.md" with { type: "text" };
 
 function renderLines(resultText: string): string {

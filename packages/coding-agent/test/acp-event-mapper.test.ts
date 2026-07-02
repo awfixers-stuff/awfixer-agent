@@ -13,16 +13,16 @@ const arkSessionNotification = type({
 	},
 });
 
-import type { Model } from "@oh-my-pi/pi-ai";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { AcpAgent } from "@oh-my-pi/pi-coding-agent/modes/acp/acp-agent";
+import { AcpAgent } from "@awfixerai/agent/modes/acp/acp-agent";
 import {
 	buildToolCallStartUpdate,
 	mapAgentSessionEventToAcpSessionUpdates,
 	normalizeReplayToolArguments,
-} from "@oh-my-pi/pi-coding-agent/modes/acp/acp-event-mapper";
-import type { AgentSession, AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
+} from "@awfixerai/agent/modes/acp/acp-event-mapper";
+import type { AgentSession, AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import type { Model } from "@awfixerai/ai";
+import { buildModel } from "@awfixerai/catalog/build";
 import { expectAcpStructure, expectAcpStructureRejects } from "./helpers/acp-schema";
 
 function makeAssistantMessage(text: string) {

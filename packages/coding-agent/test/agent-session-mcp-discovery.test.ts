@@ -2,21 +2,21 @@ import { afterEach, describe, expect, it, vi } from "bun:test";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
+import { Settings } from "@awfixerai/agent/config/settings";
+import type { CustomTool } from "@awfixerai/agent/extensibility/custom-tools/types";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import type { OutputMeta } from "@awfixerai/agent/tools/output-meta";
 import {
 	Agent,
 	type AgentTool,
 	type AgentToolContext,
 	type AgentToolResult,
 	ThinkingLevel,
-} from "@oh-my-pi/pi-agent-core";
-import { Effort, type Model } from "@oh-my-pi/pi-ai";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import type { CustomTool } from "@oh-my-pi/pi-coding-agent/extensibility/custom-tools/types";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import type { OutputMeta } from "@oh-my-pi/pi-coding-agent/tools/output-meta";
-import { removeSyncWithRetries } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent-core";
+import { Effort, type Model } from "@awfixerai/ai";
+import { buildModel } from "@awfixerai/catalog/build";
+import { removeSyncWithRetries } from "@awfixerai/utils";
 import { type } from "arktype";
 
 function createModel(): Model<"openai-responses"> {

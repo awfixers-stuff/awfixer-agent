@@ -1,11 +1,11 @@
 import * as path from "node:path";
+import { getTinyModelsCacheDir, prompt } from "@awfixerai/utils";
 import type {
 	ProgressInfo,
 	TextGenerationPipeline,
 	TextGenerationStringOutput,
 	StoppingCriteria as TransformersStoppingCriteria,
 } from "@huggingface/transformers";
-import { getTinyModelsCacheDir, prompt } from "@oh-my-pi/pi-utils";
 import tinyTitleSystemPrompt from "../prompts/system/tiny-title-system.md" with { type: "text" };
 import {
 	errorMessage,

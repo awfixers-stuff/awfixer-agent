@@ -2,8 +2,8 @@
  * Get the API key or OAuth token for a provider.
  */
 
-import { PROVIDER_REGISTRY } from "@oh-my-pi/pi-ai";
-import { Args, Command, Flags } from "@oh-my-pi/pi-utils/cli";
+import { PROVIDER_REGISTRY } from "@awfixerai/ai";
+import { Args, Command, Flags } from "@awfixerai/utils/cli";
 import chalk from "chalk";
 import { isAuthenticated, ModelRegistry } from "../config/model-registry";
 import { discoverAuthStorage } from "../sdk";

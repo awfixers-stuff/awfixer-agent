@@ -1,7 +1,7 @@
 /**
  * Migrate config from ~/.omp to ~/.agent.
  */
-import { Command, Flags } from "@oh-my-pi/pi-utils/cli";
+import { Command, Flags } from "@awfixerai/utils/cli";
 import { runMigrateConfig } from "../cli/commands/migrate-config";
 
 export default class MigrateConfig extends Command {

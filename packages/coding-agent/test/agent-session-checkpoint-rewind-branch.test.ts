@@ -1,16 +1,16 @@
 import { afterEach, describe, expect, it } from "bun:test";
 import * as path from "node:path";
-import { Agent, type AgentMessage, type AgentTool } from "@oh-my-pi/pi-agent-core";
-import type { AssistantMessage, Message, ThinkingContent } from "@oh-my-pi/pi-ai";
-import { z } from "@oh-my-pi/pi-ai";
-import { createMockModel, type MockContent, type MockModel, type MockResponse } from "@oh-my-pi/pi-ai/providers/mock";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { convertToLlm } from "@oh-my-pi/pi-coding-agent/session/messages";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { convertToLlm } from "@awfixerai/agent/session/messages";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent, type AgentMessage, type AgentTool } from "@awfixerai/agent-core";
+import type { AssistantMessage, Message, ThinkingContent } from "@awfixerai/ai";
+import { z } from "@awfixerai/ai";
+import { createMockModel, type MockContent, type MockModel, type MockResponse } from "@awfixerai/ai/providers/mock";
+import { TempDir } from "@awfixerai/utils";
 
 const checkpointSchema = z.object({ goal: z.string() });
 const rewindSchema = z.object({ report: z.string() });

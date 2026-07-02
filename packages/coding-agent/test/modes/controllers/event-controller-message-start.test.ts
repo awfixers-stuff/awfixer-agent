@@ -1,12 +1,12 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "bun:test";
-import type { TextContent, UserMessage } from "@oh-my-pi/pi-ai";
-import { TranscriptContainer } from "@oh-my-pi/pi-coding-agent/modes/components/transcript-container";
-import { EventController } from "@oh-my-pi/pi-coding-agent/modes/controllers/event-controller";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
-import { UiHelpers } from "@oh-my-pi/pi-coding-agent/modes/utils/ui-helpers";
-import type { CustomMessage } from "@oh-my-pi/pi-coding-agent/session/messages";
-import type { Component } from "@oh-my-pi/pi-tui";
+import { TranscriptContainer } from "@awfixerai/agent/modes/components/transcript-container";
+import { EventController } from "@awfixerai/agent/modes/controllers/event-controller";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import { UiHelpers } from "@awfixerai/agent/modes/utils/ui-helpers";
+import type { CustomMessage } from "@awfixerai/agent/session/messages";
+import type { TextContent, UserMessage } from "@awfixerai/ai";
+import type { Component } from "@awfixerai/tui";
 
 beforeAll(() => {
 	initTheme();

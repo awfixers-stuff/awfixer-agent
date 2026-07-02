@@ -1,21 +1,17 @@
 {
   "type": "module",
-  "name": "@oh-my-pi/pi-mnemopi",
+  "name": "@awfixerai/mnemopi",
   "version": "0.0.0",
   "description": "Local SQLite memory engine for Oh My Pi agents",
-  "homepage": "https://omp.sh",
-  "author": "Can Boluk",
-  "contributors": [
-    "Abdias J"
-  ],
+  "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/can1357/oh-my-pi.git",
+    "url": "git+https://github.com/awfixers-stuff/awfixer-agent.git",
     "directory": "packages/mnemopi"
   },
   "bugs": {
-    "url": "https://github.com/can1357/oh-my-pi/issues"
+    "url": "https://github.com/awfixers-stuff/awfixer-agent/issues"
   },
   "keywords": [
     "memory",
@@ -39,9 +35,9 @@
     "fmt": "biome format --write ."
   },
   "dependencies": {
-    "@oh-my-pi/pi-ai": "catalog:",
-    "@oh-my-pi/pi-catalog": "catalog:",
-    "@oh-my-pi/pi-utils": "catalog:",
+    "@awfixerai/ai": "catalog:",
+    "@awfixerai/catalog": "catalog:",
+    "@awfixerai/utils": "catalog:",
     "lru-cache": "catalog:"
   },
   "peerDependencies": {

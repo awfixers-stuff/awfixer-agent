@@ -9,7 +9,7 @@ import {
 	shouldEnableHyperlinksByDefault,
 	shouldEnableSynchronizedOutputByDefault,
 	synchronizedOutputUserOverride,
-} from "@oh-my-pi/pi-tui/terminal-capabilities";
+} from "@awfixerai/tui/terminal-capabilities";
 
 describe("detectTerminalId", () => {
 	it("recognizes Warp before the true-color fallback", () => {
@@ -141,7 +141,7 @@ describe("Warp terminal capabilities", () => {
 			cmd: [
 				process.execPath,
 				"--eval",
-				`import { ImageProtocol, TERMINAL, TERMINAL_ID } from "@oh-my-pi/pi-tui/terminal-capabilities";
+				`import { ImageProtocol, TERMINAL, TERMINAL_ID } from "@awfixerai/tui/terminal-capabilities";
 console.log(JSON.stringify({ id: TERMINAL_ID, imageProtocol: TERMINAL.imageProtocol, expected: ImageProtocol.Kitty }));`,
 			],
 			env,

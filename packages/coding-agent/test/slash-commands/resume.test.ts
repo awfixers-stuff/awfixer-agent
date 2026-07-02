@@ -2,16 +2,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
-import { resolveResumableSession } from "@oh-my-pi/pi-coding-agent/session/session-listing";
-import { computeDefaultSessionDir } from "@oh-my-pi/pi-coding-agent/session/session-paths";
-import { FileSessionStorage } from "@oh-my-pi/pi-coding-agent/session/session-storage";
-import { executeBuiltinSlashCommand } from "@oh-my-pi/pi-coding-agent/slash-commands/builtin-registry";
-import { getConfigRootDir, setAgentDir } from "@oh-my-pi/pi-utils";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import { resolveResumableSession } from "@awfixerai/agent/session/session-listing";
+import { computeDefaultSessionDir } from "@awfixerai/agent/session/session-paths";
+import { FileSessionStorage } from "@awfixerai/agent/session/session-storage";
+import { executeBuiltinSlashCommand } from "@awfixerai/agent/slash-commands/builtin-registry";
+import { getConfigRootDir, setAgentDir } from "@awfixerai/utils";
 
 let tempDir: string;
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = getConfigRootDir()
+const fallbackAgentDir = getConfigRootDir();
 const storage = new FileSessionStorage();
 
 beforeEach(async () => {

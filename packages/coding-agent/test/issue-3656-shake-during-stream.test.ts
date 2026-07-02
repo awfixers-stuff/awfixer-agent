@@ -1,18 +1,18 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as path from "node:path";
-import { Agent } from "@oh-my-pi/pi-agent-core";
-import type { AssistantMessage } from "@oh-my-pi/pi-ai";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { AssistantMessageComponent } from "@oh-my-pi/pi-coding-agent/modes/components/assistant-message";
-import { ToolExecutionComponent } from "@oh-my-pi/pi-coding-agent/modes/components/tool-execution";
-import { InteractiveMode } from "@oh-my-pi/pi-coding-agent/modes/interactive-mode";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { AssistantMessageComponent } from "@awfixerai/agent/modes/components/assistant-message";
+import { ToolExecutionComponent } from "@awfixerai/agent/modes/components/tool-execution";
+import { InteractiveMode } from "@awfixerai/agent/modes/interactive-mode";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import type { AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent } from "@awfixerai/agent-core";
+import type { AssistantMessage } from "@awfixerai/ai";
+import { TempDir } from "@awfixerai/utils";
 
 /**
  * Regression for issue #3656 — running `/shake` (or any mid-stream rebuild)

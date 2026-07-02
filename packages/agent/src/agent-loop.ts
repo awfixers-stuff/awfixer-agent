@@ -17,15 +17,15 @@ import {
 	type TSchema,
 	toolWireSchema,
 	validateToolArguments,
-} from "@oh-my-pi/pi-ai";
+} from "@awfixerai/ai";
 import {
 	type Dialect,
 	encodeInbandToolHistory,
 	renderInbandToolPrompt,
 	renderToolExamples,
 	wrapInbandToolStream,
-} from "@oh-my-pi/pi-ai/dialect";
-import * as AIError from "@oh-my-pi/pi-ai/error";
+} from "@awfixerai/ai/dialect";
+import * as AIError from "@awfixerai/ai/error";
 import {
 	createHarmonyAuditEvent,
 	detectHarmonyLeakInAssistantMessage,
@@ -35,10 +35,10 @@ import {
 	isHarmonyLeakMitigationTarget,
 	recoverHarmonyToolCall,
 	signalListLabel,
-} from "@oh-my-pi/pi-ai/utils/harmony-leak";
-import { preferredDialect } from "@oh-my-pi/pi-catalog/identity";
-import { sanitizeText, structuredCloneJSON } from "@oh-my-pi/pi-utils";
-import { INTENT_FIELD } from "@oh-my-pi/pi-wire";
+} from "@awfixerai/ai/utils/harmony-leak";
+import { preferredDialect } from "@awfixerai/catalog/identity";
+import { sanitizeText, structuredCloneJSON } from "@awfixerai/utils";
+import { INTENT_FIELD } from "@awfixerai/wire";
 import { type AgentRunCoverage, type AgentRunSummary, ToolCallBlockedError } from "./run-collector";
 import {
 	type AgentTelemetry,

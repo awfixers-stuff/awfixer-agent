@@ -8,13 +8,13 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import type { AgentSideConnection, InitializeRequest } from "@agentclientprotocol/sdk";
-import type { Model } from "@oh-my-pi/pi-ai";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { AcpAgent } from "@oh-my-pi/pi-coding-agent/modes/acp/acp-agent";
-import { ACP_TERMINAL_AUTH_FLAG, prepareAcpTerminalAuthArgs } from "@oh-my-pi/pi-coding-agent/modes/acp/terminal-auth";
-import type { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { getConfigRootDir, setAgentDir, VERSION } from "@oh-my-pi/pi-utils";
+import { AcpAgent } from "@awfixerai/agent/modes/acp/acp-agent";
+import { ACP_TERMINAL_AUTH_FLAG, prepareAcpTerminalAuthArgs } from "@awfixerai/agent/modes/acp/terminal-auth";
+import type { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import type { Model } from "@awfixerai/ai";
+import { buildModel } from "@awfixerai/catalog/build";
+import { getConfigRootDir, setAgentDir, VERSION } from "@awfixerai/utils";
 import { type } from "arktype";
 import { expectAcpStructure } from "./helpers/acp-schema";
 
@@ -127,7 +127,7 @@ class FakeAgentSession {
 
 const cleanupRoots: string[] = [];
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = getConfigRootDir()
+const fallbackAgentDir = getConfigRootDir();
 
 afterEach(async () => {
 	if (originalAgentDir) {

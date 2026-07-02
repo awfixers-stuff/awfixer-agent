@@ -1,9 +1,9 @@
 import { beforeAll, describe, expect, it, vi } from "bun:test";
-import { EventController } from "@oh-my-pi/pi-coding-agent/modes/controllers/event-controller";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
-import type { AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { Container } from "@oh-my-pi/pi-tui";
+import { EventController } from "@awfixerai/agent/modes/controllers/event-controller";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import type { AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import { Container } from "@awfixerai/tui";
 
 beforeAll(async () => {
 	await initTheme(false);

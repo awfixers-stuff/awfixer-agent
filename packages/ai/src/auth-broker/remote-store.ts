@@ -8,7 +8,7 @@
  * runs isn't required.
  */
 import { scheduler } from "node:timers/promises";
-import { logger } from "@oh-my-pi/pi-utils";
+import { logger } from "@awfixerai/utils";
 import {
 	type AuthCredential,
 	type AuthCredentialSnapshotEntry,

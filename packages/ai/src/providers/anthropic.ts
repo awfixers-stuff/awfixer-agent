@@ -2,11 +2,11 @@ import * as nodeCrypto from "node:crypto";
 import * as fs from "node:fs";
 import { scheduler } from "node:timers/promises";
 import * as tls from "node:tls";
-import { isOfficialAnthropicApiUrl } from "@oh-my-pi/pi-catalog/compat/anthropic";
-import { mapEffortToAnthropicAdaptiveEffort } from "@oh-my-pi/pi-catalog/model-thinking";
-import { calculateCost } from "@oh-my-pi/pi-catalog/models";
-import { isAnthropicOAuthToken } from "@oh-my-pi/pi-catalog/utils";
-import { parseGitHubCopilotApiKey } from "@oh-my-pi/pi-catalog/wire/github-copilot";
+import { isOfficialAnthropicApiUrl } from "@awfixerai/catalog/compat/anthropic";
+import { mapEffortToAnthropicAdaptiveEffort } from "@awfixerai/catalog/model-thinking";
+import { calculateCost } from "@awfixerai/catalog/models";
+import { isAnthropicOAuthToken } from "@awfixerai/catalog/utils";
+import { parseGitHubCopilotApiKey } from "@awfixerai/catalog/wire/github-copilot";
 import {
 	$env,
 	getInstallId,
@@ -15,7 +15,7 @@ import {
 	parseJsonWithRepair,
 	parseStreamingJsonThrottled,
 	readSseEvents,
-} from "@oh-my-pi/pi-utils";
+} from "@awfixerai/utils";
 import { renderDemotedThinking } from "../dialect/demotion";
 import * as AIError from "../error";
 import { getEnvApiKey, OUTPUT_FALLBACK_BUFFER } from "../stream";

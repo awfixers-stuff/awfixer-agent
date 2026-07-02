@@ -1,18 +1,17 @@
 {
   "type": "module",
-  "name": "@oh-my-pi/hashline",
+  "name": "@awfixerai/hashline",
   "version": "0.0.0",
   "description": "Hashline: a compact, line-anchored patch language and applier. Pluggable FS/IO so it works over disk, in-memory, or any custom backend.",
-  "homepage": "https://omp.sh",
-  "author": "Can Boluk",
+  "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/can1357/oh-my-pi.git",
+    "url": "git+https://github.com/awfixers-stuff/awfixer-agent.git",
     "directory": "packages/hashline"
   },
   "bugs": {
-    "url": "https://github.com/can1357/oh-my-pi/issues"
+    "url": "https://github.com/awfixers-stuff/awfixer-agent/issues"
   },
   "keywords": [
     "patch",

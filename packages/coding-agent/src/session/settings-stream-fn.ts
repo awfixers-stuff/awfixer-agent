@@ -10,8 +10,8 @@
  * OpenRouter never saw `providers.openrouterVariant`, breaking sticky routing
  * and OpenRouter response-cache hits across advisor calls.
  */
-import type { StreamFn } from "@oh-my-pi/pi-agent-core";
-import { type SimpleStreamOptions, streamSimple } from "@oh-my-pi/pi-ai";
+import type { StreamFn } from "@awfixerai/agent-core";
+import { type SimpleStreamOptions, streamSimple } from "@awfixerai/ai";
 import { type Settings, validateProviderMaxInFlightRequests } from "../config/settings";
 
 /**

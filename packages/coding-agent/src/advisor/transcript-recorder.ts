@@ -1,7 +1,7 @@
 import * as path from "node:path";
-import type { AgentMessage } from "@oh-my-pi/pi-agent-core";
-import type { Message, UserMessage } from "@oh-my-pi/pi-ai";
-import { logger } from "@oh-my-pi/pi-utils";
+import type { AgentMessage } from "@awfixerai/agent-core";
+import type { Message, UserMessage } from "@awfixerai/ai";
+import { logger } from "@awfixerai/utils";
 import { SessionManager } from "../session/session-manager";
 
 /**

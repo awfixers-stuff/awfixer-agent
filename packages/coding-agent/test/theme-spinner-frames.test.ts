@@ -2,19 +2,16 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import {
-	SPINNER_GLYPH_ADVANCE_MS,
-	sharedSpinnerFrame,
-} from "@oh-my-pi/pi-coding-agent/modes/components/tool-execution";
-import { getThemeByName } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { getConfigRootDir, getCustomThemesDir, removeWithRetries, setAgentDir } from "@oh-my-pi/pi-utils";
+import { SPINNER_GLYPH_ADVANCE_MS, sharedSpinnerFrame } from "@awfixerai/agent/modes/components/tool-execution";
+import { getThemeByName } from "@awfixerai/agent/modes/theme/theme";
+import { getConfigRootDir, getCustomThemesDir, removeWithRetries, setAgentDir } from "@awfixerai/utils";
 
 // Path of the built-in dark theme JSON, used as a known-valid base we can
 // extend with custom `symbols.spinnerFrames` shapes.
 const DARK_THEME_PATH = path.join(import.meta.dir, "..", "src", "modes", "theme", "dark.json");
 
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = getConfigRootDir()
+const fallbackAgentDir = getConfigRootDir();
 
 let tmpAgentDir: string;
 

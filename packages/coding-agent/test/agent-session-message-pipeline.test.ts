@@ -1,11 +1,22 @@
 import { afterEach, describe, expect, it, vi } from "bun:test";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import * as memoryBackend from "@awfixerai/agent/memory-backend";
+import type { MemoryBackend } from "@awfixerai/agent/memory-backend/types";
+import { type MnemopiSessionState, setMnemopiSessionState } from "@awfixerai/agent/mnemopi/state";
+import { createAgentSession, type ExtensionFactory } from "@awfixerai/agent/sdk";
+import { obfuscateProviderContext, SecretObfuscator } from "@awfixerai/agent/secrets";
+import { AgentSession, type AgentSessionEvent } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { convertToLlm, wrapSteeringForModel } from "@awfixerai/agent/session/messages";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
 import {
 	Agent,
 	type AgentMessage,
 	type AgentTool,
 	AppendOnlyContextManager,
 	type StreamFn,
-} from "@oh-my-pi/pi-agent-core";
+} from "@awfixerai/agent-core";
 import {
 	type Api,
 	type Context,
@@ -17,21 +28,10 @@ import {
 	registerCustomApi,
 	type SimpleStreamOptions,
 	type TextContent,
-} from "@oh-my-pi/pi-ai";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import * as memoryBackend from "@oh-my-pi/pi-coding-agent/memory-backend";
-import type { MemoryBackend } from "@oh-my-pi/pi-coding-agent/memory-backend/types";
-import { type MnemopiSessionState, setMnemopiSessionState } from "@oh-my-pi/pi-coding-agent/mnemopi/state";
-import { createAgentSession, type ExtensionFactory } from "@oh-my-pi/pi-coding-agent/sdk";
-import { obfuscateProviderContext, SecretObfuscator } from "@oh-my-pi/pi-coding-agent/secrets";
-import { AgentSession, type AgentSessionEvent } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { convertToLlm, wrapSteeringForModel } from "@oh-my-pi/pi-coding-agent/session/messages";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/ai";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
+import { buildModel } from "@awfixerai/catalog/build";
+import { TempDir } from "@awfixerai/utils";
 import { createAssistantMessage } from "./helpers/agent-session-setup";
 
 function createAgent(): Agent {

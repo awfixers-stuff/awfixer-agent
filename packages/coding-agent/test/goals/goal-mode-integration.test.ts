@@ -1,18 +1,18 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as path from "node:path";
-import { Agent } from "@oh-my-pi/pi-agent-core";
-import type { Model } from "@oh-my-pi/pi-ai";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { GoalTool } from "@oh-my-pi/pi-coding-agent/goals/tools/goal-tool";
-import { InteractiveMode } from "@oh-my-pi/pi-coding-agent/modes/interactive-mode";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { createTools, type Tool, type ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
-import type { TodoPhase } from "@oh-my-pi/pi-coding-agent/tools/todo";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { GoalTool } from "@awfixerai/agent/goals/tools/goal-tool";
+import { InteractiveMode } from "@awfixerai/agent/modes/interactive-mode";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { createTools, type Tool, type ToolSession } from "@awfixerai/agent/tools";
+import type { TodoPhase } from "@awfixerai/agent/tools/todo";
+import { Agent } from "@awfixerai/agent-core";
+import type { Model } from "@awfixerai/ai";
+import { TempDir } from "@awfixerai/utils";
 
 function createToolSession(cwd: string, settings: Settings, overrides: Partial<ToolSession> = {}): ToolSession {
 	return {

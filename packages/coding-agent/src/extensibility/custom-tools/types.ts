@@ -10,11 +10,11 @@ import type {
 	ToolApproval,
 	ToolApprovalDecision,
 	ToolTier,
-} from "@oh-my-pi/pi-agent-core";
-import type { CompactionResult } from "@oh-my-pi/pi-agent-core/compaction";
-import type { FetchImpl, Model, Static, TSchema } from "@oh-my-pi/pi-ai";
-import type { Component } from "@oh-my-pi/pi-tui";
-import type { logger as PiLogger } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent-core";
+import type { CompactionResult } from "@awfixerai/agent-core/compaction";
+import type { FetchImpl, Model, Static, TSchema } from "@awfixerai/ai";
+import type { Component } from "@awfixerai/tui";
+import type { logger as PiLogger } from "@awfixerai/utils";
 import type { type as ArkType } from "arktype";
 import type * as zod from "zod/v4";
 import type { Rule } from "../../capability/rule";

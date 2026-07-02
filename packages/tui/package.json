@@ -1,21 +1,17 @@
 {
   "type": "module",
-  "name": "@oh-my-pi/pi-tui",
+  "name": "@awfixerai/tui",
   "version": "0.0.0",
   "description": "Terminal User Interface library with differential rendering for efficient text-based applications",
-  "homepage": "https://omp.sh",
-  "author": "Can Boluk",
-  "contributors": [
-    "Mario Zechner"
-  ],
+  "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/can1357/oh-my-pi.git",
+    "url": "git+https://github.com/awfixers-stuff/awfixer-agent.git",
     "directory": "packages/tui"
   },
   "bugs": {
-    "url": "https://github.com/can1357/oh-my-pi/issues"
+    "url": "https://github.com/awfixers-stuff/awfixer-agent/issues"
   },
   "keywords": [
     "tui",
@@ -37,8 +33,8 @@
     "fmt": "biome format --write ."
   },
   "dependencies": {
-    "@oh-my-pi/pi-natives": "catalog:",
-    "@oh-my-pi/pi-utils": "catalog:",
+    "@awfixerai/natives": "catalog:",
+    "@awfixerai/utils": "catalog:",
     "lru-cache": "catalog:",
     "marked": "catalog:"
   },

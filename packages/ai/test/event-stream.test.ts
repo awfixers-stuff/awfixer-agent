@@ -1,7 +1,7 @@
 import { describe, expect, it } from "bun:test";
-import * as AIError from "@oh-my-pi/pi-ai/error";
-import type { AssistantMessage } from "@oh-my-pi/pi-ai/types";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
+import * as AIError from "@awfixerai/ai/error";
+import type { AssistantMessage } from "@awfixerai/ai/types";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
 
 function createPartial(text = ""): AssistantMessage {
 	return {

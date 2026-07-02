@@ -1,12 +1,12 @@
 import { describe, expect, it } from "bun:test";
-import { convertOpenAICodexResponsesTools } from "@oh-my-pi/pi-ai/providers/openai-codex-responses";
-import type { Model, Tool, ToolCall } from "@oh-my-pi/pi-ai/types";
-import { enforceStrictSchema } from "@oh-my-pi/pi-ai/utils/schema";
-import { validateToolArguments } from "@oh-my-pi/pi-ai/utils/validation";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
-import { YieldTool } from "@oh-my-pi/pi-coding-agent/tools/yield";
+import { Settings } from "@awfixerai/agent/config/settings";
+import type { ToolSession } from "@awfixerai/agent/tools";
+import { YieldTool } from "@awfixerai/agent/tools/yield";
+import { convertOpenAICodexResponsesTools } from "@awfixerai/ai/providers/openai-codex-responses";
+import type { Model, Tool, ToolCall } from "@awfixerai/ai/types";
+import { enforceStrictSchema } from "@awfixerai/ai/utils/schema";
+import { validateToolArguments } from "@awfixerai/ai/utils/validation";
+import { buildModel } from "@awfixerai/catalog/build";
 
 function createSession(overrides: Partial<ToolSession> = {}): ToolSession {
 	return {

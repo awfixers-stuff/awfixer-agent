@@ -19,14 +19,14 @@ import {
 	type Tool,
 	type Usage,
 	withAuth,
-} from "@oh-my-pi/pi-ai";
-import { ProviderHttpError } from "@oh-my-pi/pi-ai/error";
-import { convertTools } from "@oh-my-pi/pi-ai/providers/openai-responses";
-import { buildResponsesInput, resolveOpenAICompatPolicy } from "@oh-my-pi/pi-ai/providers/openai-shared";
-import { preferredDialect } from "@oh-my-pi/pi-catalog/identity";
-import { clampThinkingLevelForModel } from "@oh-my-pi/pi-catalog/model-thinking";
-import { logger, prompt } from "@oh-my-pi/pi-utils";
-import * as snapcompact from "@oh-my-pi/snapcompact";
+} from "@awfixerai/ai";
+import { ProviderHttpError } from "@awfixerai/ai/error";
+import { convertTools } from "@awfixerai/ai/providers/openai-responses";
+import { buildResponsesInput, resolveOpenAICompatPolicy } from "@awfixerai/ai/providers/openai-shared";
+import { preferredDialect } from "@awfixerai/catalog/identity";
+import { clampThinkingLevelForModel } from "@awfixerai/catalog/model-thinking";
+import * as snapcompact from "@awfixerai/snapcompact";
+import { logger, prompt } from "@awfixerai/utils";
 import { type AgentTelemetry, instrumentedCompleteSimple } from "../telemetry";
 import { ThinkingLevel } from "../thinking";
 import { countTokens } from "../tokenizer";

@@ -10,12 +10,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
 import { existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { HindsightApi } from "@oh-my-pi/pi-coding-agent/hindsight/client";
-import type { HindsightConfig } from "@oh-my-pi/pi-coding-agent/hindsight/config";
-import { HindsightSessionState } from "@oh-my-pi/pi-coding-agent/hindsight/state";
-import { mnemopiBackend } from "@oh-my-pi/pi-coding-agent/mnemopi/backend";
-import { loadMnemopiConfig, type MnemopiBackendConfig } from "@oh-my-pi/pi-coding-agent/mnemopi/config";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { HindsightApi } from "@awfixerai/agent/hindsight/client";
+import type { HindsightConfig } from "@awfixerai/agent/hindsight/config";
+import { HindsightSessionState } from "@awfixerai/agent/hindsight/state";
+import { mnemopiBackend } from "@awfixerai/agent/mnemopi/backend";
+import { loadMnemopiConfig, type MnemopiBackendConfig } from "@awfixerai/agent/mnemopi/config";
 import {
 	getMnemopiScopedDbPaths,
 	getMnemopiSessionState,
@@ -23,14 +23,14 @@ import {
 	loadMnemopiCore,
 	MnemopiSessionState,
 	setMnemopiSessionState,
-} from "@oh-my-pi/pi-coding-agent/mnemopi/state";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools/index";
-import { MemoryEditTool } from "@oh-my-pi/pi-coding-agent/tools/memory-edit";
-import { MemoryRecallTool } from "@oh-my-pi/pi-coding-agent/tools/memory-recall";
-import { MemoryReflectTool } from "@oh-my-pi/pi-coding-agent/tools/memory-reflect";
-import { MemoryRetainTool } from "@oh-my-pi/pi-coding-agent/tools/memory-retain";
-import { resetMemoryForTests } from "@oh-my-pi/pi-mnemopi";
-import { TempDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent/mnemopi/state";
+import type { ToolSession } from "@awfixerai/agent/tools/index";
+import { MemoryEditTool } from "@awfixerai/agent/tools/memory-edit";
+import { MemoryRecallTool } from "@awfixerai/agent/tools/memory-recall";
+import { MemoryReflectTool } from "@awfixerai/agent/tools/memory-reflect";
+import { MemoryRetainTool } from "@awfixerai/agent/tools/memory-retain";
+import { resetMemoryForTests } from "@awfixerai/mnemopi";
+import { TempDir } from "@awfixerai/utils";
 
 // Mnemopi is lazy-loaded at runtime; preload it so the sync construction in
 // registerMnemopiState() and getMnemopiScopedDbPaths() can resolve the module.

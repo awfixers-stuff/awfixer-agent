@@ -7,22 +7,22 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import { scheduler } from "node:timers/promises";
-import { Agent, AgentBusyError, type AgentMessage, type AgentTool } from "@oh-my-pi/pi-agent-core";
-import type { AssistantMessage, Message, ToolCall } from "@oh-my-pi/pi-ai";
-import { createMockModel } from "@oh-my-pi/pi-ai/providers/mock";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { AsyncJobManager } from "@oh-my-pi/pi-coding-agent/async";
-import type { Rule } from "@oh-my-pi/pi-coding-agent/capability/rule";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { TtsrManager } from "@oh-my-pi/pi-coding-agent/export/ttsr";
-import type { ExtensionRunner } from "@oh-my-pi/pi-coding-agent/extensibility/extensions";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { convertToLlm } from "@oh-my-pi/pi-coding-agent/session/messages";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { removeSyncWithRetries, Snowflake } from "@oh-my-pi/pi-utils";
+import { AsyncJobManager } from "@awfixerai/agent/async";
+import type { Rule } from "@awfixerai/agent/capability/rule";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { TtsrManager } from "@awfixerai/agent/export/ttsr";
+import type { ExtensionRunner } from "@awfixerai/agent/extensibility/extensions";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { convertToLlm } from "@awfixerai/agent/session/messages";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent, AgentBusyError, type AgentMessage, type AgentTool } from "@awfixerai/agent-core";
+import type { AssistantMessage, Message, ToolCall } from "@awfixerai/ai";
+import { createMockModel } from "@awfixerai/ai/providers/mock";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { removeSyncWithRetries, Snowflake } from "@awfixerai/utils";
 import { type } from "arktype";
 import { createAssistantMessage } from "./helpers/agent-session-setup";
 
@@ -699,7 +699,7 @@ describe("AgentSession concurrent prompt guard", () => {
 	// agent's own `isStreaming` had flipped, but #promptWithMessage's finally had
 	// not yet decremented the prompt-in-flight counter), and the next prompt
 	// threw AgentBusyError. Surfaced as `RpcCommandError: prompt: Agent is
-	// already processing` from omp-rpc clients (robomp triage reminder path).
+	// already processing` from omp-rpc clients (autoawfixer triage reminder path).
 	it("subscriber may prompt() synchronously from agent_end without AgentBusyError", async () => {
 		const model = getBundledModel("anthropic", "claude-sonnet-4-5")!;
 		const mock = createMockModel({ handler: () => ({ content: ["Done"] }) });

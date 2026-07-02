@@ -7,17 +7,17 @@ import {
 	AppendOnlyContextManager,
 	filterProviderReplayMessages,
 	type ThinkingLevel,
-} from "@oh-my-pi/pi-agent-core";
-import type { Context, CredentialDisabledEvent, Message, Model, SimpleStreamOptions } from "@oh-my-pi/pi-ai";
-import type { Dialect } from "@oh-my-pi/pi-ai/dialect";
+} from "@awfixerai/agent-core";
+import type { Context, CredentialDisabledEvent, Message, Model, SimpleStreamOptions } from "@awfixerai/ai";
+import type { Dialect } from "@awfixerai/ai/dialect";
 import {
 	getOpenAICodexTransportDetails,
 	prewarmOpenAICodexResponses,
-} from "@oh-my-pi/pi-ai/providers/openai-codex-responses";
-import { FALLBACK_DIALECT, preferredDialect } from "@oh-my-pi/pi-catalog/identity";
-import type { Component } from "@oh-my-pi/pi-tui";
-import { $env, $flag, getAgentDir, getProjectDir, logger, postmortem, prompt, Snowflake } from "@oh-my-pi/pi-utils";
-import { INTENT_FIELD } from "@oh-my-pi/pi-wire";
+} from "@awfixerai/ai/providers/openai-codex-responses";
+import { FALLBACK_DIALECT, preferredDialect } from "@awfixerai/catalog/identity";
+import type { Component } from "@awfixerai/tui";
+import { $env, $flag, getAgentDir, getProjectDir, logger, postmortem, prompt, Snowflake } from "@awfixerai/utils";
+import { INTENT_FIELD } from "@awfixerai/wire";
 import {
 	discoverAdvisorConfigs,
 	discoverWatchdogFiles,
@@ -1062,7 +1062,7 @@ function buildMCPPromptCommands(manager: MCPManager): LoadedCustomCommand[] {
  * const { session } = await createAgentSession();
  *
  * // With explicit model
- * import { getModel } from '@oh-my-pi/pi-ai';
+ * import { getModel } from '@awfixerai/ai';
  * const { session } = await createAgentSession({
  *   model: getModel('anthropic', 'claude-opus-4-5'),
  *   thinkingLevel: 'high',

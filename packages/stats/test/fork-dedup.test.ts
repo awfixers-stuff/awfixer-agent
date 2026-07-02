@@ -3,10 +3,10 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { syncAllSessions } from "@oh-my-pi/omp-stats/aggregator";
-import { closeDb, getOverallStats, getRecentRequests, initDb, insertMessageStats } from "@oh-my-pi/omp-stats/db";
-import type { MessageStats } from "@oh-my-pi/omp-stats/types";
-import { getAgentDir, getSessionsDir, getStatsDbPath, setAgentDir, TempDir } from "@oh-my-pi/pi-utils";
+import { syncAllSessions } from "@awfixerai/stats/aggregator";
+import { closeDb, getOverallStats, getRecentRequests, initDb, insertMessageStats } from "@awfixerai/stats/db";
+import type { MessageStats } from "@awfixerai/stats/types";
+import { getAgentDir, getSessionsDir, getStatsDbPath, setAgentDir, TempDir } from "@awfixerai/utils";
 
 const XDG_KEYS = ["XDG_DATA_HOME", "XDG_STATE_HOME", "XDG_CACHE_HOME"] as const;
 const originalConfigDir = process.env.PI_CONFIG_DIR;

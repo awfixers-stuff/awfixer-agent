@@ -21,7 +21,7 @@ pathIgnorePatterns = [
   "python/**",
   "docs/**",
   "runs/**",
-  "python/robomp/data/**",
+  "python/autoawfixer/data/**",
   ".wt/**",
   ".worktrees/**",
 ]

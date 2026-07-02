@@ -2,11 +2,11 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { FileEntry, SessionHeader } from "@oh-my-pi/pi-coding-agent/session/session-entries";
-import { findMostRecentSession, resolveResumableSession } from "@oh-my-pi/pi-coding-agent/session/session-listing";
-import { loadEntriesFromFile } from "@oh-my-pi/pi-coding-agent/session/session-loader";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { getConfigRootDir, getSessionsDir, removeSyncWithRetries, Snowflake, setAgentDir } from "@oh-my-pi/pi-utils";
+import type { FileEntry, SessionHeader } from "@awfixerai/agent/session/session-entries";
+import { findMostRecentSession, resolveResumableSession } from "@awfixerai/agent/session/session-listing";
+import { loadEntriesFromFile } from "@awfixerai/agent/session/session-loader";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { getConfigRootDir, getSessionsDir, removeSyncWithRetries, Snowflake, setAgentDir } from "@awfixerai/utils";
 
 describe("loadEntriesFromFile", () => {
 	let tempDir: string;
@@ -160,7 +160,7 @@ describe("resolveResumableSession", () => {
 describe("SessionManager temp cwd session dirs", () => {
 	let testAgentDir: string;
 	const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-	const fallbackAgentDir = getConfigRootDir()
+	const fallbackAgentDir = getConfigRootDir();
 
 	function expectedTempSessionDirName(tempCwd: string): string {
 		return `-tmp-${path.relative(os.tmpdir(), path.resolve(tempCwd)).replace(/[/\\:]/g, "-")}`;

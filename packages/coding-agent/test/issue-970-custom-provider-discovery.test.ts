@@ -3,16 +3,16 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import { stripVTControlCharacters } from "node:util";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { writeModelCache } from "@oh-my-pi/pi-catalog/model-cache";
-import type { ModelRegistry, ProviderDiscoveryState } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { ModelRegistry as ModelRegistryImpl } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { ModelSelectorComponent } from "@oh-my-pi/pi-coding-agent/modes/components/model-selector";
-import { getThemeByName, setThemeInstance } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import type { TUI } from "@oh-my-pi/pi-tui";
-import { removeSyncWithRetries, Snowflake } from "@oh-my-pi/pi-utils";
+import type { ModelRegistry, ProviderDiscoveryState } from "@awfixerai/agent/config/model-registry";
+import { ModelRegistry as ModelRegistryImpl } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { ModelSelectorComponent } from "@awfixerai/agent/modes/components/model-selector";
+import { getThemeByName, setThemeInstance } from "@awfixerai/agent/modes/theme/theme";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { buildModel } from "@awfixerai/catalog/build";
+import { writeModelCache } from "@awfixerai/catalog/model-cache";
+import type { TUI } from "@awfixerai/tui";
+import { removeSyncWithRetries, Snowflake } from "@awfixerai/utils";
 
 function normalizeRenderedText(text: string): string {
 	return stripVTControlCharacters(text).replace(/\s+/g, " ").trim();

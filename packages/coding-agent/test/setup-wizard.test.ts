@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, mock } from "bun:test";
-import { runOnboardingSetup } from "@oh-my-pi/pi-coding-agent/commands/setup";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { SETTINGS_SCHEMA } from "@oh-my-pi/pi-coding-agent/config/settings-schema";
+import { runOnboardingSetup } from "@awfixerai/agent/commands/setup";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { SETTINGS_SCHEMA } from "@awfixerai/agent/config/settings-schema";
 import {
 	ALL_SCENES,
 	CURRENT_SETUP_VERSION,
@@ -10,12 +10,12 @@ import {
 	type SetupScene,
 	type SetupSceneHost,
 	selectSetupScenes,
-} from "@oh-my-pi/pi-coding-agent/modes/setup-wizard";
-import { WebSearchTab } from "@oh-my-pi/pi-coding-agent/modes/setup-wizard/scenes/web-search";
-import { SetupWizardComponent } from "@oh-my-pi/pi-coding-agent/modes/setup-wizard/wizard-overlay";
-import { initTheme, theme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
-import { SEARCH_PROVIDER_OPTIONS, SEARCH_PROVIDER_PREFERENCES } from "@oh-my-pi/pi-coding-agent/web/search/types";
+} from "@awfixerai/agent/modes/setup-wizard";
+import { WebSearchTab } from "@awfixerai/agent/modes/setup-wizard/scenes/web-search";
+import { SetupWizardComponent } from "@awfixerai/agent/modes/setup-wizard/wizard-overlay";
+import { initTheme, theme } from "@awfixerai/agent/modes/theme/theme";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import { SEARCH_PROVIDER_OPTIONS, SEARCH_PROVIDER_PREFERENCES } from "@awfixerai/agent/web/search/types";
 
 function fakeContextWithConfiguredModel(): InteractiveModeContext {
 	return {

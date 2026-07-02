@@ -2,10 +2,10 @@ import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "bu
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { SourceMeta } from "@oh-my-pi/pi-coding-agent/capability/types";
-import type { MCPServerConfig } from "@oh-my-pi/pi-coding-agent/mcp/types";
-import { MCPCommandController } from "@oh-my-pi/pi-coding-agent/modes/controllers/mcp-command-controller";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
+import type { SourceMeta } from "@awfixerai/agent/capability/types";
+import type { MCPServerConfig } from "@awfixerai/agent/mcp/types";
+import { MCPCommandController } from "@awfixerai/agent/modes/controllers/mcp-command-controller";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
 import {
 	getConfigRootDir,
 	getMCPConfigPath,
@@ -13,11 +13,11 @@ import {
 	removeWithRetries,
 	setAgentDir,
 	setProjectDir,
-} from "@oh-my-pi/pi-utils";
+} from "@awfixerai/utils";
 
 const originalProjectDir = getProjectDir();
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = getConfigRootDir()
+const fallbackAgentDir = getConfigRootDir();
 
 function restoreAgentDir(): void {
 	if (originalAgentDir) {

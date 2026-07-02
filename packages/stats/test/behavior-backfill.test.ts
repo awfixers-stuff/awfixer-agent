@@ -3,9 +3,9 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { syncAllSessions } from "@oh-my-pi/omp-stats/aggregator";
-import { closeDb, getBehaviorOverall, getFileOffset, initDb } from "@oh-my-pi/omp-stats/db";
-import { getAgentDir, getStatsDbPath, setAgentDir, TempDir } from "@oh-my-pi/pi-utils";
+import { syncAllSessions } from "@awfixerai/stats/aggregator";
+import { closeDb, getBehaviorOverall, getFileOffset, initDb } from "@awfixerai/stats/db";
+import { getAgentDir, getStatsDbPath, setAgentDir, TempDir } from "@awfixerai/utils";
 
 const originalConfigDir = process.env.PI_CONFIG_DIR;
 const originalAgentDir = getAgentDir();

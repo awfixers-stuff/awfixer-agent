@@ -2,6 +2,13 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "bun:te
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { createAgentSession } from "@awfixerai/agent/sdk";
+import type { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import type { SessionEntry, SessionMessageEntry } from "@awfixerai/agent/session/session-entries";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
 import type {
 	AssistantMessage,
 	Message,
@@ -9,17 +16,10 @@ import type {
 	ProviderSessionState,
 	ToolResultMessage,
 	Usage,
-} from "@oh-my-pi/pi-ai/types";
-import { createOpenAIResponsesHistoryPayload } from "@oh-my-pi/pi-ai/utils";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { createAgentSession } from "@oh-my-pi/pi-coding-agent/sdk";
-import type { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import type { SessionEntry, SessionMessageEntry } from "@oh-my-pi/pi-coding-agent/session/session-entries";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { removeSyncWithRetries, Snowflake } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/ai/types";
+import { createOpenAIResponsesHistoryPayload } from "@awfixerai/ai/utils";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { removeSyncWithRetries, Snowflake } from "@awfixerai/utils";
 
 function createUsage(): Usage {
 	return {

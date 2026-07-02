@@ -1,21 +1,17 @@
 {
   "type": "module",
-  "name": "@oh-my-pi/pi-agent-core",
+  "name": "@awfixerai/agent-core",
   "version": "0.0.0",
   "description": "General-purpose agent with transport abstraction, state management, and attachment support",
-  "homepage": "https://omp.sh",
-  "author": "Can Boluk",
-  "contributors": [
-    "Mario Zechner"
-  ],
+  "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/can1357/oh-my-pi.git",
+    "url": "git+https://github.com/awfixers-stuff/awfixer-agent.git",
     "directory": "packages/agent"
   },
   "bugs": {
-    "url": "https://github.com/can1357/oh-my-pi/issues"
+    "url": "https://github.com/awfixers-stuff/awfixer-agent/issues"
   },
   "keywords": [
     "ai",
@@ -35,12 +31,12 @@
     "fmt": "biome format --write ."
   },
   "dependencies": {
-    "@oh-my-pi/pi-ai": "catalog:",
-    "@oh-my-pi/pi-catalog": "catalog:",
-    "@oh-my-pi/pi-natives": "catalog:",
-    "@oh-my-pi/pi-utils": "catalog:",
-    "@oh-my-pi/pi-wire": "catalog:",
-    "@oh-my-pi/snapcompact": "catalog:",
+    "@awfixerai/ai": "catalog:",
+    "@awfixerai/catalog": "catalog:",
+    "@awfixerai/natives": "catalog:",
+    "@awfixerai/utils": "catalog:",
+    "@awfixerai/wire": "catalog:",
+    "@awfixerai/snapcompact": "catalog:",
     "@opentelemetry/api": "catalog:"
   },
   "devDependencies": {

@@ -1,16 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as path from "node:path";
-import { Agent } from "@oh-my-pi/pi-agent-core";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import * as pythonExecutor from "@oh-my-pi/pi-coding-agent/eval/py/executor";
-import * as bashExecutor from "@oh-my-pi/pi-coding-agent/exec/bash-executor";
-import type { ExtensionRunner } from "@oh-my-pi/pi-coding-agent/extensibility/extensions";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import * as pythonExecutor from "@awfixerai/agent/eval/py/executor";
+import * as bashExecutor from "@awfixerai/agent/exec/bash-executor";
+import type { ExtensionRunner } from "@awfixerai/agent/extensibility/extensions";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent } from "@awfixerai/agent-core";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { TempDir } from "@awfixerai/utils";
 
 describe("AgentSession user shortcut hooks", () => {
 	let tempDir: TempDir;

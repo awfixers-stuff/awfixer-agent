@@ -5,15 +5,17 @@ import {
 	isSamePrCacheContext,
 	parseDefaultBranch,
 	parseGitHubRepo,
-} from "@oh-my-pi/pi-coding-agent/modes/components/status-line/git-utils";
+} from "@awfixerai/agent/modes/components/status-line/git-utils";
 
 describe("parseGitHubRepo", () => {
 	test("parses HTTPS URL", () => {
-		expect(parseGitHubRepo("https://github.com/can1357/oh-my-pi.git")).toBe("can1357/oh-my-pi");
+		expect(parseGitHubRepo("https://github.com/awfixers-stuff/awfixer-agent.git")).toBe(
+			"awfixers-stuff/awfixer-agent",
+		);
 	});
 
 	test("parses HTTPS URL without .git suffix", () => {
-		expect(parseGitHubRepo("https://github.com/can1357/oh-my-pi")).toBe("can1357/oh-my-pi");
+		expect(parseGitHubRepo("https://github.com/awfixers-stuff/awfixer-agent")).toBe("awfixers-stuff/awfixer-agent");
 	});
 
 	test("parses SSH scp-style URL", () => {

@@ -1,18 +1,17 @@
 {
-  "name": "@oh-my-pi/pi-natives",
+  "name": "@awfixerai/natives",
   "version": "0.0.0",
   "description": "Native Rust bindings for grep, clipboard, image processing, syntax highlighting, PTY, and shell operations via N-API",
   "type": "module",
-  "homepage": "https://omp.sh",
-  "author": "Can Boluk",
+  "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/can1357/oh-my-pi.git",
+    "url": "git+https://github.com/awfixers-stuff/awfixer-agent.git",
     "directory": "packages/natives"
   },
   "bugs": {
-    "url": "https://github.com/can1357/oh-my-pi/issues"
+    "url": "https://github.com/awfixers-stuff/awfixer-agent/issues"
   },
   "keywords": [
     "napi",

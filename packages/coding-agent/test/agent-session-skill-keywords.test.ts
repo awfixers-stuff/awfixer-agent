@@ -1,21 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import * as path from "node:path";
-import { Agent } from "@oh-my-pi/pi-agent-core";
-import type { TextContent } from "@oh-my-pi/pi-ai";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { WORKFLOW_NOTICE } from "@oh-my-pi/pi-coding-agent/modes/workflow";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import {
-	convertToLlm,
-	SKILL_PROMPT_MESSAGE_TYPE,
-	type SkillPromptDetails,
-} from "@oh-my-pi/pi-coding-agent/session/messages";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { WORKFLOW_NOTICE } from "@awfixerai/agent/modes/workflow";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { convertToLlm, SKILL_PROMPT_MESSAGE_TYPE, type SkillPromptDetails } from "@awfixerai/agent/session/messages";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent } from "@awfixerai/agent-core";
+import type { TextContent } from "@awfixerai/ai";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { TempDir } from "@awfixerai/utils";
 import { createAssistantMessage } from "./helpers/agent-session-setup";
 
 type ObservedSkillTurn = {

@@ -6,22 +6,22 @@
  * behavior they have in the TUI.
  */
 import { afterEach, beforeEach, expect, it, spyOn } from "bun:test";
-import { Agent, type AgentTool } from "@oh-my-pi/pi-agent-core";
-import { createMockModel, type MockModelOptions } from "@oh-my-pi/pi-ai/providers/mock";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { type SettingPath, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { EditTool } from "@oh-my-pi/pi-coding-agent/edit";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
+import { type SettingPath, Settings } from "@awfixerai/agent/config/settings";
+import { EditTool } from "@awfixerai/agent/edit";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
 import type {
 	ClientBridge,
 	ClientBridgePermissionOutcome,
 	ClientBridgePermissionToolCall,
-} from "@oh-my-pi/pi-coding-agent/session/client-bridge";
-import { convertToLlm } from "@oh-my-pi/pi-coding-agent/session/messages";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
-import { TempDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent/session/client-bridge";
+import { convertToLlm } from "@awfixerai/agent/session/messages";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import type { ToolSession } from "@awfixerai/agent/tools";
+import { Agent, type AgentTool } from "@awfixerai/agent-core";
+import { createMockModel, type MockModelOptions } from "@awfixerai/ai/providers/mock";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { TempDir } from "@awfixerai/utils";
 import { type } from "arktype";
 
 // ---------------------------------------------------------------------------

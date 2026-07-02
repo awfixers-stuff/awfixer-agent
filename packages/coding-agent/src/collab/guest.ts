@@ -13,9 +13,9 @@
  * transcript behavior are native by construction.
  */
 import * as path from "node:path";
-import type { ThinkingLevel } from "@oh-my-pi/pi-agent-core";
-import type { ImageContent } from "@oh-my-pi/pi-ai";
-import { getConfigRootDir, logger } from "@oh-my-pi/pi-utils";
+import type { ThinkingLevel } from "@awfixerai/agent-core";
+import type { ImageContent } from "@awfixerai/ai";
+import { getConfigRootDir, logger } from "@awfixerai/utils";
 import type { AgentHubRemote } from "../modes/components/agent-hub";
 import type { InteractiveModeContext } from "../modes/types";
 import { AgentRegistry } from "../registry/agent-registry";

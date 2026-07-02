@@ -1,5 +1,5 @@
 /**
- * Regression for [#3749](https://github.com/can1357/oh-my-pi/issues/3749):
+ * Regression for [#3749](https://github.com/awfixers-stuff/awfixer-agent/issues/3749):
  * the per-provider concurrency cap used to bracket the whole subagent
  * lifecycle (acquired before session creation, released only after the
  * subagent yielded), so any spawn tree wider than `maxConcurrency`
@@ -8,12 +8,12 @@
  * LLM HTTP request; this file exercises the new contract.
  */
 import { describe, expect, it } from "bun:test";
-import type { StreamFn } from "@oh-my-pi/pi-agent-core";
-import type { AssistantMessage, Model } from "@oh-my-pi/pi-ai";
-import { AssistantMessageEventStream } from "@oh-my-pi/pi-ai/utils/event-stream";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { wrapStreamFnWithProviderConcurrency } from "@oh-my-pi/pi-coding-agent/task/provider-concurrency";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { wrapStreamFnWithProviderConcurrency } from "@awfixerai/agent/task/provider-concurrency";
+import type { StreamFn } from "@awfixerai/agent-core";
+import type { AssistantMessage, Model } from "@awfixerai/ai";
+import { AssistantMessageEventStream } from "@awfixerai/ai/utils/event-stream";
+import { getBundledModel } from "@awfixerai/catalog/models";
 
 interface Deferred {
 	promise: Promise<void>;

@@ -1,21 +1,17 @@
 {
   "type": "module",
-  "name": "@oh-my-pi/pi-coding-agent",
+  "name": "@awfixerai/agent",
   "version": "0.0.0",
   "description": "Coding agent CLI with read, bash, edit, write tools and session management",
-  "homepage": "https://omp.sh",
-  "author": "Can Boluk",
-  "contributors": [
-    "Mario Zechner"
-  ],
+  "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/can1357/oh-my-pi.git",
+    "url": "git+https://github.com/awfixers-stuff/awfixer-agent.git",
     "directory": "packages/coding-agent"
   },
   "bugs": {
-    "url": "https://github.com/can1357/oh-my-pi/issues"
+    "url": "https://github.com/awfixers-stuff/awfixer-agent/issues"
   },
   "keywords": [
     "coding-agent",
@@ -28,8 +24,7 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "bin": {
-    "agent": "src/cli.ts",
-    "omp": "src/cli.ts"
+    "agent": "src/cli.ts"
   },
   "scripts": {
     "build": "bun scripts/build-binary.ts",
@@ -56,17 +51,17 @@
     "@agentclientprotocol/sdk": "catalog:",
     "@babel/parser": "catalog:",
     "@mozilla/readability": "catalog:",
-    "@oh-my-pi/hashline": "catalog:",
-    "@oh-my-pi/omp-stats": "catalog:",
-    "@oh-my-pi/pi-agent-core": "catalog:",
-    "@oh-my-pi/pi-ai": "catalog:",
-    "@oh-my-pi/pi-catalog": "catalog:",
-    "@oh-my-pi/pi-mnemopi": "catalog:",
-    "@oh-my-pi/pi-natives": "catalog:",
-    "@oh-my-pi/pi-tui": "catalog:",
-    "@oh-my-pi/pi-utils": "catalog:",
-    "@oh-my-pi/pi-wire": "catalog:",
-    "@oh-my-pi/snapcompact": "catalog:",
+    "@awfixerai/hashline": "catalog:",
+    "@awfixerai/stats": "catalog:",
+    "@awfixerai/agent-core": "catalog:",
+    "@awfixerai/ai": "catalog:",
+    "@awfixerai/catalog": "catalog:",
+    "@awfixerai/mnemopi": "catalog:",
+    "@awfixerai/natives": "catalog:",
+    "@awfixerai/tui": "catalog:",
+    "@awfixerai/utils": "catalog:",
+    "@awfixerai/wire": "catalog:",
+    "@awfixerai/snapcompact": "catalog:",
     "@opentelemetry/api": "catalog:",
     "@opentelemetry/context-async-hooks": "catalog:",
     "@opentelemetry/exporter-trace-otlp-proto": "catalog:",
@@ -91,6 +86,7 @@
     "zod": "catalog:"
   },
   "optionalDependencies": {
+    "@1password/sdk": "catalog:",
     "@huggingface/transformers": "catalog:",
     "sherpa-onnx-node": "1.13.2"
   },

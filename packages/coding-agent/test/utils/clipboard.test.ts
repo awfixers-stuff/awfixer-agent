@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
-import { readImageFromClipboard, readMacFileUrlsFromClipboard } from "@oh-my-pi/pi-coding-agent/utils/clipboard";
-import * as native from "@oh-my-pi/pi-natives";
+import { readImageFromClipboard, readMacFileUrlsFromClipboard } from "@awfixerai/agent/utils/clipboard";
+import * as native from "@awfixerai/natives";
 import type { Subprocess } from "bun";
 
 type SpawnOptions = Bun.SpawnOptions.SpawnOptions<

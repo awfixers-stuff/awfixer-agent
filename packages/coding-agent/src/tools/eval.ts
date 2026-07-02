@@ -1,6 +1,6 @@
-import type { AgentTool, AgentToolContext, AgentToolResult, AgentToolUpdateCallback } from "@oh-my-pi/pi-agent-core";
-import type { ImageContent, ToolExample } from "@oh-my-pi/pi-ai";
-import { prompt } from "@oh-my-pi/pi-utils";
+import type { AgentTool, AgentToolContext, AgentToolResult, AgentToolUpdateCallback } from "@awfixerai/agent-core";
+import type { ImageContent, ToolExample } from "@awfixerai/ai";
+import { prompt } from "@awfixerai/utils";
 import { type } from "arktype";
 import { jsBackend, juliaBackend, pythonBackend, rubyBackend } from "../eval";
 import type { ExecutorBackend, ExecutorBackendResult } from "../eval/backend";

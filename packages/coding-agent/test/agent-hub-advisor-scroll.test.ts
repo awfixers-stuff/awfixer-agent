@@ -10,13 +10,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import type { AgentHubRemote } from "@oh-my-pi/pi-coding-agent/modes/components/agent-hub";
-import { AgentTranscriptViewer } from "@oh-my-pi/pi-coding-agent/modes/components/agent-transcript-viewer";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { AgentRegistry } from "@oh-my-pi/pi-coding-agent/registry/agent-registry";
-import { CURRENT_SESSION_VERSION } from "@oh-my-pi/pi-coding-agent/session/session-entries";
-import { removeSyncWithRetries } from "@oh-my-pi/pi-utils";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import type { AgentHubRemote } from "@awfixerai/agent/modes/components/agent-hub";
+import { AgentTranscriptViewer } from "@awfixerai/agent/modes/components/agent-transcript-viewer";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import { AgentRegistry } from "@awfixerai/agent/registry/agent-registry";
+import { CURRENT_SESSION_VERSION } from "@awfixerai/agent/session/session-entries";
+import { removeSyncWithRetries } from "@awfixerai/utils";
 
 const TS = new Date().toISOString();
 

@@ -15,7 +15,7 @@ describe("generated native npm leaf packages", () => {
 			version: "15.5.15",
 		});
 
-		expect(manifest.name).toBe("@oh-my-pi/pi-natives-linux-x64");
+		expect(manifest.name).toBe("@awfixerai/natives-linux-x64");
 		expect(manifest.version).toBe("15.5.15");
 		expect(manifest.os).toEqual(["linux"]);
 		expect(manifest.cpu).toEqual(["x64"]);
@@ -35,7 +35,7 @@ describe("generated native npm leaf packages", () => {
 			version: "15.5.15",
 		});
 
-		expect(manifest.name).toBe("@oh-my-pi/pi-natives-darwin-arm64");
+		expect(manifest.name).toBe("@awfixerai/natives-darwin-arm64");
 		expect(manifest.os).toEqual(["darwin"]);
 		expect(manifest.cpu).toEqual(["arm64"]);
 		expect(manifest.main).toBe("./pi_natives.darwin-arm64.node");
@@ -44,7 +44,7 @@ describe("generated native npm leaf packages", () => {
 	});
 
 	it("generates every leaf package by copying present addon files", async () => {
-		const packageDir = await fs.mkdtemp(path.join(os.tmpdir(), "pi-natives-npm-"));
+		const packageDir = await fs.mkdtemp(path.join(os.tmpdir(), "agent-natives-npm-"));
 		try {
 			await fs.mkdir(path.join(packageDir, "native"));
 			await Bun.write(path.join(packageDir, "package.json"), JSON.stringify({ version: "15.5.15" }));
@@ -82,7 +82,7 @@ describe("generated native npm leaf packages", () => {
 	});
 
 	it("reports missing leaves during dry runs without writing generated packages", async () => {
-		const packageDir = await fs.mkdtemp(path.join(os.tmpdir(), "pi-natives-npm-dry-"));
+		const packageDir = await fs.mkdtemp(path.join(os.tmpdir(), "agent-natives-npm-dry-"));
 		const logSpy = spyOn(console, "log").mockImplementation(() => {});
 		try {
 			await fs.mkdir(path.join(packageDir, "native"));

@@ -3,8 +3,8 @@ import * as fs from "node:fs";
 import * as fsp from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { cleanupEmptyMoveSession, SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { getConfigRootDir, setAgentDir } from "@oh-my-pi/pi-utils";
+import { cleanupEmptyMoveSession, SessionManager } from "@awfixerai/agent/session/session-manager";
+import { getConfigRootDir, setAgentDir } from "@awfixerai/utils";
 
 import { makeAssistantMessage } from "./helpers";
 
@@ -12,7 +12,7 @@ describe("move-session cleanup tracking", () => {
 	let testAgentDir: string;
 	let cwd: string;
 	const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-	const fallbackAgentDir = getConfigRootDir()
+	const fallbackAgentDir = getConfigRootDir();
 
 	beforeEach(async () => {
 		testAgentDir = await fsp.mkdtemp(path.join(os.tmpdir(), "omp-move-cleanup-"));

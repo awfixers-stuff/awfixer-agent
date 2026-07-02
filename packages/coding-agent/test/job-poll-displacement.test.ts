@@ -11,15 +11,15 @@
  *    poll from the transcript; any other tool seals it in place.
  */
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "bun:test";
-import type { AgentMessage } from "@oh-my-pi/pi-agent-core";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { ToolExecutionComponent } from "@oh-my-pi/pi-coding-agent/modes/components/tool-execution";
-import { EventController } from "@oh-my-pi/pi-coding-agent/modes/controllers/event-controller";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
-import { UiHelpers } from "@oh-my-pi/pi-coding-agent/modes/utils/ui-helpers";
-import type { SessionContext } from "@oh-my-pi/pi-coding-agent/session/session-context";
-import { type Component, Container, type TUI } from "@oh-my-pi/pi-tui";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { ToolExecutionComponent } from "@awfixerai/agent/modes/components/tool-execution";
+import { EventController } from "@awfixerai/agent/modes/controllers/event-controller";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import { UiHelpers } from "@awfixerai/agent/modes/utils/ui-helpers";
+import type { SessionContext } from "@awfixerai/agent/session/session-context";
+import type { AgentMessage } from "@awfixerai/agent-core";
+import { type Component, Container, type TUI } from "@awfixerai/tui";
 
 const uiStub = { requestRender() {} } as unknown as TUI;
 

@@ -1,4 +1,4 @@
-import type { AgentMessage } from "@oh-my-pi/pi-agent-core";
+import type { AgentMessage } from "@awfixerai/agent-core";
 
 export function canonicalizeMessage(text: string | null | undefined): string {
 	if (!text) return "";

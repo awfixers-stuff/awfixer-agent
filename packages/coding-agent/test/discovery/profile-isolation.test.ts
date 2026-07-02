@@ -17,14 +17,14 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { clearCache as clearFsCache } from "@oh-my-pi/pi-coding-agent/capability/fs";
-import { type Skill, skillCapability } from "@oh-my-pi/pi-coding-agent/capability/skill";
-import { type SlashCommand, slashCommandCapability } from "@oh-my-pi/pi-coding-agent/capability/slash-command";
-import { loadCapability } from "@oh-my-pi/pi-coding-agent/discovery";
-import { getConfigRootDir, removeWithRetries, setAgentDir } from "@oh-my-pi/pi-utils";
+import { clearCache as clearFsCache } from "@awfixerai/agent/capability/fs";
+import { type Skill, skillCapability } from "@awfixerai/agent/capability/skill";
+import { type SlashCommand, slashCommandCapability } from "@awfixerai/agent/capability/slash-command";
+import { loadCapability } from "@awfixerai/agent/discovery";
+import { getConfigRootDir, removeWithRetries, setAgentDir } from "@awfixerai/utils";
 
 const originalAgentDirEnv = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = getConfigRootDir()
+const fallbackAgentDir = getConfigRootDir();
 
 async function writeFile(filePath: string, content: string): Promise<void> {
 	await fs.mkdir(path.dirname(filePath), { recursive: true });

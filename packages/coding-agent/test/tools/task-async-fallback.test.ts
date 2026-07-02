@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "bun:test";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { TaskTool } from "@oh-my-pi/pi-coding-agent/task";
-import * as discoveryModule from "@oh-my-pi/pi-coding-agent/task/discovery";
-import type { TaskParams } from "@oh-my-pi/pi-coding-agent/task/types";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { TaskTool } from "@awfixerai/agent/task";
+import * as discoveryModule from "@awfixerai/agent/task/discovery";
+import type { TaskParams } from "@awfixerai/agent/task/types";
+import type { ToolSession } from "@awfixerai/agent/tools";
 
 function createSession(overrides: Partial<Record<string, unknown>> = {}): ToolSession {
 	return {

@@ -23,7 +23,7 @@ import {
 	TabBar,
 	truncateToWidth,
 	visibleWidth,
-} from "@oh-my-pi/pi-tui";
+} from "@awfixerai/tui";
 import { Settings } from "../../../config/settings";
 import { getTabBarTheme } from "../../../modes/shared";
 import { theme } from "../../../modes/theme/theme";

@@ -1,7 +1,7 @@
 /**
  * Install-from-git tests for `PluginManager.install`.
  *
- * Strategy: spy on the six `@oh-my-pi/pi-utils` plugin-path getters so the
+ * Strategy: spy on the six `@awfixerai/utils` plugin-path getters so the
  * manager points at a temp directory tree, then spy on `Bun.spawn` so we can
  * simulate `bun install <git-spec>`'s side effects (writing the dep into
  * `plugins/package.json` under its real name, and dropping a matching
@@ -18,9 +18,9 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { PluginManager } from "@oh-my-pi/pi-coding-agent/extensibility/plugins/manager";
-import * as piUtils from "@oh-my-pi/pi-utils";
-import { removeWithRetries } from "@oh-my-pi/pi-utils";
+import { PluginManager } from "@awfixerai/agent/extensibility/plugins/manager";
+import * as piUtils from "@awfixerai/utils";
+import { removeWithRetries } from "@awfixerai/utils";
 import type { Subprocess } from "bun";
 
 function emptyStream(): ReadableStream<Uint8Array> {
@@ -47,7 +47,7 @@ describe("PluginManager.install with git sources", () => {
 		vi.spyOn(piUtils, "getPluginsDir").mockReturnValue(pluginsDir);
 		vi.spyOn(piUtils, "getPluginsNodeModules").mockReturnValue(pluginsNodeModules);
 		vi.spyOn(piUtils, "getPluginsPackageJson").mockReturnValue(pluginsPkgJson);
-		vi.spyOn(piUtils, "getPluginsLockfile").mockReturnValue(path.join(tmpRoot, "omp-plugins.lock.json"));
+		vi.spyOn(piUtils, "getPluginsLockfile").mockReturnValue(path.join(tmpRoot, "agent-plugins.lock.json"));
 		vi.spyOn(piUtils, "getProjectDir").mockReturnValue(tmpRoot);
 		vi.spyOn(piUtils, "getProjectPluginOverridesPath").mockReturnValue(path.join(tmpRoot, "plugin-overrides.json"));
 	});

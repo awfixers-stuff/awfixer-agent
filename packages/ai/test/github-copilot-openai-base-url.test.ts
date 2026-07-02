@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "bun:test";
-import { streamOpenAICompletions } from "@oh-my-pi/pi-ai/providers/openai-completions";
-import { streamOpenAIResponses } from "@oh-my-pi/pi-ai/providers/openai-responses";
-import type { Context, Model } from "@oh-my-pi/pi-ai/types";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
+import { streamOpenAICompletions } from "@awfixerai/ai/providers/openai-completions";
+import { streamOpenAIResponses } from "@awfixerai/ai/providers/openai-responses";
+import type { Context, Model } from "@awfixerai/ai/types";
+import { getBundledModel } from "@awfixerai/catalog/models";
 
 afterEach(() => {
 	vi.restoreAllMocks();

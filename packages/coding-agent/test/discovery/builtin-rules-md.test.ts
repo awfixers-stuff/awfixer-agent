@@ -11,20 +11,20 @@ import { afterEach, beforeEach, expect, test } from "bun:test";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { getCapability } from "@oh-my-pi/pi-coding-agent/capability";
-import { clearCache } from "@oh-my-pi/pi-coding-agent/capability/fs";
-import { type Rule, ruleCapability } from "@oh-my-pi/pi-coding-agent/capability/rule";
-import type { LoadContext } from "@oh-my-pi/pi-coding-agent/capability/types";
+import { getCapability } from "@awfixerai/agent/capability";
+import { clearCache } from "@awfixerai/agent/capability/fs";
+import { type Rule, ruleCapability } from "@awfixerai/agent/capability/rule";
+import type { LoadContext } from "@awfixerai/agent/capability/types";
 // Register all discovery providers as a side effect.
-import "@oh-my-pi/pi-coding-agent/discovery";
-import { getConfigRootDir, removeSyncWithRetries, setAgentDir } from "@oh-my-pi/pi-utils";
+import "@awfixerai/agent/discovery";
+import { getConfigRootDir, removeSyncWithRetries, setAgentDir } from "@awfixerai/utils";
 
 let tempDir: string;
 let home: string;
 let project: string;
 
 const originalAgentDirEnv = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = getConfigRootDir()
+const fallbackAgentDir = getConfigRootDir();
 
 function writeFile(filePath: string, content: string): void {
 	fs.mkdirSync(path.dirname(filePath), { recursive: true });

@@ -1,13 +1,13 @@
 import { createRequire } from "node:module";
 import * as path from "node:path";
-import type { ProgressInfo } from "@huggingface/transformers";
 import {
 	ensureRuntimeInstalled,
 	getTinyModelsCacheDir,
 	installRuntimeModuleResolver,
 	isCompiledBinary,
 	resolveRuntimeModule,
-} from "@oh-my-pi/pi-utils";
+} from "@awfixerai/utils";
+import type { ProgressInfo } from "@huggingface/transformers";
 import packageJson from "../../package.json" with { type: "json" };
 
 /**

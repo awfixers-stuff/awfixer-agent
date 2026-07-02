@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test, vi } from "bun:test";
-import { getCatalogProviderEntry } from "@oh-my-pi/pi-catalog/provider-models/descriptors";
-import { moonshotModelManagerOptions } from "@oh-my-pi/pi-catalog/provider-models/openai-compat";
-import type { FetchImpl } from "@oh-my-pi/pi-catalog/types";
-import { $pickenv } from "@oh-my-pi/pi-utils";
+import { getCatalogProviderEntry } from "@awfixerai/catalog/provider-models/descriptors";
+import { moonshotModelManagerOptions } from "@awfixerai/catalog/provider-models/openai-compat";
+import type { FetchImpl } from "@awfixerai/catalog/types";
+import { $pickenv } from "@awfixerai/utils";
 
 const MODELS_DEV_URL = "https://models.dev/api.json";
 

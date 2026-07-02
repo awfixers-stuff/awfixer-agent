@@ -1,16 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "bun:test";
 import * as path from "node:path";
-import { ThinkingLevel } from "@oh-my-pi/pi-agent-core";
-import { Effort, type Model } from "@oh-my-pi/pi-ai";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
 import {
 	classifyDifficulty,
 	parseDifficultyBucket,
 	parseDifficultyLevel,
-} from "@oh-my-pi/pi-coding-agent/auto-thinking/classifier";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
+} from "@awfixerai/agent/auto-thinking/classifier";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
 import {
 	AUTO_THINKING,
 	clampAutoThinkingEffort,
@@ -19,10 +16,13 @@ import {
 	parseEffort,
 	parseThinkingLevel,
 	resolveProvisionalAutoLevel,
-} from "@oh-my-pi/pi-coding-agent/thinking";
-import type { TinyMemoryLocalModelKey } from "@oh-my-pi/pi-coding-agent/tiny/models";
-import { tinyModelClient } from "@oh-my-pi/pi-coding-agent/tiny/title-client";
-import { TempDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent/thinking";
+import type { TinyMemoryLocalModelKey } from "@awfixerai/agent/tiny/models";
+import { tinyModelClient } from "@awfixerai/agent/tiny/title-client";
+import { ThinkingLevel } from "@awfixerai/agent-core";
+import { Effort, type Model } from "@awfixerai/ai";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { TempDir } from "@awfixerai/utils";
 
 describe("auto thinking classifier helpers", () => {
 	afterEach(() => {
@@ -143,7 +143,7 @@ describe("auto thinking classifier helpers", () => {
 	});
 
 	it("returns undefined for reasoning models without controllable efforts (devin-agent shape)", () => {
-		// Repro for https://github.com/can1357/oh-my-pi/issues/3356 — Devin
+		// Repro for https://github.com/awfixers-stuff/awfixer-agent/issues/3356 — Devin
 		// models report `reasoning: true` but expose no `thinking.efforts` (Cascade
 		// selects effort by routing to sibling model ids). `auto` must not invent
 		// a concrete effort here, or `requireSupportedEffort` throws in stream.ts.

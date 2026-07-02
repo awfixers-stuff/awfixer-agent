@@ -2,15 +2,15 @@ import { beforeAll, describe, expect, it } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { InMemorySnapshotStore } from "@oh-my-pi/hashline";
-import type { AgentTool } from "@oh-my-pi/pi-agent-core";
-import { renderGalleryState, resolveFixture } from "@oh-my-pi/pi-coding-agent/cli/gallery-cli";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { editToolRenderer } from "@oh-my-pi/pi-coding-agent/edit/renderer";
-import { ToolExecutionComponent } from "@oh-my-pi/pi-coding-agent/modes/components/tool-execution";
-import * as themeModule from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { Text, type TUI, visibleWidth } from "@oh-my-pi/pi-tui";
-import { removeWithRetries } from "@oh-my-pi/pi-utils";
+import { renderGalleryState, resolveFixture } from "@awfixerai/agent/cli/gallery-cli";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { editToolRenderer } from "@awfixerai/agent/edit/renderer";
+import { ToolExecutionComponent } from "@awfixerai/agent/modes/components/tool-execution";
+import * as themeModule from "@awfixerai/agent/modes/theme/theme";
+import type { AgentTool } from "@awfixerai/agent-core";
+import { InMemorySnapshotStore } from "@awfixerai/hashline";
+import { Text, type TUI, visibleWidth } from "@awfixerai/tui";
+import { removeWithRetries } from "@awfixerai/utils";
 
 beforeAll(async () => {
 	resetSettingsForTest();

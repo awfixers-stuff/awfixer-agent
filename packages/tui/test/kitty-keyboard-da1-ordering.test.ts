@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "bun:test";
-import type { Component } from "@oh-my-pi/pi-tui";
+import type { Component } from "@awfixerai/tui";
 import {
 	createProcessTerminalRenderHarness,
 	type ProcessTerminalRenderHarness,

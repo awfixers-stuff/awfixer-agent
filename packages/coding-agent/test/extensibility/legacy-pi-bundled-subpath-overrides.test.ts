@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import { BUNDLED_PI_REGISTRY_KEYS } from "@oh-my-pi/pi-coding-agent/extensibility/plugins/legacy-pi-bundled-keys";
-import { __buildLegacyPiPackageRootOverrides } from "@oh-my-pi/pi-coding-agent/extensibility/plugins/legacy-pi-compat";
+import { BUNDLED_PI_REGISTRY_KEYS } from "@awfixerai/agent/extensibility/plugins/legacy-pi-bundled-keys";
+import { __buildLegacyPiPackageRootOverrides } from "@awfixerai/agent/extensibility/plugins/legacy-pi-compat";
 
 // Regression for issue #3442: extension validation in compiled-binary mode
 // failed to resolve `@earendil-works/pi-ai/oauth` because the override map
@@ -9,12 +9,12 @@ import { __buildLegacyPiPackageRootOverrides } from "@oh-my-pi/pi-coding-agent/e
 // `rewriteLegacyPiImports` catch left the original specifier in place and
 // Bun's native resolver couldn't find a peer install. The fix seeds the
 // override map with every key in `BUNDLED_PI_REGISTRY_KEYS` so subpath
-// imports route to the same `omp-legacy-pi-bundled:` virtual namespace
+// imports route to the same `agent-legacy-bundled:` virtual namespace
 // that already serves the roots.
 describe("legacy pi compat compiled-mode subpath overrides (issue #3442)", () => {
-	it("serves @oh-my-pi/pi-ai/oauth through the bundled virtual namespace in compiled mode", () => {
+	it("serves @awfixerai/ai/oauth through the bundled virtual namespace in compiled mode", () => {
 		const overrides = __buildLegacyPiPackageRootOverrides(true);
-		expect(overrides["@oh-my-pi/pi-ai/oauth"]).toBe("omp-legacy-pi-bundled:@oh-my-pi/pi-ai/oauth");
+		expect(overrides["@awfixerai/ai/oauth"]).toBe("agent-legacy-bundled:@awfixerai/ai/oauth");
 	});
 
 	it("expands wildcard exports for concrete on-disk targets (issue #3442 follow-up)", () => {
@@ -25,27 +25,25 @@ describe("legacy pi compat compiled-mode subpath overrides (issue #3442)", () =>
 		// fall-through. The generator now globs each wildcard's source pattern
 		// and registers every concrete `.ts` match against the virtual namespace.
 		const overrides = __buildLegacyPiPackageRootOverrides(true);
-		expect(overrides["@oh-my-pi/pi-ai/oauth/anthropic"]).toBe(
-			"omp-legacy-pi-bundled:@oh-my-pi/pi-ai/oauth/anthropic",
-		);
+		expect(overrides["@awfixerai/ai/oauth/anthropic"]).toBe("agent-legacy-bundled:@awfixerai/ai/oauth/anthropic");
 		// Sanity: the wildcard expansion also reaches deeper subroots so plugins
-		// pinned to e.g. `@oh-my-pi/pi-ai/providers/openai` keep resolving.
-		expect(BUNDLED_PI_REGISTRY_KEYS.has("@oh-my-pi/pi-ai/oauth/anthropic")).toBe(true);
-		expect(BUNDLED_PI_REGISTRY_KEYS.has("@oh-my-pi/pi-ai/oauth/openai-codex")).toBe(true);
+		// pinned to e.g. `@awfixerai/ai/providers/openai` keep resolving.
+		expect(BUNDLED_PI_REGISTRY_KEYS.has("@awfixerai/ai/oauth/anthropic")).toBe(true);
+		expect(BUNDLED_PI_REGISTRY_KEYS.has("@awfixerai/ai/oauth/openai-codex")).toBe(true);
 	});
 
 	it("expands web search provider wildcard exports for compiled plugin imports", () => {
 		const overrides = __buildLegacyPiPackageRootOverrides(true);
 		const providerKeys = [
-			"@oh-my-pi/pi-coding-agent/web/search/providers/xai",
-			"@oh-my-pi/pi-coding-agent/web/search/providers/tinyfish",
-			"@oh-my-pi/pi-coding-agent/web/search/providers/firecrawl",
-			"@oh-my-pi/pi-coding-agent/web/search/providers/duckduckgo",
+			"@awfixerai/agent/web/search/providers/xai",
+			"@awfixerai/agent/web/search/providers/tinyfish",
+			"@awfixerai/agent/web/search/providers/firecrawl",
+			"@awfixerai/agent/web/search/providers/duckduckgo",
 		] as const;
 
 		for (const key of providerKeys) {
 			expect(BUNDLED_PI_REGISTRY_KEYS.has(key)).toBe(true);
-			expect(overrides[key]).toBe(`omp-legacy-pi-bundled:${key}`);
+			expect(overrides[key]).toBe(`agent-legacy-bundled:${key}`);
 		}
 	});
 
@@ -54,9 +52,9 @@ describe("legacy pi compat compiled-mode subpath overrides (issue #3442)", () =>
 		// like the package's own `cli.ts` and explode the bundle through the
 		// binary entry's transitive graph. Plugins almost never import top-level
 		// pi-* files directly, so we keep those routed via `Bun.resolveSync`.
-		// Concrete check: `@oh-my-pi/pi-coding-agent/cli` is NOT bundled.
-		expect(BUNDLED_PI_REGISTRY_KEYS.has("@oh-my-pi/pi-coding-agent/cli")).toBe(false);
-		expect(BUNDLED_PI_REGISTRY_KEYS.has("@oh-my-pi/pi-coding-agent/main")).toBe(false);
+		// Concrete check: `@awfixerai/agent/cli` is NOT bundled.
+		expect(BUNDLED_PI_REGISTRY_KEYS.has("@awfixerai/agent/cli")).toBe(false);
+		expect(BUNDLED_PI_REGISTRY_KEYS.has("@awfixerai/agent/main")).toBe(false);
 	});
 
 	it("does not bundle main-thread-unsafe worker entrypoints", () => {
@@ -64,7 +62,7 @@ describe("legacy pi compat compiled-mode subpath overrides (issue #3442)", () =>
 		// The compiled legacy registry is imported on the main thread while
 		// validating plugin extensions, so enumerating these files recreates the
 		// `js worker-entry: missing parentPort` failure from #3508.
-		expect(BUNDLED_PI_REGISTRY_KEYS.has("@oh-my-pi/pi-coding-agent/eval/js/worker-entry")).toBe(false);
+		expect(BUNDLED_PI_REGISTRY_KEYS.has("@awfixerai/agent/eval/js/worker-entry")).toBe(false);
 	});
 
 	it("maps every bundled key (minus shimmed roots + typebox) to its virtual specifier in compiled mode", () => {
@@ -74,8 +72,8 @@ describe("legacy pi compat compiled-mode subpath overrides (issue #3442)", () =>
 			// pi-ai/pi-coding-agent roots intentionally use the legacy compat shims
 			// (they re-attach `Type`, `defineTool`, etc. dropped from the canonical
 			// package surface); typebox is served via TYPEBOX_SHIM_PATH.
-			if (key === "@oh-my-pi/pi-ai" || key === "@oh-my-pi/pi-coding-agent" || key === "typebox") continue;
-			if (overrides[key] !== `omp-legacy-pi-bundled:${key}`) {
+			if (key === "@awfixerai/ai" || key === "@awfixerai/agent" || key === "typebox") continue;
+			if (overrides[key] !== `agent-legacy-bundled:${key}`) {
 				missing.push(key);
 			}
 		}
@@ -89,15 +87,15 @@ describe("legacy pi compat compiled-mode subpath overrides (issue #3442)", () =>
 		// canonical pi-* surface — extensions still see the `Type` /
 		// `defineTool` helpers the canonical entrypoints dropped.
 		const overrides = __buildLegacyPiPackageRootOverrides(true);
-		expect(overrides["@oh-my-pi/pi-ai"]).toBeDefined();
-		expect(overrides["@oh-my-pi/pi-ai"]).not.toBe("omp-legacy-pi-bundled:@oh-my-pi/pi-ai/oauth");
-		expect(overrides["@oh-my-pi/pi-coding-agent"]).toBeDefined();
+		expect(overrides["@awfixerai/ai"]).toBeDefined();
+		expect(overrides["@awfixerai/ai"]).not.toBe("agent-legacy-bundled:@awfixerai/ai/oauth");
+		expect(overrides["@awfixerai/agent"]).toBeDefined();
 	});
 
 	it("does not register subpath overrides in dev/install mode", () => {
 		const overrides = __buildLegacyPiPackageRootOverrides(false);
-		expect(overrides).not.toHaveProperty("@oh-my-pi/pi-ai/oauth");
-		expect(overrides).not.toHaveProperty("@oh-my-pi/pi-coding-agent/tools");
+		expect(overrides).not.toHaveProperty("@awfixerai/ai/oauth");
+		expect(overrides).not.toHaveProperty("@awfixerai/agent/tools");
 		// Dev keeps only the historical shim entries so canonical subpath
 		// imports continue to flow through `Bun.resolveSync` against the live
 		// monorepo / installed `node_modules` tree.

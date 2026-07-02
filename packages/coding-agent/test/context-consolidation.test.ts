@@ -1,18 +1,18 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "bun:test";
 import * as path from "node:path";
-import { Agent, type AgentMessage } from "@oh-my-pi/pi-agent-core";
-import { estimateTokens } from "@oh-my-pi/pi-agent-core/compaction/compaction";
-import type { AssistantMessage, Message, Model } from "@oh-my-pi/pi-ai";
-import { createMockModel } from "@oh-my-pi/pi-ai/providers/mock";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { StatusLineComponent } from "@oh-my-pi/pi-coding-agent/modes/components/status-line";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { computeContextBreakdown } from "@oh-my-pi/pi-coding-agent/modes/utils/context-usage";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { StatusLineComponent } from "@awfixerai/agent/modes/components/status-line";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import { computeContextBreakdown } from "@awfixerai/agent/modes/utils/context-usage";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent, type AgentMessage } from "@awfixerai/agent-core";
+import { estimateTokens } from "@awfixerai/agent-core/compaction/compaction";
+import type { AssistantMessage, Message, Model } from "@awfixerai/ai";
+import { createMockModel } from "@awfixerai/ai/providers/mock";
+import { TempDir } from "@awfixerai/utils";
 
 describe("Context usage consolidation", () => {
 	let sharedDir: TempDir;

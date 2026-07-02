@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import { isBuiltin } from "node:module";
 import * as path from "node:path";
 import * as url from "node:url";
-import { isCompiledBinary } from "@oh-my-pi/pi-utils";
+import { isCompiledBinary } from "@awfixerai/utils";
 import { BUNDLED_PI_REGISTRY_KEYS } from "./legacy-pi-bundled-keys";
 
 const IS_COMPILED_BINARY = isCompiledBinary();
@@ -36,9 +36,9 @@ const IS_COMPILED_BINARY = isCompiledBinary();
 // static import would crash every dev/test run that touches
 // `legacy-pi-compat.ts`. This is the documented "conditional platform code"
 // exception to the static-import rule.
-const BUNDLED_VIRTUAL_SCHEME = "omp-legacy-pi-bundled:";
-const BUNDLED_VIRTUAL_NAMESPACE = "omp-legacy-pi-bundled";
-const BUNDLED_REGISTRY_GLOBAL = "__ompLegacyPiBundledRegistry";
+const BUNDLED_VIRTUAL_SCHEME = "agent-legacy-bundled:";
+const BUNDLED_VIRTUAL_NAMESPACE = "agent-legacy-bundled";
+const BUNDLED_REGISTRY_GLOBAL = "__agentLegacyBundledRegistry";
 const TYPEBOX_BUNDLED_REGISTRY_KEY = "typebox";
 
 type BundledRegistry = Readonly<Record<string, Readonly<Record<string, unknown>>>>;
@@ -62,7 +62,7 @@ let bundledRegistryPromise: Promise<BundledRegistry> | null = null;
 function ensureBundledRegistryLoaded(): Promise<BundledRegistry> {
 	if (!IS_COMPILED_BINARY) {
 		return Promise.reject(
-			new Error("omp:legacy-pi-shim: bundled registry is only available in compiled-binary mode"),
+			new Error("agent:legacy-pi-shim: bundled registry is only available in compiled-binary mode"),
 		);
 	}
 	if (!bundledRegistryPromise) {
@@ -92,7 +92,7 @@ function isBundledVirtualSpecifier(value: string): boolean {
 function synthesizeBundledModuleSourceFromRegistry(registryKey: string, registry: BundledRegistry): string {
 	const mod = registry[registryKey];
 	if (!mod) {
-		throw new Error(`omp:legacy-pi-shim: no bundled module registered for ${registryKey}`);
+		throw new Error(`agent:legacy-pi-shim: no bundled module registered for ${registryKey}`);
 	}
 	const lines: string[] = [
 		`const __omp_bundled = globalThis[${JSON.stringify(BUNDLED_REGISTRY_GLOBAL)}][${JSON.stringify(registryKey)}];`,
@@ -147,21 +147,44 @@ export function __getLegacyPiBundledRegistryGlobal(): string {
 
 // Canonical scope for in-process pi packages. Plugins published against any of
 // the aliased scopes below (mariozechner's original publish, earendil-works'
-// fork, or the canonical @oh-my-pi scope itself) are remapped to this scope and
-// resolved against the bundled copy that ships inside the omp binary. This
-// keeps plugins running against the exact runtime state of the host (single
-// module registry, single tool registry, etc.) regardless of which historical
-// scope name they happened to declare in their peerDependencies.
-const CANONICAL_PI_SCOPE = "@oh-my-pi";
+// fork, legacy @oh-my-pi, or the canonical @awfixerai scope itself) are
+// remapped to this scope and resolved against the bundled copy that ships
+// inside the omp binary. This keeps plugins running against the exact runtime
+// state of the host (single module registry, single tool registry, etc.)
+// regardless of which historical scope name they happened to declare in their
+// peerDependencies.
+const CANONICAL_PI_SCOPE = "@awfixerai";
 
 // Scopes that have historically been used to publish (or alias) the same set
-// of internal pi-* packages. `@oh-my-pi` is intentionally included so direct
-// canonical imports still pass through the same host-bundled package resolution
-// path instead of pulling a duplicate copy from plugin node_modules.
-const PI_SCOPE_ALIASES = ["oh-my-pi", "mariozechner", "earendil-works"] as const;
+// of internal pi-* packages. `oh-my-pi` is intentionally included so legacy
+// `@oh-my-pi/*` plugin imports still pass through the same host-bundled package
+// resolution path instead of pulling a duplicate copy from plugin node_modules.
+const PI_SCOPE_ALIASES = ["oh-my-pi", "mariozechner", "earendil-works", "awfixerai"] as const;
 
-// Internal pi-* package basenames bundled inside the omp binary.
-const PI_PACKAGE_NAMES = ["pi-agent-core", "pi-ai", "pi-coding-agent", "pi-natives", "pi-tui", "pi-utils"] as const;
+// Historical pi-* basenames plus deduplicated awfixer-agent package names.
+const PI_PACKAGE_NAMES = [
+	"pi-agent-core",
+	"pi-ai",
+	"pi-coding-agent",
+	"pi-natives",
+	"pi-tui",
+	"pi-utils",
+	"agent-core",
+	"ai",
+	"agent",
+	"natives",
+	"tui",
+	"utils",
+] as const;
+
+const PI_PACKAGE_BASE_ALIASES: ReadonlyMap<string, string> = new Map([
+	["pi-agent-core", "agent-core"],
+	["pi-ai", "ai"],
+	["pi-coding-agent", "agent"],
+	["pi-natives", "natives"],
+	["pi-tui", "tui"],
+	["pi-utils", "utils"],
+]);
 
 const PI_SCOPE_ALTERNATION = PI_SCOPE_ALIASES.join("|");
 const PI_PACKAGE_ALTERNATION = PI_PACKAGE_NAMES.join("|");
@@ -173,23 +196,34 @@ const PI_PACKAGE_ALTERNATION = PI_PACKAGE_NAMES.join("|");
 // bundled copy. Entries ending in `/` rewrite the whole subtree; add new
 // `pkg/from -> pkg/to` pairs whenever an upstream-only subpath breaks resolution.
 const PI_SUBPATH_REMAPS: ReadonlyMap<string, string> = new Map<string, string>([
-	["pi-ai/utils/oauth", "pi-ai/oauth"],
-	["pi-ai/utils/oauth/", "pi-ai/oauth/"],
+	["pi-ai/utils/oauth", "ai/oauth"],
+	["pi-ai/utils/oauth/", "ai/oauth/"],
+	["ai/utils/oauth", "ai/oauth"],
+	["ai/utils/oauth/", "ai/oauth/"],
 ]);
 
+function canonicalizeLegacyPiPackageBase(rest: string): string {
+	const slashIdx = rest.indexOf("/");
+	const base = slashIdx === -1 ? rest : rest.slice(0, slashIdx);
+	const suffix = slashIdx === -1 ? "" : rest.slice(slashIdx);
+	const canonicalBase = PI_PACKAGE_BASE_ALIASES.get(base) ?? base;
+	return `${canonicalBase}${suffix}`;
+}
+
 function remapLegacyPiSubpath(rest: string): string {
-	const exact = PI_SUBPATH_REMAPS.get(rest);
+	const canonicalRest = canonicalizeLegacyPiPackageBase(rest);
+	const exact = PI_SUBPATH_REMAPS.get(canonicalRest);
 	if (exact) {
 		return exact;
 	}
 
 	for (const [from, to] of PI_SUBPATH_REMAPS) {
-		if (from.endsWith("/") && rest.startsWith(from)) {
-			return `${to}${rest.slice(from.length)}`;
+		if (from.endsWith("/") && canonicalRest.startsWith(from)) {
+			return `${to}${canonicalRest.slice(from.length)}`;
 		}
 	}
 
-	return rest;
+	return canonicalRest;
 }
 
 const LEGACY_PI_SPECIFIER_FILTER = new RegExp(`^@(?:${PI_SCOPE_ALTERNATION})/(?:${PI_PACKAGE_ALTERNATION})(?:/.*)?$`);
@@ -227,7 +261,7 @@ const TYPEBOX_SPECIFIER_FILTER = /^(?:@sinclair\/typebox|typebox)$/;
  *
  * `bundle-dist.ts` defines `process.env.PI_BUNDLED="true"`; after bundling,
  * `import.meta.dir` points at `<package>/dist`. Do not resolve the package via
- * bare `@oh-my-pi/pi-coding-agent` here: from a global install Bun can pick an
+ * bare `@awfixerai/pi-coding-agent` here: from a global install Bun can pick an
  * older cache entry, recreating mixed-runtime plugin loading.
  */
 export function __computeBundledSelfPackageRoot(metaDir: string, pathImpl: typeof path = path): string {
@@ -294,10 +328,10 @@ const TYPEBOX_SHIM_PATH = __resolveTypeBoxShimPath(IS_COMPILED_BINARY, sourceShi
 // longer satisfies those imports. The override below redirects only the bare
 // pi-ai package root onto a sibling shim that re-exports the canonical surface
 // plus the borrowed `Type` runtime from the Zod-backed TypeBox shim. Subpath
-// imports such as `@oh-my-pi/pi-ai/oauth` continue to resolve directly
+// imports such as `@awfixerai/pi-ai/oauth` continue to resolve directly
 // against the bundled pi-ai package.
 const LEGACY_PI_AI_SHIM_PATH = IS_COMPILED_BINARY
-	? bundledRegistryVirtualSpecifier(`${CANONICAL_PI_SCOPE}/pi-ai`)
+	? bundledRegistryVirtualSpecifier(`${CANONICAL_PI_SCOPE}/ai`)
 	: sourceShimPath("legacy-pi-ai-shim.ts");
 
 // The coding-agent's own `./src/index.ts` cannot be listed as an extra
@@ -308,7 +342,7 @@ const LEGACY_PI_AI_SHIM_PATH = IS_COMPILED_BINARY
 // the sibling source shim whose distinct file path avoids the #1474 collision
 // while still re-exporting the canonical package surface.
 const LEGACY_PI_CODING_AGENT_SHIM_PATH = IS_COMPILED_BINARY
-	? bundledRegistryVirtualSpecifier(`${CANONICAL_PI_SCOPE}/pi-coding-agent`)
+	? bundledRegistryVirtualSpecifier(`${CANONICAL_PI_SCOPE}/agent`)
 	: sourceShimPath("legacy-pi-coding-agent-shim.ts");
 
 // Package-root overrides. Shim entries (`pi-ai`, `pi-coding-agent`) always
@@ -318,7 +352,7 @@ const LEGACY_PI_CODING_AGENT_SHIM_PATH = IS_COMPILED_BINARY
 // to route extensions onto the in-process module instance — in dev /
 // source-link / installed-package mode the canonical specifier resolves
 // cleanly through `Bun.resolveSync` and hardcoding a source-tree path would
-// miss installs where the bundled packages live at `node_modules/@oh-my-pi/pi-*`.
+// miss installs where the bundled packages live at `node_modules/@awfixerai/pi-*`.
 //
 // Compiled-binary entries are `omp-legacy-pi-bundled:<key>` specifiers handed
 // to the synthetic onLoad in `installLegacyPiSpecifierShim()` — bunfs paths
@@ -360,7 +394,9 @@ export function __validateLegacyPiPackageRootOverrides(
 export function __buildLegacyPiPackageRootOverrides(isCompiled: boolean): Record<string, string> {
 	const candidates: Record<string, string> = {
 		[`${CANONICAL_PI_SCOPE}/pi-ai`]: LEGACY_PI_AI_SHIM_PATH,
+		[`${CANONICAL_PI_SCOPE}/ai`]: LEGACY_PI_AI_SHIM_PATH,
 		[`${CANONICAL_PI_SCOPE}/pi-coding-agent`]: LEGACY_PI_CODING_AGENT_SHIM_PATH,
+		[`${CANONICAL_PI_SCOPE}/agent`]: LEGACY_PI_CODING_AGENT_SHIM_PATH,
 	};
 	if (isCompiled) {
 		for (const key of BUNDLED_PI_REGISTRY_KEYS) {
@@ -403,7 +439,7 @@ function getResolvedSpecifier(specifier: string): string {
 }
 
 /**
- * Resolve a canonical `@oh-my-pi/*` specifier to a filesystem path, preferring
+ * Resolve a canonical `@awfixerai/*` specifier to a filesystem path, preferring
  * a bundled compat shim when one is registered for the package root.
  *
  * Falls back to `getResolvedSpecifier` (which may throw under compiled binary
@@ -1010,7 +1046,7 @@ function resolveLegacyPiSpecifier(args: { path: string; importer: string }): { p
 		return undefined;
 	}
 
-	// Primary: resolve the canonical @oh-my-pi/* specifier from the host binary
+	// Primary: resolve the canonical @awfixerai/* specifier from the host binary
 	// location. Works in dev mode and in source-link installs.
 	try {
 		return { path: resolveCanonicalPiSpecifier(remappedSpecifier) };

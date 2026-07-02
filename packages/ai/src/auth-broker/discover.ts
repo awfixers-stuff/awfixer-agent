@@ -12,7 +12,7 @@ import {
 	getConfigRootDir,
 	isEnoent,
 	logger,
-} from "@oh-my-pi/pi-utils";
+} from "@awfixerai/utils";
 import { YAML } from "bun";
 import { AuthStorage } from "../auth-storage";
 import * as AIError from "../error";

@@ -1,4 +1,4 @@
-import { getProjectDir, logger } from "@oh-my-pi/pi-utils";
+import { getProjectDir, logger } from "@awfixerai/utils";
 
 type MarketplaceAutoUpdateMode = "off" | "notify" | "auto";
 

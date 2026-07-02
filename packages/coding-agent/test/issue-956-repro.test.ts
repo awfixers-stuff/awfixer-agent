@@ -2,14 +2,14 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "bun:
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import * as mcpClient from "@oh-my-pi/pi-coding-agent/mcp/client";
-import { MCPCommandController } from "@oh-my-pi/pi-coding-agent/modes/controllers/mcp-command-controller";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { getConfigRootDir, getProjectDir, removeWithRetries, setAgentDir, setProjectDir } from "@oh-my-pi/pi-utils";
+import * as mcpClient from "@awfixerai/agent/mcp/client";
+import { MCPCommandController } from "@awfixerai/agent/modes/controllers/mcp-command-controller";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import { getConfigRootDir, getProjectDir, removeWithRetries, setAgentDir, setProjectDir } from "@awfixerai/utils";
 
 const originalProjectDir = getProjectDir();
 const originalAgentDir = process.env.PI_CODING_AGENT_DIR;
-const fallbackAgentDir = getConfigRootDir()
+const fallbackAgentDir = getConfigRootDir();
 
 describe("issue #956: interactive /mcp test", () => {
 	let projectDir = "";

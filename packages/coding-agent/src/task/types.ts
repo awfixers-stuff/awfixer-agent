@@ -1,6 +1,6 @@
-import type { ThinkingLevel } from "@oh-my-pi/pi-agent-core";
-import type { Usage } from "@oh-my-pi/pi-ai";
-import { $env } from "@oh-my-pi/pi-utils";
+import type { ThinkingLevel } from "@awfixerai/agent-core";
+import type { Usage } from "@awfixerai/ai";
+import { $env } from "@awfixerai/utils";
 import { type } from "arktype";
 import type { AgentSessionEvent } from "../session/agent-session";
 import type { NestedRepoPatch } from "./worktree";

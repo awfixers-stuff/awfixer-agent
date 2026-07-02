@@ -2,10 +2,10 @@ import { describe, expect, it, spyOn } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { type Skill as CapabilitySkill, skillCapability } from "@oh-my-pi/pi-coding-agent/capability/skill";
-import { getCapability } from "@oh-my-pi/pi-coding-agent/discovery";
-import { loadSkills, loadSkillsFromDir, type Skill } from "@oh-my-pi/pi-coding-agent/extensibility/skills";
-import { removeWithRetries } from "@oh-my-pi/pi-utils";
+import { type Skill as CapabilitySkill, skillCapability } from "@awfixerai/agent/capability/skill";
+import { getCapability } from "@awfixerai/agent/discovery";
+import { loadSkills, loadSkillsFromDir, type Skill } from "@awfixerai/agent/extensibility/skills";
+import { removeWithRetries } from "@awfixerai/utils";
 
 const fixturesDir = path.resolve(import.meta.dirname, "fixtures/skills");
 const collisionFixturesDir = path.resolve(import.meta.dirname, "fixtures/skills-collision");

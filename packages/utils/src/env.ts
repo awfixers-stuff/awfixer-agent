@@ -129,7 +129,7 @@ refreshDirsFromEnv();
 /**
  * Intentional re-export of Bun.env.
  *
- * All users should import this env module (import { $env } from "@oh-my-pi/pi-utils")
+ * All users should import this env module (import { $env } from "@awfixerai/utils")
  * before using environment variables. This ensures that .env files have been loaded and
  * overrides (project, home) have been applied, so $env always reflects the correct values.
  */
@@ -205,7 +205,9 @@ export function setTerminalHeadless(headless: boolean): boolean {
 export function isCompiledBinary(): boolean {
 	if (process.env.AGENT_COMPILED || Bun.env.AGENT_COMPILED) return true;
 	if (process.env.PI_COMPILED || Bun.env.PI_COMPILED) {
-		process.stderr.write("[deprecated] Environment variable PI_COMPILED is deprecated. Use AGENT_COMPILED instead.\n");
+		process.stderr.write(
+			"[deprecated] Environment variable PI_COMPILED is deprecated. Use AGENT_COMPILED instead.\n",
+		);
 		return true;
 	}
 	const url = import.meta.url;

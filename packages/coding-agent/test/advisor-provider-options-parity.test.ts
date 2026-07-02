@@ -3,7 +3,7 @@
  * the advisor `Agent` constructed by `#buildAdvisorRuntime` inherits them so
  * its OpenRouter/OpenAI requests cache and route like the main turn.
  *
- * Regression for can1357/oh-my-pi#3639: before the fix, the advisor was built
+ * Regression for awfixers-stuff/awfixer-agent#3639: before the fix, the advisor was built
  * with only `sessionId`/`getApiKey`/telemetry — it dropped the session's
  * `streamFn` wrapper (so `providers.openrouterVariant` and `loopGuard` never
  * landed on advisor requests), its `promptCacheKey` (so OpenAI Responses
@@ -12,16 +12,16 @@
  */
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "bun:test";
 import * as path from "node:path";
-import { Agent, type StreamFn } from "@oh-my-pi/pi-agent-core";
-import type { Model, SimpleStreamOptions } from "@oh-my-pi/pi-ai";
-import { streamSimple } from "@oh-my-pi/pi-ai";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent, type StreamFn } from "@awfixerai/agent-core";
+import type { Model, SimpleStreamOptions } from "@awfixerai/ai";
+import { streamSimple } from "@awfixerai/ai";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { TempDir } from "@awfixerai/utils";
 
 describe("AgentSession advisor provider-options parity", () => {
 	let sharedDir: TempDir;

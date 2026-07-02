@@ -6,8 +6,8 @@ import {
 	classifySource,
 	fetchMarketplace,
 	parseMarketplaceCatalog,
-} from "@oh-my-pi/pi-coding-agent/extensibility/plugins/marketplace";
-import { removeSyncWithRetries } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent/extensibility/plugins/marketplace";
+import { removeSyncWithRetries } from "@awfixerai/utils";
 
 // Fixture lives at test/marketplace/fixtures/valid-marketplace/
 const FIXTURE_DIR = path.join(import.meta.dir, "fixtures", "valid-marketplace");

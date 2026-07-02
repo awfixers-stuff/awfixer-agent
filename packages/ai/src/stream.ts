@@ -3,17 +3,17 @@ import * as fsSync from "node:fs";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { scheduler } from "node:timers/promises";
-import type { Effort } from "@oh-my-pi/pi-catalog/effort";
-import { isVertexExpressOpenAIUrl, isVertexRawPredictUrl } from "@oh-my-pi/pi-catalog/hosts";
+import type { Effort } from "@awfixerai/catalog/effort";
+import { isVertexExpressOpenAIUrl, isVertexRawPredictUrl } from "@awfixerai/catalog/hosts";
 import {
 	mapEffortToAnthropicAdaptiveEffort,
 	mapEffortToGoogleThinkingLevel,
 	minimumSupportedEffort,
 	requireSupportedEffort,
 	resolveWireModelId,
-} from "@oh-my-pi/pi-catalog/model-thinking";
-import { CATALOG_PROVIDERS, type ProviderCatalogEntry } from "@oh-my-pi/pi-catalog/provider-models";
-import { $env, $pickenv, getConfigRootDir, isEnoent, logger } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/catalog/model-thinking";
+import { CATALOG_PROVIDERS, type ProviderCatalogEntry } from "@awfixerai/catalog/provider-models";
+import { $env, $pickenv, getConfigRootDir, isEnoent, logger } from "@awfixerai/utils";
 import { getCustomApi } from "./api-registry";
 import { AUTH_RETRY_STEPS, isApiKeyResolver, resolveRetryKey } from "./auth-retry";
 import * as AIError from "./error";

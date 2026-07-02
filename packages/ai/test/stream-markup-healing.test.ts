@@ -1,17 +1,12 @@
 import { describe, expect, it } from "bun:test";
-import {
-	type Dialect,
-	getDialectDefinition,
-	type InbandScanEvent,
-	ThinkingInbandScanner,
-} from "@oh-my-pi/pi-ai/dialect";
-import { streamOpenAICompletions } from "@oh-my-pi/pi-ai/providers/openai-completions";
-import { stream } from "@oh-my-pi/pi-ai/stream";
-import type { Context, FetchImpl, Model, ThinkingContent, Tool, ToolCall } from "@oh-my-pi/pi-ai/types";
-import { getStreamMarkupHealingPattern, StreamMarkupHealing } from "@oh-my-pi/pi-ai/utils/stream-markup-healing";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import { INTENT_FIELD } from "@oh-my-pi/pi-wire";
+import { type Dialect, getDialectDefinition, type InbandScanEvent, ThinkingInbandScanner } from "@awfixerai/ai/dialect";
+import { streamOpenAICompletions } from "@awfixerai/ai/providers/openai-completions";
+import { stream } from "@awfixerai/ai/stream";
+import type { Context, FetchImpl, Model, ThinkingContent, Tool, ToolCall } from "@awfixerai/ai/types";
+import { getStreamMarkupHealingPattern, StreamMarkupHealing } from "@awfixerai/ai/utils/stream-markup-healing";
+import { buildModel } from "@awfixerai/catalog/build";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import { INTENT_FIELD } from "@awfixerai/wire";
 
 interface SseToolCallDelta {
 	index: number;

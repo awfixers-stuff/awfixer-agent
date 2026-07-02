@@ -1,5 +1,5 @@
-import * as AIError from "@oh-my-pi/pi-ai/error";
-import { logger, readSseEvents, Snowflake } from "@oh-my-pi/pi-utils";
+import * as AIError from "@awfixerai/ai/error";
+import { logger, readSseEvents, Snowflake } from "@awfixerai/utils";
 import type {
 	JsonRpcError,
 	JsonRpcMessage,

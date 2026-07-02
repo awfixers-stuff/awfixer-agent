@@ -2,10 +2,10 @@ import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { FetchImpl } from "@oh-my-pi/pi-ai/types";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { removeSyncWithRetries, Snowflake } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import type { FetchImpl } from "@awfixerai/ai/types";
+import { removeSyncWithRetries, Snowflake } from "@awfixerai/utils";
 
 describe("ModelRegistry LM Studio Fixes", () => {
 	let tempDir: string;

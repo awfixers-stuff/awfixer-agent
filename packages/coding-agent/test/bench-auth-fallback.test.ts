@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+import { type BenchModelRegistry, runBenchCommand } from "@awfixerai/agent/cli/bench-cli";
 import type {
 	Api,
 	ApiKeyResolver,
@@ -6,8 +7,7 @@ import type {
 	AssistantMessageEvent,
 	AssistantMessageEventStream,
 	Model,
-} from "@oh-my-pi/pi-ai";
-import { type BenchModelRegistry, runBenchCommand } from "@oh-my-pi/pi-coding-agent/cli/bench-cli";
+} from "@awfixerai/ai";
 
 function fakeModel(provider: string, id: string): Model<Api> {
 	return {

@@ -1,12 +1,12 @@
 import { beforeAll, describe, expect, it, vi } from "bun:test";
 import { stripVTControlCharacters } from "node:util";
-import type { AgentToolContext } from "@oh-my-pi/pi-agent-core";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import type { ExtensionUISelectItem } from "@oh-my-pi/pi-coding-agent/extensibility/extensions";
-import { getThemeByName, initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { ToolSession } from "@oh-my-pi/pi-coding-agent/tools";
-import { AskTool, askToolRenderer } from "@oh-my-pi/pi-coding-agent/tools/ask";
-import { ToolAbortError } from "@oh-my-pi/pi-coding-agent/tools/tool-errors";
+import { Settings } from "@awfixerai/agent/config/settings";
+import type { ExtensionUISelectItem } from "@awfixerai/agent/extensibility/extensions";
+import { getThemeByName, initTheme } from "@awfixerai/agent/modes/theme/theme";
+import type { ToolSession } from "@awfixerai/agent/tools";
+import { AskTool, askToolRenderer } from "@awfixerai/agent/tools/ask";
+import { ToolAbortError } from "@awfixerai/agent/tools/tool-errors";
+import type { AgentToolContext } from "@awfixerai/agent-core";
 
 function createSession(overrides: Partial<ToolSession> = {}): ToolSession {
 	return {

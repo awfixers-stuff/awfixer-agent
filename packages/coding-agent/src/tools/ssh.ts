@@ -1,7 +1,7 @@
-import type { AgentTool, AgentToolContext, AgentToolResult, AgentToolUpdateCallback } from "@oh-my-pi/pi-agent-core";
-import type { ToolExample } from "@oh-my-pi/pi-ai";
-import type { Component } from "@oh-my-pi/pi-tui";
-import { prompt } from "@oh-my-pi/pi-utils";
+import type { AgentTool, AgentToolContext, AgentToolResult, AgentToolUpdateCallback } from "@awfixerai/agent-core";
+import type { ToolExample } from "@awfixerai/ai";
+import type { Component } from "@awfixerai/tui";
+import { prompt } from "@awfixerai/utils";
 import { type } from "arktype";
 import type { SSHHost } from "../capability/ssh";
 import { sshCapability } from "../capability/ssh";
@@ -383,6 +383,6 @@ export const sshToolRenderer = {
 	// stable pending header would be promoted by the stable-prefix ratchet and
 	// committed to native scrollback, then the final render's SSH glyph would
 	// land below and strand a duplicate pending header above the final frame
-	// ([#3177](https://github.com/can1357/oh-my-pi/issues/3177)).
+	// ([#3177](https://github.com/awfixers-stuff/awfixer-agent/issues/3177)).
 	provisionalPartialResult: true,
 };

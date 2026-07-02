@@ -1,18 +1,17 @@
 {
   "type": "module",
-  "name": "@oh-my-pi/snapcompact",
+  "name": "@awfixerai/snapcompact",
   "version": "0.0.0",
   "description": "Bitmap-frame context compression for vision-capable LLMs",
-  "homepage": "https://omp.sh",
-  "author": "Can Boluk",
+  "homepage": "https://agent.awfixer.codes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/can1357/oh-my-pi.git",
+    "url": "git+https://github.com/awfixers-stuff/awfixer-agent.git",
     "directory": "packages/snapcompact"
   },
   "bugs": {
-    "url": "https://github.com/can1357/oh-my-pi/issues"
+    "url": "https://github.com/awfixers-stuff/awfixer-agent/issues"
   },
   "keywords": [
     "context-compression",
@@ -31,10 +30,10 @@
     "fmt": "biome format --write ."
   },
   "dependencies": {
-    "@oh-my-pi/pi-ai": "catalog:",
-    "@oh-my-pi/pi-natives": "catalog:",
-    "@oh-my-pi/pi-utils": "catalog:",
-    "@oh-my-pi/pi-wire": "catalog:"
+    "@awfixerai/ai": "catalog:",
+    "@awfixerai/natives": "catalog:",
+    "@awfixerai/utils": "catalog:",
+    "@awfixerai/wire": "catalog:"
   },
   "devDependencies": {
     "@types/bun": "catalog:"

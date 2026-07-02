@@ -1,14 +1,14 @@
 import { beforeAll, describe, expect, test, vi } from "bun:test";
 import { stripVTControlCharacters } from "node:util";
-import type { Model } from "@oh-my-pi/pi-ai";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import type { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { ModelSelectorComponent } from "@oh-my-pi/pi-coding-agent/modes/components/model-selector";
-import { getThemeByName, setThemeInstance } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { ConfiguredThinkingLevel } from "@oh-my-pi/pi-coding-agent/thinking";
-import type { TUI } from "@oh-my-pi/pi-tui";
+import type { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import { Settings } from "@awfixerai/agent/config/settings";
+import { ModelSelectorComponent } from "@awfixerai/agent/modes/components/model-selector";
+import { getThemeByName, setThemeInstance } from "@awfixerai/agent/modes/theme/theme";
+import type { ConfiguredThinkingLevel } from "@awfixerai/agent/thinking";
+import type { Model } from "@awfixerai/ai";
+import { buildModel } from "@awfixerai/catalog/build";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import type { TUI } from "@awfixerai/tui";
 
 function normalizeRenderedText(text: string): string {
 	return stripVTControlCharacters(text).replace(/\s+/g, " ").trim();

@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { CONFIG_DIR_NAME, getConfigAgentDirName, getProjectDir, PROJECT_CONFIG_DIR_NAME } from "@oh-my-pi/pi-utils";
+import { getConfigAgentDirName, getProjectDir, PROJECT_CONFIG_DIR_NAME } from "@awfixerai/utils";
 import { expandTilde } from "./tools/path-utils";
 
 export * from "./config/config-file";

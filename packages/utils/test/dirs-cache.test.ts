@@ -3,16 +3,15 @@ import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
 import {
-	APP_NAME,
 	__resetDirsFromEnvForTests,
+	APP_NAME,
 	getActiveProfile,
 	getConfigRootDir,
-	getConfigDirName,
 	getDocumentConversionCacheDir,
 	getProfileRootDir,
 	setAgentDir,
-} from "@oh-my-pi/pi-utils/dirs";
-import { Snowflake } from "@oh-my-pi/pi-utils/snowflake";
+} from "@awfixerai/utils/dirs";
+import { Snowflake } from "@awfixerai/utils/snowflake";
 
 function restoreEnv(key: string, value: string | undefined): void {
 	if (value === undefined) {
@@ -24,14 +23,14 @@ function restoreEnv(key: string, value: string | undefined): void {
 
 describe("document conversion cache directory", () => {
 	let tempRoot = "";
-	let originalPiCodingAgentDir: string | undefined;
-	let originalOmpProfile: string | undefined;
+	let originalAgentDir: string | undefined;
+	let originalAgentProfile: string | undefined;
 	let originalPiProfile: string | undefined;
 	let originalXdgCacheHome: string | undefined;
 
 	beforeEach(async () => {
-		originalPiCodingAgentDir = process.env.PI_CODING_AGENT_DIR;
-		originalOmpProfile = process.env.OMP_PROFILE;
+		originalAgentDir = process.env.AGENT_DIR;
+		originalAgentProfile = process.env.AGENT_PROFILE;
 		originalPiProfile = process.env.PI_PROFILE;
 		originalXdgCacheHome = process.env.XDG_CACHE_HOME;
 		tempRoot = path.join(os.tmpdir(), "pi-utils-document-cache", Snowflake.next());
@@ -39,8 +38,8 @@ describe("document conversion cache directory", () => {
 	});
 
 	afterEach(async () => {
-		restoreEnv("PI_CODING_AGENT_DIR", originalPiCodingAgentDir);
-		restoreEnv("OMP_PROFILE", originalOmpProfile);
+		restoreEnv("AGENT_DIR", originalAgentDir);
+		restoreEnv("AGENT_PROFILE", originalAgentProfile);
 		restoreEnv("PI_PROFILE", originalPiProfile);
 		restoreEnv("XDG_CACHE_HOME", originalXdgCacheHome);
 		__resetDirsFromEnvForTests();
@@ -61,7 +60,7 @@ describe("document conversion cache directory", () => {
 		);
 	});
 
-	it("stays under a custom PI_CODING_AGENT_DIR", () => {
+	it("stays under a custom AGENT_DIR", () => {
 		const customAgentDir = path.join(tempRoot, "custom-agent");
 
 		setAgentDir(customAgentDir);
@@ -72,23 +71,23 @@ describe("document conversion cache directory", () => {
 
 describe("test directory state cleanup", () => {
 	it("restores the active profile from the current env after setAgentDir mutations", () => {
-		const originalPiCodingAgentDir = process.env.PI_CODING_AGENT_DIR;
-		const originalOmpProfile = process.env.OMP_PROFILE;
+		const originalAgentDir = process.env.AGENT_DIR;
+		const originalAgentProfile = process.env.AGENT_PROFILE;
 		const originalPiProfile = process.env.PI_PROFILE;
 		const originalXdgCacheHome = process.env.XDG_CACHE_HOME;
 		try {
-			process.env.OMP_PROFILE = "cache-profile";
+			process.env.AGENT_PROFILE = "cache-profile";
 			delete process.env.PI_PROFILE;
-			delete process.env.PI_CODING_AGENT_DIR;
+			delete process.env.AGENT_DIR;
 			delete process.env.XDG_CACHE_HOME;
 			__resetDirsFromEnvForTests();
 
 			setAgentDir(path.join(os.tmpdir(), "pi-utils-document-cache", Snowflake.next(), "agent"));
 			expect(getActiveProfile()).toBeUndefined();
 
-			process.env.OMP_PROFILE = "cache-profile";
+			process.env.AGENT_PROFILE = "cache-profile";
 			delete process.env.PI_PROFILE;
-			delete process.env.PI_CODING_AGENT_DIR;
+			delete process.env.AGENT_DIR;
 			__resetDirsFromEnvForTests();
 
 			expect(getActiveProfile()).toBe("cache-profile");
@@ -96,8 +95,8 @@ describe("test directory state cleanup", () => {
 				path.join(getProfileRootDir("cache-profile"), "agent", "cache", "document-conversions"),
 			);
 		} finally {
-			restoreEnv("PI_CODING_AGENT_DIR", originalPiCodingAgentDir);
-			restoreEnv("OMP_PROFILE", originalOmpProfile);
+			restoreEnv("AGENT_DIR", originalAgentDir);
+			restoreEnv("AGENT_PROFILE", originalAgentProfile);
 			restoreEnv("PI_PROFILE", originalPiProfile);
 			restoreEnv("XDG_CACHE_HOME", originalXdgCacheHome);
 			__resetDirsFromEnvForTests();

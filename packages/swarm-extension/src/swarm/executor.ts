@@ -12,8 +12,8 @@ import type {
 	ModelRegistry,
 	Settings,
 	SingleResult,
-} from "@oh-my-pi/pi-coding-agent";
-import { runSubprocess } from "@oh-my-pi/pi-coding-agent";
+} from "@awfixerai/agent";
+import { runSubprocess } from "@awfixerai/agent";
 import type { SwarmAgent } from "./schema";
 import type { StateTracker } from "./state";
 

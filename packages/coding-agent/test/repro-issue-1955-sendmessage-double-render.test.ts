@@ -1,19 +1,19 @@
 import { afterEach, beforeAll, describe, expect, test, vi } from "bun:test";
-import type { AgentMessage } from "@oh-my-pi/pi-agent-core";
-import type { ImageContent, TextContent } from "@oh-my-pi/pi-ai";
 import type {
 	ExtensionActions,
 	ExtensionCommandContextActions,
 	ExtensionContextActions,
 	ExtensionUIContext,
-} from "@oh-my-pi/pi-coding-agent/extensibility/extensions";
-import { ExtensionUiController } from "@oh-my-pi/pi-coding-agent/modes/controllers/extension-ui-controller";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import type { InteractiveModeContext } from "@oh-my-pi/pi-coding-agent/modes/types";
-import { UiHelpers } from "@oh-my-pi/pi-coding-agent/modes/utils/ui-helpers";
-import { buildSessionContext, type SessionContext } from "@oh-my-pi/pi-coding-agent/session/session-context";
-import type { CustomMessageEntry, SessionEntry } from "@oh-my-pi/pi-coding-agent/session/session-entries";
-import { Container } from "@oh-my-pi/pi-tui";
+} from "@awfixerai/agent/extensibility/extensions";
+import { ExtensionUiController } from "@awfixerai/agent/modes/controllers/extension-ui-controller";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import type { InteractiveModeContext } from "@awfixerai/agent/modes/types";
+import { UiHelpers } from "@awfixerai/agent/modes/utils/ui-helpers";
+import { buildSessionContext, type SessionContext } from "@awfixerai/agent/session/session-context";
+import type { CustomMessageEntry, SessionEntry } from "@awfixerai/agent/session/session-entries";
+import type { AgentMessage } from "@awfixerai/agent-core";
+import type { ImageContent, TextContent } from "@awfixerai/ai";
+import { Container } from "@awfixerai/tui";
 
 /**
  * Issue #1955: `sendMessage` with `display: true` renders twice during

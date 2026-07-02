@@ -18,9 +18,6 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { scheduler } from "node:timers/promises";
 import { isPromise } from "node:util/types";
-
-import type { InMemorySnapshotStore } from "@oh-my-pi/hashline";
-import { Patch } from "@oh-my-pi/hashline";
 import {
 	type AfterToolCallContext,
 	type AfterToolCallResult,
@@ -39,7 +36,7 @@ import {
 	type StreamFn,
 	ThinkingLevel,
 	type ToolChoiceDirective,
-} from "@oh-my-pi/pi-agent-core";
+} from "@awfixerai/agent-core";
 import {
 	AGGRESSIVE_SHAKE_CONFIG,
 	AUTO_HANDOFF_THRESHOLD_FOCUS,
@@ -70,14 +67,14 @@ import {
 	type SummaryOptions,
 	shouldCompact,
 	shouldUseOpenAiRemoteCompaction,
-} from "@oh-my-pi/pi-agent-core/compaction";
+} from "@awfixerai/agent-core/compaction";
 import {
 	DEFAULT_PRUNE_CONFIG,
 	pruneSupersededToolResults,
 	pruneToolOutputs,
 	readToolSupersedeKey,
-} from "@oh-my-pi/pi-agent-core/compaction/pruning";
-import type { ProtectedToolMatcher } from "@oh-my-pi/pi-agent-core/compaction/tool-protection";
+} from "@awfixerai/agent-core/compaction/pruning";
+import type { ProtectedToolMatcher } from "@awfixerai/agent-core/compaction/tool-protection";
 import type {
 	AssistantMessage,
 	AssistantMessageEvent,
@@ -98,7 +95,7 @@ import type {
 	ToolChoice,
 	Usage,
 	UsageReport,
-} from "@oh-my-pi/pi-ai";
+} from "@awfixerai/ai";
 import {
 	calculateRateLimitBackoffMs,
 	clearAnthropicFastModeFallback,
@@ -107,14 +104,17 @@ import {
 	parseRateLimitReason,
 	resolveServiceTier,
 	streamSimple,
-} from "@oh-my-pi/pi-ai";
-import * as AIError from "@oh-my-pi/pi-ai/error";
-import { toolWireSchema } from "@oh-my-pi/pi-ai/utils/schema";
-import { GeminiHeaderRunDetector, isGeminiThinkingModel } from "@oh-my-pi/pi-ai/utils/thinking-loop";
-import { isFireworksFastModelId, toFireworksBaseModelId } from "@oh-my-pi/pi-catalog/fireworks-model-id";
-import { getSupportedEfforts } from "@oh-my-pi/pi-catalog/model-thinking";
-import { modelsAreEqual } from "@oh-my-pi/pi-catalog/models";
-import { MacOSPowerAssertion } from "@oh-my-pi/pi-natives";
+} from "@awfixerai/ai";
+import * as AIError from "@awfixerai/ai/error";
+import { toolWireSchema } from "@awfixerai/ai/utils/schema";
+import { GeminiHeaderRunDetector, isGeminiThinkingModel } from "@awfixerai/ai/utils/thinking-loop";
+import { isFireworksFastModelId, toFireworksBaseModelId } from "@awfixerai/catalog/fireworks-model-id";
+import { getSupportedEfforts } from "@awfixerai/catalog/model-thinking";
+import { modelsAreEqual } from "@awfixerai/catalog/models";
+import type { InMemorySnapshotStore } from "@awfixerai/hashline";
+import { Patch } from "@awfixerai/hashline";
+import { MacOSPowerAssertion } from "@awfixerai/natives";
+import * as snapcompact from "@awfixerai/snapcompact";
 import {
 	extractRetryHint,
 	formatDuration,
@@ -127,8 +127,7 @@ import {
 	relativePathWithinRoot,
 	Snowflake,
 	withTimeout,
-} from "@oh-my-pi/pi-utils";
-import * as snapcompact from "@oh-my-pi/snapcompact";
+} from "@awfixerai/utils";
 import {
 	ADVISOR_DEFAULT_TOOL_NAMES,
 	AdviseTool,

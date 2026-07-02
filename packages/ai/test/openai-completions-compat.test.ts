@@ -1,10 +1,10 @@
 import { describe, expect, it } from "bun:test";
-import { renderDemotedThinking } from "@oh-my-pi/pi-ai/dialect";
+import { renderDemotedThinking } from "@awfixerai/ai/dialect";
 import {
 	applyOpenRouterRoutingVariant,
 	convertMessages,
 	streamOpenAICompletions,
-} from "@oh-my-pi/pi-ai/providers/openai-completions";
+} from "@awfixerai/ai/providers/openai-completions";
 import type {
 	AssistantMessage,
 	Context,
@@ -14,11 +14,11 @@ import type {
 	OpenAICompat,
 	Tool,
 	ToolResultMessage,
-} from "@oh-my-pi/pi-ai/types";
-import { buildModel } from "@oh-my-pi/pi-catalog/build";
-import { Effort } from "@oh-my-pi/pi-catalog/effort";
-import { getBundledModel } from "@oh-my-pi/pi-catalog/models";
-import type { ResolvedOpenAICompat } from "@oh-my-pi/pi-catalog/types";
+} from "@awfixerai/ai/types";
+import { buildModel } from "@awfixerai/catalog/build";
+import { Effort } from "@awfixerai/catalog/effort";
+import { getBundledModel } from "@awfixerai/catalog/models";
+import type { ResolvedOpenAICompat } from "@awfixerai/catalog/types";
 
 const gpt4oMiniSpec: ModelSpec<"openai-completions"> = (() => {
 	const {

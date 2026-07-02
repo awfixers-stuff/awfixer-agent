@@ -8,18 +8,18 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as os from "node:os";
 import * as path from "node:path";
-import { Agent, type AgentTool } from "@oh-my-pi/pi-agent-core";
-import { type Api, Effort, type Model } from "@oh-my-pi/pi-ai";
-import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
-import type { PromptTemplate } from "@oh-my-pi/pi-coding-agent/config/prompt-templates";
-import { resetSettingsForTest, Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
-import { InteractiveMode } from "@oh-my-pi/pi-coding-agent/modes/interactive-mode";
-import { initTheme } from "@oh-my-pi/pi-coding-agent/modes/theme/theme";
-import { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
-import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
-import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
-import type { AutocompleteProvider } from "@oh-my-pi/pi-tui";
-import { TempDir } from "@oh-my-pi/pi-utils";
+import { ModelRegistry } from "@awfixerai/agent/config/model-registry";
+import type { PromptTemplate } from "@awfixerai/agent/config/prompt-templates";
+import { resetSettingsForTest, Settings } from "@awfixerai/agent/config/settings";
+import { InteractiveMode } from "@awfixerai/agent/modes/interactive-mode";
+import { initTheme } from "@awfixerai/agent/modes/theme/theme";
+import { AgentSession } from "@awfixerai/agent/session/agent-session";
+import { AuthStorage } from "@awfixerai/agent/session/auth-storage";
+import { SessionManager } from "@awfixerai/agent/session/session-manager";
+import { Agent, type AgentTool } from "@awfixerai/agent-core";
+import { type Api, Effort, type Model } from "@awfixerai/ai";
+import type { AutocompleteProvider } from "@awfixerai/tui";
+import { TempDir } from "@awfixerai/utils";
 import { type } from "arktype";
 
 function makeTool(name: string): AgentTool {

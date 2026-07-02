@@ -1,22 +1,22 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "bun:test";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import type { ImageContent, TextContent } from "@oh-my-pi/pi-ai";
-import { createSessionRuntime } from "@oh-my-pi/pi-coding-agent/autoresearch/state";
+import { createSessionRuntime } from "@awfixerai/agent/autoresearch/state";
 import {
 	type AutoresearchStorage,
 	closeAllAutoresearchStorages,
 	openAutoresearchStorage,
 	type SessionRow,
-} from "@oh-my-pi/pi-coding-agent/autoresearch/storage";
-import { createInitExperimentTool } from "@oh-my-pi/pi-coding-agent/autoresearch/tools/init-experiment";
-import { createLogExperimentTool } from "@oh-my-pi/pi-coding-agent/autoresearch/tools/log-experiment";
-import { createRunExperimentTool } from "@oh-my-pi/pi-coding-agent/autoresearch/tools/run-experiment";
-import { createUpdateNotesTool } from "@oh-my-pi/pi-coding-agent/autoresearch/tools/update-notes";
-import type { ASIData, LogDetails, NumericMetricMap, RunDetails } from "@oh-my-pi/pi-coding-agent/autoresearch/types";
-import type { ExtensionAPI, ExtensionContext } from "@oh-my-pi/pi-coding-agent/extensibility/extensions";
-import * as git from "@oh-my-pi/pi-coding-agent/utils/git";
-import { TempDir } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent/autoresearch/storage";
+import { createInitExperimentTool } from "@awfixerai/agent/autoresearch/tools/init-experiment";
+import { createLogExperimentTool } from "@awfixerai/agent/autoresearch/tools/log-experiment";
+import { createRunExperimentTool } from "@awfixerai/agent/autoresearch/tools/run-experiment";
+import { createUpdateNotesTool } from "@awfixerai/agent/autoresearch/tools/update-notes";
+import type { ASIData, LogDetails, NumericMetricMap, RunDetails } from "@awfixerai/agent/autoresearch/types";
+import type { ExtensionAPI, ExtensionContext } from "@awfixerai/agent/extensibility/extensions";
+import * as git from "@awfixerai/agent/utils/git";
+import type { ImageContent, TextContent } from "@awfixerai/ai";
+import { TempDir } from "@awfixerai/utils";
 import { $ } from "bun";
 
 afterEach(() => {

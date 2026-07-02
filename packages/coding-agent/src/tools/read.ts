@@ -2,19 +2,19 @@ import { Database } from "bun:sqlite";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { formatHashlineHeader, formatNumberedLine, formatNumberedLines } from "@oh-my-pi/hashline";
 import type {
 	AgentTool,
 	AgentToolContext,
 	AgentToolResult,
 	AgentToolUpdateCallback,
 	ToolTier,
-} from "@oh-my-pi/pi-agent-core";
-import type { ImageContent, TextContent } from "@oh-my-pi/pi-ai";
-import { glob, type SummaryResult, summarizeCode } from "@oh-my-pi/pi-natives";
-import type { Component } from "@oh-my-pi/pi-tui";
-import { Text } from "@oh-my-pi/pi-tui";
-import { getRemoteDir, type ImageMetadata, logger, prompt, readImageMetadata, untilAborted } from "@oh-my-pi/pi-utils";
+} from "@awfixerai/agent-core";
+import type { ImageContent, TextContent } from "@awfixerai/ai";
+import { formatHashlineHeader, formatNumberedLine, formatNumberedLines } from "@awfixerai/hashline";
+import { glob, type SummaryResult, summarizeCode } from "@awfixerai/natives";
+import type { Component } from "@awfixerai/tui";
+import { Text } from "@awfixerai/tui";
+import { getRemoteDir, type ImageMetadata, logger, prompt, readImageMetadata, untilAborted } from "@awfixerai/utils";
 import { type } from "arktype";
 import { LRUCache } from "lru-cache/raw";
 import {

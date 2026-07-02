@@ -1,7 +1,7 @@
-import type { AgentTool, AgentToolContext, AgentToolResult, AgentToolUpdateCallback } from "@oh-my-pi/pi-agent-core";
-import { instrumentedCompleteSimple, resolveTelemetry } from "@oh-my-pi/pi-agent-core";
-import { type Api, completeSimple, type ImageContent, type Model, type ToolExample } from "@oh-my-pi/pi-ai";
-import { prompt } from "@oh-my-pi/pi-utils";
+import type { AgentTool, AgentToolContext, AgentToolResult, AgentToolUpdateCallback } from "@awfixerai/agent-core";
+import { instrumentedCompleteSimple, resolveTelemetry } from "@awfixerai/agent-core";
+import { type Api, completeSimple, type ImageContent, type Model, type ToolExample } from "@awfixerai/ai";
+import { prompt } from "@awfixerai/utils";
 import { type } from "arktype";
 import { extractTextContent } from "../commit/utils";
 

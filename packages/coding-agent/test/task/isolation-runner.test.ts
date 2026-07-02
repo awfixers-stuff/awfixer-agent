@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "bun:test";
-import { applyEligibleNestedPatches, mergeIsolatedChanges } from "@oh-my-pi/pi-coding-agent/task/isolation-runner";
-import type { SingleResult } from "@oh-my-pi/pi-coding-agent/task/types";
-import * as worktreeModule from "@oh-my-pi/pi-coding-agent/task/worktree";
+import { applyEligibleNestedPatches, mergeIsolatedChanges } from "@awfixerai/agent/task/isolation-runner";
+import type { SingleResult } from "@awfixerai/agent/task/types";
+import * as worktreeModule from "@awfixerai/agent/task/worktree";
 
 function result(overrides: Partial<SingleResult> = {}): SingleResult {
 	return {
