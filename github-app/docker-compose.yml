@@ -36,6 +36,7 @@ services:
     environment:
       DATABASE_URL: postgresql://prwatch:prwatch@postgres:5432/prwatch
       PRWATCH_WORKER_ID: worker-local
+      PRWATCH_STUB_PIPELINE: "true"
       E2B_API_KEY: ""
     volumes:
       - prwatch-data:/data

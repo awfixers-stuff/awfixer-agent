@@ -9,9 +9,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends git ca-certific
 WORKDIR /app
 COPY github-app/worker/pyproject.toml github-app/worker/README.md ./
 COPY github-app/worker/src ./src
-RUN pip install --no-cache-dir .
+COPY python/omp-rpc /tmp/omp-rpc
+RUN pip install --no-cache-dir /tmp/omp-rpc . \
+  && rm -rf /tmp/omp-rpc
 COPY --from=pi /usr/local/bin/omp /usr/local/bin/omp
-ENV PRWATCH_OMP_COMMAND=omp
+COPY --from=pi /usr/local/bin/agent /usr/local/bin/agent
+ENV PRWATCH_OMP_COMMAND=agent
 ENV PRWATCH_WORKSPACE_ROOT=/data/workspaces
 VOLUME /data
 ENTRYPOINT ["prwatch"]

@@ -12,6 +12,7 @@ dependencies = [
   "asyncpg>=0.30",
   "click>=8.1",
   "httpx>=0.27",
+  "PyJWT[crypto]>=2.8",
   "pydantic>=2.6",
   "pydantic-settings>=2.2",
   "python-dotenv>=1.0",
@@ -22,7 +23,9 @@ dev = [
   "pytest>=8.0",
   "pytest-asyncio>=0.23",
   "ruff>=0.13",
+  "testcontainers[postgres]>=4.0",
 ]
+
 e2b = [
   "e2b-code-interpreter>=1.0",
 ]
