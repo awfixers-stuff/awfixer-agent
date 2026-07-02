@@ -105,7 +105,6 @@ async function checkForNewVersion(currentVersion: string): Promise<string | unde
 		return;
 	}
 	try {
-		if (!UPDATE_CHECK_URL) return undefined;
 		const response = await fetch(UPDATE_CHECK_URL);
 		if (!response.ok) return undefined;
 
@@ -649,7 +648,7 @@ export async function createSessionManager(
 		if (!match) {
 			throw new SessionResolutionError(
 				`Session "${forkSource}" not found.`,
-				"Run `omp --resume` without an argument to pick from recent sessions, or `omp` to start a new one.",
+				"Run `agent --resume` without an argument to pick from recent sessions, or `agent` to start a new one.",
 			);
 		}
 		return await SessionManager.forkFrom(match.session.path, cwd, parsed.sessionDir);
@@ -667,7 +666,7 @@ export async function createSessionManager(
 		if (!match) {
 			throw new SessionResolutionError(
 				`Session "${sessionArg}" not found.`,
-				"Run `omp --resume` without an argument to pick from recent sessions, or `omp` to start a new one.",
+				"Run `agent --resume` without an argument to pick from recent sessions, or `agent` to start a new one.",
 			);
 		}
 		if (match.scope === "local") {

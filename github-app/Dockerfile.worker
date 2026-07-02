@@ -1,7 +1,15 @@
 # syntax=docker/dockerfile:1
-# Build from monorepo root: docker build -f github-app/Dockerfile.worker --build-arg PI_BASE=awfixer-agent/agent:dev .
-ARG PI_BASE=awfixer-agent/agent:dev
-FROM ${PI_BASE} AS pi
+# Build from monorepo root: docker build -f github-app/Dockerfile.worker --build-arg AGENT_BASE=awfixer-agent/agent:dev .
+ARG PI_BASE
+ARG AGENT_BASE
+ARG BASE_IMAGE=${AGENT_BASE:-${PI_BASE:-awfixer-agent/agent:dev}}
+FROM ${BASE_IMAGE} AS pi
+
+ARG PI_BASE
+ARG AGENT_BASE
+RUN if [ -z "${AGENT_BASE}" ] && [ -n "${PI_BASE}" ]; then \
+      echo "[deprecated] Docker build-arg PI_BASE is deprecated; use AGENT_BASE instead." >&2; \
+    fi
 
 FROM python:3.12-slim
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates \

@@ -18,8 +18,8 @@
 #     docker run --rm -it -v "$PWD":/work awfixer-agent/agent:dev cli    # interactive omp
 #
 # Consume as a base in another Dockerfile (see Dockerfile.autoawfixer):
-#     ARG PI_BASE=awfixer-agent/agent:dev
-#     FROM ${PI_BASE} AS pi-base
+#     ARG AGENT_BASE=awfixer-agent/agent:dev
+#     FROM ${AGENT_BASE} AS pi-base
 ###############################################################################
 
 ARG BUN_VERSION=1.3.14

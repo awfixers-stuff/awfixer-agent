@@ -49,7 +49,7 @@ describe("DuckDuckGo web search provider", () => {
 		expect(url.searchParams.get("no_redirect")).toBe("1");
 		expect(url.searchParams.get("no_html")).toBe("1");
 		expect(url.searchParams.get("skip_disambig")).toBe("1");
-		expect(url.searchParams.get("t")).toBe("oh-my-pi");
+		expect(url.searchParams.get("t")).toBe("awfixer-agent");
 		expect(capturedInit?.method).toBe("GET");
 		expect(capturedInit?.headers).toBeUndefined();
 	});

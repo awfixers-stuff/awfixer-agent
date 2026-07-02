@@ -22,6 +22,7 @@ export const commands: CommandEntry[] = [
 	{ name: "completions", load: () => import("./commands/completions").then(m => m.default) },
 	{ name: "__complete", load: () => import("./commands/complete").then(m => m.default) },
 	{ name: "config", load: () => import("./commands/config").then(m => m.default) },
+	{ name: "control", load: () => import("./commands/control").then(m => m.default) },
 	{ name: "dry-balance", load: () => import("./commands/dry-balance").then(m => m.default) },
 	{ name: "migrate-config", load: () => import("./commands/migrate-config").then(m => m.default) },
 	{ name: "gc", load: () => import("./commands/gc").then(m => m.default) },
@@ -57,15 +58,15 @@ export const commands: CommandEntry[] = [
 const RESERVED_TOP_LEVEL_WORDS = new Map<string, string>([
 	[
 		"extensions",
-		'`omp extensions` is not a management command. Use `omp plugin list` / `omp plugin install`, or run `omp launch extensions` if you meant to send "extensions" as a prompt.',
+		'`agent extensions` is not a management command. Use `agent plugin list` / `agent plugin install`, or run `agent launch extensions` if you meant to send "extensions" as a prompt.',
 	],
 	[
 		"list",
-		'`omp list` is not a top-level command. Use `omp plugin list` to list installed plugins, or run `omp launch list` if you meant to send "list" as a prompt.',
+		'`agent list` is not a top-level command. Use `agent plugin list` to list installed plugins, or run `agent launch list` if you meant to send "list" as a prompt.',
 	],
 	[
 		"remove",
-		'`omp remove` is not a top-level command. Use `omp plugin uninstall <name>` to remove a plugin, or run `omp launch remove` if you meant to send "remove" as a prompt.',
+		'`agent remove` is not a top-level command. Use `agent plugin uninstall <name>` to remove a plugin, or run `agent launch remove` if you meant to send "remove" as a prompt.',
 	],
 ]);
 

@@ -195,18 +195,39 @@ function compareVersions(a: string, b: string): number {
 	return aPatch - bPatch;
 }
 
+const RELEASE_BRANCH = "main";
+
+function isExplicitVersion(arg: string): boolean {
+	return /^\d+\.\d+\.\d+(-[a-zA-Z0-9.]+)?$/.test(arg);
+}
+
+function normalizeTagVersion(tag: string): string {
+	return tag.replace(/^v/, "");
+}
+
+function isVersionGreaterThan(candidate: string, baselineTag: string): boolean {
+	return Bun.semver.order(normalizeTagVersion(candidate), normalizeTagVersion(baselineTag)) > 0;
+}
+
+async function resolveLatestTag(): Promise<string | null> {
+	const result = await git(["describe", "--tags", "--abbrev=0", "--match", "v*"]).quiet().nothrow();
+	if (result.exitCode !== 0) return null;
+	const tag = result.text().trim();
+	return tag.length > 0 ? tag : null;
+}
+
 async function cmdRelease(versionOrBump: string): Promise<void> {
 	console.log("\n=== Release Script ===\n");
 
 	// 1. Pre-flight checks
 	console.log("Pre-flight checks...");
 
-	const branch = await git(["branch", "--show-current"]).text();
-	if (branch.trim() !== "main") {
-		console.error(`Error: Must be on main branch (currently on '${branch.trim()}')`);
+	const branch = (await git(["branch", "--show-current"]).text()).trim();
+	if (branch !== RELEASE_BRANCH) {
+		console.error(`Error: Must be on ${RELEASE_BRANCH} branch (currently on '${branch}')`);
 		process.exit(1);
 	}
-	console.log("  On main branch");
+	console.log(`  On ${RELEASE_BRANCH} branch`);
 
 	const status = await git(["status", "--porcelain"]).text();
 	if (status.trim()) {
@@ -216,18 +237,26 @@ async function cmdRelease(versionOrBump: string): Promise<void> {
 	}
 	console.log("  Working directory clean");
 
-	const latestTag = (await git(["describe", "--tags", "--abbrev=0", "--match", "v*"]).text()).trim();
+	const latestTag = await resolveLatestTag();
 	let version = versionOrBump;
 	if (version === "major" || version === "minor" || version === "patch") {
+		if (!latestTag) {
+			console.error("Error: No prior v* release tag found; pass an explicit version instead.");
+			process.exit(1);
+		}
 		version = bumpVersion(latestTag, version);
 		console.log(`Bumping ${versionOrBump} version from ${latestTag} -> ${version}`);
 	}
 
-	if (compareVersions(version, latestTag) <= 0) {
-		console.error(`Error: Version ${version} must be greater than latest tag ${latestTag}`);
-		process.exit(1);
+	if (latestTag) {
+		if (!isVersionGreaterThan(version, latestTag)) {
+			console.error(`Error: Version ${version} must be greater than latest tag ${latestTag}`);
+			process.exit(1);
+		}
+		console.log(`  Version ${version} > ${latestTag}\n`);
+	} else {
+		console.log(`  First release (no prior v* tags); publishing ${version}\n`);
 	}
-	console.log(`  Version ${version} > ${latestTag}\n`);
 
 	// 2. Update package versions
 	console.log(`Updating package versions to ${version}…`);
@@ -418,7 +447,7 @@ if (!arg) {
 
 if (arg === "watch") {
 	await cmdWatch();
-} else if (arg === "major" || arg === "minor" || arg === "patch" || /^\d+\.\d+\.\d+$/.test(arg)) {
+} else if (arg === "major" || arg === "minor" || arg === "patch" || isExplicitVersion(arg)) {
 	await cmdRelease(arg);
 } else {
 	console.error(`Unknown command or invalid version: ${arg}`);

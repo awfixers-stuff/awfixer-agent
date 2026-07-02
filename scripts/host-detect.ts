@@ -29,15 +29,5 @@ export function detectHostAvx2Support(): boolean {
 		return Boolean(features && /\bAVX2\b/i.test(features));
 	}
 
-	if (process.platform === "win32") {
-		const output = runCommand("powershell.exe", [
-			"-NoProfile",
-			"-NonInteractive",
-			"-Command",
-			"[System.Runtime.Intrinsics.X86.Avx2]::IsSupported",
-		]);
-		return output?.toLowerCase() === "true";
-	}
-
 	return false;
 }

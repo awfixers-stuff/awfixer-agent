@@ -4,7 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import codes.awfixer.agentmobile.data.AppSettings
-import codes.awfixer.agentmobile.data.OfflineControlRepository
+import codes.awfixer.agentmobile.data.ControlApi
+import codes.awfixer.agentmobile.data.HttpControlRepository
 import codes.awfixer.agentmobile.data.SettingsStore
 import codes.awfixer.agentmobile.data.StatsApi
 import codes.awfixer.agentmobile.data.StatsApiException
@@ -28,7 +29,7 @@ data class UiLoadState<T>(
 class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val settingsStore = SettingsStore(application)
     private val statsRepository = StatsRepository(StatsApi())
-    private val controlRepository = OfflineControlRepository()
+    private val controlRepository = HttpControlRepository(ControlApi())
 
     val settings: StateFlow<AppSettings> = settingsStore.settings.stateIn(
         viewModelScope,
@@ -61,7 +62,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         loadDashboard(current)
         loadRecent(current)
         loadErrors(current)
-        viewModelScope.launch { _control.value = controlRepository.refresh() }
+        viewModelScope.launch { _control.value = controlRepository.refresh(current) }
     }
 
     fun loadDashboard(settings: AppSettings) {

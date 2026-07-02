@@ -28,8 +28,6 @@ use tokio::{
 };
 use tokio_util::sync::CancellationToken;
 
-#[cfg(windows)]
-use crate::windows::configure_windows_path;
 use crate::{
 	cancel::{AbortReason, AbortToken, CancelToken},
 	minimizer, process,
@@ -620,9 +618,6 @@ async fn create_session(config: &ShellConfig) -> Result<ShellSessionCore> {
 			builtins::builtin::<NohupCommand, _>().transparent_background_wrapper(),
 		);
 	}
-
-	#[cfg(windows)]
-	configure_windows_path(&mut shell)?;
 
 	if let Some(snapshot_path) = config.snapshot_path.as_ref() {
 		source_snapshot(&mut shell, snapshot_path).await?;

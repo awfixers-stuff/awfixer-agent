@@ -20,7 +20,7 @@ services:
       args:
         # Tag of the pre-built pi-base image produced by `bun run agent:image`
         # (sources: pi root /Dockerfile). Override per-environment as needed.
-        PI_BASE: awfixer-agent/agent:dev
+        AGENT_BASE: awfixer-agent/agent:dev
     image: autoawfixer:dev
     container_name: autoawfixer
     # Phase B (graceful shutdown): gives the orchestrator at least

@@ -14,7 +14,6 @@ import chalk from "chalk";
 import { theme } from "../modes/theme/theme";
 
 // Update-checker endpoints — see transition-docs/update-checker-domains.md.
-const REPO = "awfixers-stuff/awfixer-agent" as const;
 const PACKAGE = "@awfixerai/agent";
 /** Homebrew tap TBD — binary/bun/mise paths work without it. */
 const HOMEBREW_FORMULA = "awfixer/tap/agent";
@@ -52,13 +51,7 @@ const NATIVES_PACKAGE = "@awfixerai/natives";
  * `packages/natives/scripts/gen-npm-packages.ts`; kept here as the local
  * source of truth so the update path stays free of cross-package imports.
  */
-const SUPPORTED_NATIVE_TAGS: ReadonlySet<string> = new Set([
-	"linux-x64",
-	"linux-arm64",
-	"darwin-x64",
-	"darwin-arm64",
-	"win32-x64",
-]);
+const SUPPORTED_NATIVE_TAGS: ReadonlySet<string> = new Set(["linux-x64", "linux-arm64", "darwin-x64", "darwin-arm64"]);
 
 function currentNativeTag(): string {
 	return `${process.platform}-${process.arch}`;
@@ -246,9 +239,6 @@ async function resolveUpdateTarget(): Promise<UpdateTarget> {
  * Uses npm instead of GitHub API to avoid unauthenticated rate limiting.
  */
 async function getLatestRelease(): Promise<ReleaseInfo> {
-	if (!NPM_REGISTRY) {
-		throw new Error("Self-update checker disabled pending rebrand — see transition-docs/update-checker-domains.md");
-	}
 	const response = await fetch(`${NPM_REGISTRY}${PACKAGE}/latest`);
 	if (!response.ok) {
 		throw new Error(`Failed to fetch release info: ${response.statusText}`);
@@ -832,11 +822,6 @@ async function updateViaMise(expectedVersion: string, force: boolean): Promise<v
 async function updateViaBinaryAt(targetPath: string, expectedVersion: string): Promise<void> {
 	const binaryName = getBinaryName();
 	const tag = `v${expectedVersion}`;
-	if (!REPO) {
-		throw new Error(
-			"Self-update binary download disabled pending rebrand — see transition-docs/update-checker-domains.md",
-		);
-	}
 	const url = `${UPDATE_API_ORIGIN}/releases/download/${tag}/${binaryName}`;
 
 	const tempPath = `${targetPath}.new`;

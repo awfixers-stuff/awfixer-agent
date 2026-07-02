@@ -43,6 +43,7 @@ import {
 } from "./config/model-resolver";
 import { loadPromptTemplates as loadPromptTemplatesInternal, type PromptTemplate } from "./config/prompt-templates";
 import { Settings, type SkillsSettings } from "./config/settings";
+import { attachToControlHub } from "./control/attach";
 import { CursorExecHandlers } from "./cursor";
 import "./discovery";
 import { initializeWithSettings } from "./discovery";
@@ -2769,6 +2770,12 @@ export async function createAgentSession(options: CreateAgentSessionOptions = {}
 		// messages here. Refresh sessionFile in case it was unavailable at pre-register
 		// time. The dispose wrapper below unregisters on teardown (unless parked).
 		agentRegistry.attachSession(resolvedAgentId, session, sessionManager.getSessionFile() ?? null);
+		let detachControlHub: (() => void) | undefined;
+		if (agentKind === "main") {
+			void attachToControlHub(session).then(detach => {
+				detachControlHub = detach;
+			});
+		}
 		{
 			const originalDispose = session.dispose.bind(session);
 			session.dispose = async () => {
@@ -2786,6 +2793,7 @@ export async function createAgentSession(options: CreateAgentSessionOptions = {}
 					}
 					await originalDispose();
 				} finally {
+					detachControlHub?.();
 					unregisterUnlessParked();
 					unsubscribeCredentialDisabled?.();
 				}

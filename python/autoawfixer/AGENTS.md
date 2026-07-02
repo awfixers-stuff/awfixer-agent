@@ -23,7 +23,7 @@ Webhook → durable queue → async dispatcher → per-issue git worktree → ag
 - `src/prompts/` — Mustache-style `{{var}}` templates loaded by `persona.py` via `@cache` and `importlib.resources`. Shipped as package data (`pyproject.toml` `package-data`).
 - `tests/` — pytest suite. `test_worker_smoke.py` is gated on `AUTOAWFIXER_INTEGRATION=1`.
 - `data/` — runtime state (sqlite + WAL, `workspaces/`, `logs/`). Never committed.
-- `/Dockerfile` (pi root) — produces `awfixer-agent/agent:dev` (pi runtime image: python + bun + rustup + pi-natives + omp_rpc + `/usr/local/bin/omp` shim + the full pi source under `/pi`). Stages: `natives-builder` → `wheel-builder` → `pi-base` → `pi-runtime` (default). Built via `bun run agent:image`. Autoawfixer's image extends `pi-base` via `FROM ${PI_BASE}` in `/Dockerfile.autoawfixer`.
+- `/Dockerfile` (pi root) — produces `awfixer-agent/agent:dev` (pi runtime image: python + bun + rustup + pi-natives + omp_rpc + `/usr/local/bin/omp` shim + the full pi source under `/pi`). Stages: `natives-builder` → `wheel-builder` → `pi-base` → `pi-runtime` (default). Built via `bun run agent:image`. Autoawfixer's image extends `pi-base` via `FROM ${AGENT_BASE}` in `/Dockerfile.autoawfixer`.
 
 ## Development Commands
 
@@ -40,7 +40,7 @@ Docker inner loop:
 ```
 bun run agent:image                  # build awfixer-agent/agent:dev (one-time / on pi change)
 bun run agent:run                    # docker run -it awfixer-agent/agent:dev (smoke-test the shim)
-bun run autoawfixer:build              # pi:image (if pi changed) + docker compose build
+bun run autoawfixer:build              # agent:image (if pi changed) + docker compose build
 bun run autoawfixer:dev                # build + up -d + follow logs
 bun run autoawfixer:up / autoawfixer:down / autoawfixer:restart / autoawfixer:logs
 bun run autoawfixer:rebuild            # docker compose build --no-cache
@@ -97,8 +97,8 @@ Lint + format: TypeScript via Biome (config in `biome.json`), Python via Ruff (c
 - `src/cli.py` — Click CLI (`serve`, `triage`, `replay`, `status`, `cleanup`).
 - `src/dashboard.py` — single-page HTML dashboard served from `/`.
 - `pyproject.toml` — packaging + pytest config (`asyncio_mode = "auto"`, `testpaths = ["tests"]`).
-- `/Dockerfile.autoawfixer` (pi root) — autoawfixer's image. `FROM ${PI_BASE}` (default `awfixer-agent/agent:dev`), adds the SolidJS dashboard bundle, the autoawfixer Python package, and the `autoawfixer-entrypoint` shim. Tini entrypoint, exposes `8080`, `VOLUME /data`. The toolchain (python + bun + rustup + pi-natives + omp_rpc + `agent` shim) comes from `pi-base` — no duplication in this file.
-- `docker-compose.yml` — `build.args.PI_BASE`, mounts `$AGENT_ROOT:/work/pi:ro`, `./data:/data`, `~/.agent/models.container.yml:ro` (mapped to `models.yml` inside the container — kept separate from the host's `~/.agent/models.yml` so the host agent doesn't pick up gateway routing intended only for the container), `extra_hosts: llm-gateway.internal:host-gateway`.
+- `/Dockerfile.autoawfixer` (pi root) — autoawfixer's image. `FROM ${AGENT_BASE}` (default `awfixer-agent/agent:dev`), adds the SolidJS dashboard bundle, the autoawfixer Python package, and the `autoawfixer-entrypoint` shim. Tini entrypoint, exposes `8080`, `VOLUME /data`. The toolchain (python + bun + rustup + pi-natives + omp_rpc + `agent` shim) comes from `pi-base` — no duplication in this file.
+- `docker-compose.yml` — `build.args.AGENT_BASE`, mounts `$AGENT_ROOT:/work/pi:ro`, `./data:/data`, `~/.agent/models.container.yml:ro` (mapped to `models.yml` inside the container — kept separate from the host's `~/.agent/models.yml` so the host agent doesn't pick up gateway routing intended only for the container), `extra_hosts: llm-gateway.internal:host-gateway`.
 - `entrypoint.sh` — validates `AGENT_ROOT`, creates `/data/{workspaces,logs}` + build caches.
 - `.env.example` — authoritative list of required runtime env vars.
 - `README.md` — full architecture + operational reference. Authoritative for end-to-end flow, host-tool spec, security posture, and configuration reference.
@@ -110,7 +110,7 @@ Lint + format: TypeScript via Biome (config in `biome.json`), Python via Ruff (c
 - **Task runner**: `bun` (root `package.json` `scripts`). Always reach for an existing `bun run` recipe before invoking `docker compose` or `pytest` directly.
 - **Container runtime**: Docker Compose v2. The image embeds Bun 1.3.14 + a rustup launcher and exposes `agent` via a `/usr/local/bin/omp` shim; `AUTOAWFIXER_OMP_COMMAND=omp` should not need changing.
 - **Required env** (set in `.env`, see `.env.example`): `GITHUB_WEBHOOK_SECRET`, `AUTOAWFIXER_BOT_LOGIN`, `AUTOAWFIXER_GIT_AUTHOR_NAME`, `AUTOAWFIXER_GIT_AUTHOR_EMAIL`, `AUTOAWFIXER_REPO_ALLOWLIST`, plus model knobs (`AUTOAWFIXER_MODEL`, `AUTOAWFIXER_THINKING`, optional `AUTOAWFIXER_PROVIDER`) and rate-limit / concurrency / timeout overrides. Set `AUTOAWFIXER_BOT_LOGIN` to the lowercase mention handle (`roboomp` in production, no leading `@` or `[bot]`; config normalizes common variants). `AUTOAWFIXER_MAINTAINER_LOGINS` is optional comma-separated bare logins (`@`/`[bot]` optional, case-insensitive) for non-owner implementation authorizers. **GitHub auth is mode-exclusive**: either set `AUTOAWFIXER_GH_PROXY_URL` + `AUTOAWFIXER_GH_PROXY_HMAC_KEY` (gh-proxy mode; PAT lives only in the sidecar container — the bundled compose default), or set `GITHUB_TOKEN` directly (single-process PAT mode). `Settings._validate_proxy_or_pat` rejects a `.env` that sets both.
-- **AGENT_ROOT resolution**: autoawfixer lives inside the awfixer-agent monorepo at `python/autoawfixer/`. `bun run agent:image` builds the parent monorepo (`../..`) as its docker build context to produce `awfixer-agent/agent:dev`; `docker-compose.yml` extends that image via `PI_BASE` and mounts the same parent path read-only at `/work/pi` for the orchestrator to see live source. Override `AGENT_ROOT` only when pointing the build/mount at a different awfixer-agent checkout. Inside the container the path is always `/work/pi`. Build invalidation stays bounded: Python-only edits in autoawfixer never trigger a natives recompile.
+- **AGENT_ROOT resolution**: autoawfixer lives inside the awfixer-agent monorepo at `python/autoawfixer/`. `bun run agent:image` builds the parent monorepo (`../..`) as its docker build context to produce `awfixer-agent/agent:dev`; `docker-compose.yml` extends that image via `AGENT_BASE` and mounts the same parent path read-only at `/work/pi` for the orchestrator to see live source. Override `AGENT_ROOT` only when pointing the build/mount at a different awfixer-agent checkout. Inside the container the path is always `/work/pi`. Build invalidation stays bounded: Python-only edits in autoawfixer never trigger a natives recompile.
 - **Forbidden**: no docker-in-docker, no extra service containers, no new background workers outside `WorkerPool`. The container itself is the isolation boundary; per-issue isolation is the git worktree.
 
 ## Testing & QA

@@ -26,7 +26,7 @@ It follows the architecture terms from `docs/natives-architecture.md`:
 
 - `bun scripts/build-native.ts` (`build`) → N-API build, addon install, generated declarations install, explicit ESM export and enum runtime patch.
 - `bun scripts/embed-native.ts` (`gen:native`) → generate `native/embedded-addon.js` plus `native/embedded-addons.<tag>.tar.gz` from built files.
-- `bun scripts/gen-npm-packages.ts` (`gen:npm`) → generate per-platform npm leaf packages (`@awfixer-agent/agent-natives-<platform>-<arch>`, installed as optional dependencies of the core package) under `npm/` from built addon files.
+- `bun scripts/gen-npm-packages.ts` (`gen:npm`) → generate per-platform npm leaf packages (`@awfixerai/natives-<tag>`, installed as optional dependencies of the core package) under `npm/` from built addon files.
 
 Root scripts include `build:native` as `bun --cwd=packages/natives run build`.
 
@@ -142,7 +142,7 @@ Failure exits have explicit error text for invalid variants, failed napi build, 
 Typical local loop:
 
 1. Build addon: `bun --cwd=packages/natives run build`.
-2. Loader resolves platform npm leaf-package candidates (`@awfixer-agent/agent-natives-<platform>-<arch>`, when resolvable), then package-local `native/` and executable-dir fallback candidates.
+2. Loader resolves platform npm leaf-package candidates (`@awfixerai/natives-<tag>`, when resolvable), then package-local `native/` and executable-dir fallback candidates.
 3. Generated declarations in `native/index.d.ts` describe the public TS API.
 
 ## Shipped/compiled binary workflow

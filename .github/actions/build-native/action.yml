@@ -13,7 +13,7 @@ inputs:
       description: Rust source hash used in the artifact name
       required: true
    platform:
-      description: Target platform (linux, darwin, win32)
+      description: Target platform (linux, darwin)
       required: true
    arch:
       description: Target arch (x64, arm64)

@@ -76,7 +76,7 @@ rejects a `.env` setting both).
 
 Build invalidation is bounded: editing autoawfixer Python touches only the
 runtime layer; editing pi source rebuilds `awfixer-agent/agent:dev`, which
-autoawfixer's `Dockerfile.autoawfixer` extends via `FROM ${PI_BASE}`.
+autoawfixer's `Dockerfile.autoawfixer` extends via `FROM ${AGENT_BASE}`.
 
 ### Public URL
 

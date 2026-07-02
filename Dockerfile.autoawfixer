@@ -5,7 +5,7 @@
 # Extends `pi-base` (from /Dockerfile, default target awfixer-agent/agent:dev) and adds
 # the autoawfixer Python package + a Vite-built SolidJS dashboard bundle. The pi
 # toolchain (python + bun + rustup launcher + pi-natives + omp_rpc wheel +
-# /usr/local/bin/omp shim) all comes from PI_BASE; this file only layers what's
+# /usr/local/bin/omp shim) all comes from AGENT_BASE; this file only layers what's
 # autoawfixer-specific.
 #
 # Build (from pi root):
@@ -16,7 +16,9 @@
 #     docker compose --project-directory python/autoawfixer build
 ###############################################################################
 
-ARG PI_BASE=awfixer-agent/agent:dev
+ARG PI_BASE
+ARG AGENT_BASE
+ARG BASE_IMAGE=${AGENT_BASE:-${PI_BASE:-awfixer-agent/agent:dev}}
 ARG BUN_VERSION=1.3.14
 
 ############################
@@ -38,7 +40,13 @@ RUN bun --cwd=python/autoawfixer/web run build
 ############################
 # 2) runtime — pi-base + autoawfixer src + web bundle + pip install
 ############################
-FROM ${PI_BASE} AS runtime
+FROM ${BASE_IMAGE} AS runtime
+
+ARG PI_BASE
+ARG AGENT_BASE
+RUN if [ -z "${AGENT_BASE}" ] && [ -n "${PI_BASE}" ]; then \
+      echo "[deprecated] Docker build-arg PI_BASE is deprecated; use AGENT_BASE instead." >&2; \
+    fi
 
 # autoawfixer runs against the host pi checkout mounted at /work/pi read-only.
 ENV AGENT_ROOT=/work/pi

@@ -1,22 +1,37 @@
 # Changelog
 ## [Unreleased]
 
+### Added
+
+- Published `@awfixerai/*` packages to npm at `0.0.1-rc.1` (first public release under the `@awfixerai` scope).
+
 ### Breaking Changes
 
+- Dropped native Windows (`win32-x64`) support. No `agent-windows-x64.exe` release binary; use WSL2 or a Linux/macOS host.
 - Renamed published packages to deduplicated `@awfixerai/*` names (`@awfixerai/agent`, `@awfixerai/utils`, `@awfixerai/ai`, …); the CLI npm package is `@awfixerai/agent`. Legacy `@oh-my-pi/*` and transitional `@awfixerai/pi-*` plugin imports continue to resolve via the extension compat shim.
 - Removed the `omp` CLI binary alias and `omp-*` GitHub release assets; use `agent` and `agent-<platform>-<arch>` instead.
 - Release builds define `AGENT_COMPILED` (not `PI_COMPILED`). Log files are `agent.YYYY-MM-DD.log`.
 
 ### Added
 
+- Added `agent control serve` HTTP control API on port **3848** for listing live sessions and remote steer/abort (maps to JSON-RPC `get_state` / `steer` / `abort`). Spec: `docs/superpowers/specs/2026-07-02-agent-control-api.md`.
 - Registered `agent` as the sole CLI binary (`packages/coding-agent/package.json` `bin` map).
 
 ### Changed
 
+- Narrowed root workspace `overrides` so published `@awfixerai/*` packages resolve from npm via `catalog:`; dev-only packages remain `workspace:*`.
+- Auto QA push default endpoint is `https://agent-api.awfixer.codes/v1/grievances` (fork API receiver; was upstream `qa.omp.sh`).
+- Docker derived images prefer the `AGENT_BASE` build arg (`PI_BASE` still accepted with a build-time deprecation warning).
+- `pi:image` and `pi:run` root scripts are deprecated aliases of `agent:image` and `agent:run`.
 - CLI help and routing display **awfixer-agent** / `agent` as the product identity (`packages/coding-agent/src/cli.ts`).
 - Default user config root is `~/.agent` with `~/.omp` read fallback and `agent migrate-config` for migration (`packages/utils/src/dirs.ts`).
 - `AGENT_DIR`, `AGENT_PROFILE`, `AGENT_CONFIG_DIR`, `AGENT_COMPILED`, and related `AGENT_*` env vars are canonical; legacy `PI_*` reads emit one-time deprecation warnings (`OMP_*` removed).
 - Self-update polls `https://agent-api.awfixer.codes` for `@awfixerai/agent` version metadata (npm proxy with GitHub release fallback), installs via the same registry origin, and downloads binaries through the API release redirect (`packages/agent-api`, `packages/coding-agent/src/cli/update-cli.ts`, `packages/coding-agent/src/main.ts`; see `transition-docs/update-checker-domains.md`).
+
+### Fixed
+
+- Re-enabled self-update version check and binary download (removed rebrand disable guards).
+- Fixed CI GitHub Release upload glob (`agent-*` assets, not `omp-*`).
 - Renamed the GitHub triage bot from `robomp` to **autoawfixer** (`python/autoawfixer/`, `AUTOAWFIXER_*` env prefix, `Dockerfile.autoawfixer`, root `autoawfixer:*` scripts).
 
 ## [16.2.5] - 2026-06-28

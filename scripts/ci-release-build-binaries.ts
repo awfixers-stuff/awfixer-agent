@@ -49,13 +49,6 @@ const targets: BinaryTarget[] = [
 		target: "bun-linux-arm64",
 		outfile: "packages/coding-agent/binaries/agent-linux-arm64",
 	},
-	{
-		id: "win32-x64",
-		platform: "win32",
-		arch: "x64",
-		target: "bun-windows-x64-modern",
-		outfile: "packages/coding-agent/binaries/agent-windows-x64.exe",
-	},
 ];
 
 function parseRequestedTargets(): Set<string> | null {

@@ -25,42 +25,32 @@ when self-update was re-enabled.
 | GitHub org/repo | `awfixers-stuff/awfixer-agent` |
 | npm scope | `@awfixerai/*` (e.g. `@awfixerai/agent`) |
 
-## Nulled poll sites
+## Re-enabled poll sites
 
 ### 1. `packages/coding-agent/src/main.ts` — `checkForNewVersion`
 
 Startup update notifier (runs in interactive mode, gated by `startup.checkUpdate`).
 
 - **Was:** `fetch("https://registry.npmjs.org/@oh-my-pi/pi-coding-agent/latest")`
-- **Now:** `const UPDATE_CHECK_URL = "" as const;` with an `if (!UPDATE_CHECK_URL) return undefined;`
-  early-return so the fetch never runs. Errors are swallowed by the surrounding
-  try/catch (existing behavior).
-- **Repointed to:** `https://agent-api.awfixer.codes/@awfixerai/agent/latest`
+- **Now:** `https://agent-api.awfixer.codes/@awfixerai/agent/latest`
   (proxies npm when published; falls back to latest GitHub release tag otherwise).
 
 ### 2. `packages/coding-agent/src/cli/update-cli.ts` — `getLatestRelease` (`NPM_REGISTRY`)
 
-`omp update --check` / `omp update` fetches the latest published version from npm.
+`agent update --check` / `agent update` fetches the latest published version from npm.
 
 - **Was:** `const NPM_REGISTRY = "https://registry.npmjs.org/";`
   → `fetch(\`${NPM_REGISTRY}${PACKAGE}/latest\`)` where `PACKAGE = "@oh-my-pi/pi-coding-agent"`.
-- **Now:** `const NPM_REGISTRY = "" as const;` with an early `throw` guard in
-  `getLatestRelease` so `omp update` surfaces a clean "disabled pending rebrand" error
-  instead of a network failure.
-- **Repointed to:** `NPM_REGISTRY = https://agent-api.awfixer.codes/` (fork update API; proxies
+- **Now:** `NPM_REGISTRY = https://agent-api.awfixer.codes/` (fork update API; proxies
   `registry.npmjs.org` for `@awfixerai/*` so bun install and version check share one catalog).
 
-### 3. `packages/coding-agent/src/cli/update-cli.ts` — `updateViaBinaryAt` (`REPO`)
+### 3. `packages/coding-agent/src/cli/update-cli.ts` — `updateViaBinaryAt`
 
-Binary self-update path: downloads the platform release asset from GitHub.
+Binary self-update path: downloads the platform release asset via the update API.
 
-- **Was:** `const REPO = "awfixers-stuff/awfixer-agent";`
-  → `fetch(\`https://github.com/${REPO}/releases/download/${tag}/${binaryName}\`)`.
-- **Now:** `const REPO = "" as const;` with an early `throw` guard in
-  `updateViaBinaryAt` so the broken GitHub URL is never built/fetched.
-- **Repointed to:** `awfixers-stuff/awfixer-agent`. Binary downloads go through
-  `https://agent-api.awfixer.codes/releases/download/<tag>/<asset>` (redirects to GitHub;
-  maps `agent-*` asset names to published `omp-*` release filenames).
+- **Was:** direct `https://github.com/awfixers-stuff/awfixer-agent/releases/download/...`
+- **Now:** `https://agent-api.awfixer.codes/releases/download/<tag>/<asset>` (redirects to GitHub;
+  release assets use `agent-*` filenames).
 
 ## Related brand-tied constants (NOT polls — repoint in the same pass)
 

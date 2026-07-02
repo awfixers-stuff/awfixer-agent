@@ -222,6 +222,10 @@
       "types": "./src/config/*.ts",
       "import": "./src/config/*.ts"
     },
+    "./control/*": {
+      "types": "./src/control/*.ts",
+      "import": "./src/control/*.ts"
+    },
     "./dap": {
       "types": "./src/dap/index.ts",
       "import": "./src/dap/index.ts"

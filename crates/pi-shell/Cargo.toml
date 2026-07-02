@@ -44,8 +44,3 @@ uu_uniq = { path = "../vendor/uu-uniq" }
 
 [target.'cfg(unix)'.dependencies]
 libc.workspace = true
-
-[target.'cfg(windows)'.dependencies]
-smallvec.workspace = true
-windows-sys.workspace = true
-winreg.workspace = true

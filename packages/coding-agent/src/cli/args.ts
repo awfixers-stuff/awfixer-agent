@@ -349,7 +349,11 @@ ${chalk.bold("Plugin Options:")}
 
 ${chalk.bold("Useful Commands:")}
   agent agents unpack            - Export bundled subagents to ~/.agent/agents (default)
-  agent agents unpack --project  - Export bundled subagents to ./.omp/agents`;
+  agent agents unpack --project  - Export bundled subagents to ./.omp/agents
+
+${chalk.bold("Links:")}
+  Documentation  https://agent.awfixer.codes
+  Repository     https://github.com/awfixers-stuff/awfixer-agent`;
 }
 
 export function printHelp(): void {

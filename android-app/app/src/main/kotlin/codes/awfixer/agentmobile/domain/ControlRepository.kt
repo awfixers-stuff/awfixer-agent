@@ -1,9 +1,10 @@
 package codes.awfixer.agentmobile.domain
 
+import codes.awfixer.agentmobile.data.AppSettings
+
 /**
- * Future contract for live agent control (steer / abort / session list).
- * No awfixer-agent HTTP control server exists yet — see
- * docs/superpowers/specs/2026-07-01-android-app-design.md.
+ * Live agent control (steer / abort / session list) against the HTTP control API.
+ * See docs/superpowers/specs/2026-07-02-agent-control-api.md.
  */
 data class LiveSessionSummary(
     val id: String,
@@ -18,7 +19,7 @@ sealed interface ControlState {
 }
 
 interface ControlRepository {
-    suspend fun refresh(): ControlState
-    suspend fun steer(sessionId: String, message: String): Result<Unit>
-    suspend fun abort(sessionId: String): Result<Unit>
+    suspend fun refresh(settings: AppSettings): ControlState
+    suspend fun steer(settings: AppSettings, sessionId: String, message: String): Result<Unit>
+    suspend fun abort(settings: AppSettings, sessionId: String): Result<Unit>
 }

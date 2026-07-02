@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { API_ORIGIN, GITHUB_REPO, NATIVES_PACKAGE, PACKAGE, SITE_ORIGIN } from "./src/constants";
+import { handleGrievancesPush } from "./src/grievances";
 import { renderInstallScript } from "./src/install-script";
 import { proxyNpmRequest } from "./src/npm-proxy";
 
@@ -14,6 +15,7 @@ app.get("/", c =>
 		endpoints: {
 			health: "/healthz",
 			install: "/install",
+			grievances: "/v1/grievances",
 			latestCodingAgent: `/@awfixerai/agent/latest`,
 			latestNatives: `/@awfixerai/natives/latest`,
 			releaseAsset: "/releases/download/:tag/:asset",
@@ -33,11 +35,11 @@ app.get("/install", c =>
 	}),
 );
 
+app.post("/v1/grievances", c => handleGrievancesPush(c));
+
 app.get("/releases/download/:tag/:asset", c => {
 	const { tag, asset } = c.req.param();
-	// Release pipeline still publishes omp-* asset names while APP_NAME is agent.
-	const githubAsset = asset.startsWith("agent-") ? asset.replace(/^agent-/, "omp-") : asset;
-	const target = `https://github.com/${GITHUB_REPO}/releases/download/${tag}/${githubAsset}`;
+	const target = `https://github.com/${GITHUB_REPO}/releases/download/${tag}/${asset}`;
 	return c.redirect(target, 302);
 });
 

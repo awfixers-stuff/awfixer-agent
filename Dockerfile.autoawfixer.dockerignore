@@ -70,7 +70,7 @@ pi-*.html
 .env
 
 # Autoawfixer-only excludes. Natives + wheel + python + bun + rustup all come
-# from PI_BASE; the web-builder stage only needs root manifests + the
+# from AGENT_BASE; the web-builder stage only needs root manifests + the
 # python/autoawfixer/web tree; the runtime stage only COPYs python/autoawfixer/
 # pyproject + src + entrypoint. Everything below is dead weight in the
 # autoawfixer build context.

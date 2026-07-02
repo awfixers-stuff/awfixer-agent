@@ -65,7 +65,7 @@ ENV RUSTUP_HOME=/home/runner/.rustup \
 RUN curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs \
       | sh -s -- -y --default-toolchain "${RUST_NIGHTLY}" --profile minimal \
  && rustup component add clippy rustfmt rust-analyzer \
- && rustup target add aarch64-unknown-linux-gnu x86_64-pc-windows-msvc \
+ && rustup target add aarch64-unknown-linux-gnu \
  && cargo install --locked cargo-nextest cargo-zigbuild cargo-xwin \
  && cargo --version \
  && rustc --version \

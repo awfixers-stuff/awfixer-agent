@@ -72,7 +72,7 @@ async function callDuckDuckGoSearch(params: SearchParams): Promise<DuckDuckGoRes
 		["no_redirect", "1"],
 		["no_html", "1"],
 		["skip_disambig", "1"],
-		["t", "oh-my-pi"],
+		["t", "awfixer-agent"],
 	]
 		.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
 		.join("&");

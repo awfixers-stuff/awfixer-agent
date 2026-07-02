@@ -6,16 +6,74 @@ The agent, apps, and services that power the backend of [AWFixer LLC](https://aw
 
 ## What this is
 
-A monorepo that consolidates what used to be a stack of separate tools — the Oh My Pi agent, CodeRabbit, Mergify, Sourcery AI, Semgrep, and more — into a single integrated platform:
+A monorepo built around the **`agent`** coding-agent CLI. This repository is a **fork of [oh-my-pi](https://github.com/can1357/oh-my-pi)**, re-branded for AWFixer:
+
+| Today (fork) | Upstream |
+| --- | --- |
+| CLI binary: `agent` | `omp` |
+| npm scope: `@awfixerai/*` | `@oh-my-pi/*` |
+| User config: `~/.agent` | `~/.omp` |
+
+Docs: [agent.awfixer.codes](https://agent.awfixer.codes) · Repo: [github.com/awfixers-stuff/awfixer-agent](https://github.com/awfixers-stuff/awfixer-agent)
+
+The monorepo consolidates what used to be a stack of separate tools — the Oh My Pi agent, CodeRabbit, Mergify, Sourcery AI, Semgrep, and more — into a single integrated platform:
 
 | Surface | Role |
 | --- | --- |
 | **CLI** (`agent`) | Interactive coding agent and RPC backend for automation |
-| **GitHub App** | PR review, check runs, and repo automation |
-| **Android app** | Mobile companion for stats and control |
-| **[@autoawfixer](https://github.com/autoawfixer)** | Automated GitHub account for issue triage, fixes, and follow-up |
+| **GitHub App** ([prwatch](github-app/README.md)) | PR review, check runs, and repo automation |
+| **Android app** ([companion](android-app/README.md)) | Mobile companion for stats and control |
+| **[@autoawfixer](python/autoawfixer/README.md)** | Automated GitHub account for issue triage, fixes, and follow-up |
 
 The CLI is the core. Everything else drives or monitors it.
+
+## Quick start
+
+Requires [Bun](https://bun.sh) (see root `package.json` for the pinned version).
+
+```bash
+bun install
+bun run install:local
+agent --version
+```
+
+`install:local` compiles the CLI and installs `agent` to `~/.local/bin` (override with `LOCAL_PREFIX`). See [scripts/install-local.ts](scripts/install-local.ts) for layout details.
+
+Full CLI reference: [packages/coding-agent/README.md](packages/coding-agent/README.md).
+
+## Package map
+
+| Package | Description |
+| --- | --- |
+| `packages/ai` | Multi-provider LLM client with streaming support |
+| `packages/catalog` | Model catalog: bundled models.json, provider descriptors, model identity/classification |
+| `packages/agent` | Agent runtime with tool calling and state management |
+| `packages/coding-agent` | Main CLI application (primary focus) |
+| `packages/tui` | Terminal UI library with differential rendering |
+| `packages/natives` | Bindings for native text/image/grep operations |
+| `packages/stats` | Local observability dashboard (`agent stats`) |
+| `packages/utils` | Shared utilities (logger, streams, temp files) |
+| `crates/pi-natives` | Rust crate for performance-critical text/grep ops |
+
+## Companion apps
+
+| Path | What |
+| --- | --- |
+| [python/autoawfixer/](python/autoawfixer/README.md) | Self-hosted GitHub issue triage bot (`agent --mode rpc` in worktrees) |
+| [github-app/](github-app/README.md) | **prwatch** — PR review + Check Runs (gateway + worker on Railway) |
+| [android-app/](android-app/README.md) | Kotlin companion for `agent stats` (port 3847) |
+
+## Contributing
+
+Development conventions: [`AGENTS.md`](AGENTS.md). CLI internals map: [packages/coding-agent/DEVELOPMENT.md](packages/coding-agent/DEVELOPMENT.md).
+
+```bash
+bun run check      # typecheck + lint (all workspaces)
+bun run test:ts    # TypeScript unit tests
+bun run test:py    # Python tests (autoawfixer, omp-rpc)
+```
+
+Package-level docs live in each directory's `README.md`.
 
 ## Security
 
@@ -40,8 +98,6 @@ Continuous work in progress. The agent works on this repository — dogfooding i
 | `python/autoawfixer/` | @autoawfixer bot and orchestration |
 | `packages/agent-api/` | Update API and docs site (Vercel) |
 | `infra/` | Self-hosted CI (Kata microVMs) |
-
-Package-level docs live in each directory's `README.md`. Development conventions are in [`AGENTS.md`](AGENTS.md).
 
 ## License
 

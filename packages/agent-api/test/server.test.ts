@@ -84,7 +84,7 @@ describe("agent-api routes", () => {
 		expect(text).toContain(`PACKAGE="${PACKAGE}"`);
 	});
 
-	it("redirects release assets and maps agent-* to omp-* on GitHub", async () => {
+	it("redirects release assets to GitHub agent-* filenames", async () => {
 		const response = await app.request("http://localhost/releases/download/v1.0.0/agent-linux-x64");
 		expect(response.status).toBe(302);
 		expect(response.headers.get("Location")).toBe(
